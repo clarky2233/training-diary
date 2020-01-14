@@ -21,17 +21,15 @@ class _SmallSessionCardState extends State<SmallSessionCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDialog<void>(
-            context: context,
-            barrierDismissible: true,
-            builder: (BuildContext context) {
-              return MoreInfo(
-                db: widget.db,
-                ts: widget.ts,
-                user: widget.user,
-                returnHome: false,
-              );
-            });
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MoreInfo(
+                      db: widget.db,
+                      user: widget.user,
+                      ts: widget.ts,
+                      returnHome: false,
+                    )));
       },
       child: Container(
           width: 180,
