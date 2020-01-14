@@ -39,7 +39,7 @@ class _CreateProfileState extends State<CreateProfile> {
                   color: Colors.pinkAccent,
                   child: Center(
                     child: Text(
-                      "Training Journal",
+                      "Training Diary+",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 30,

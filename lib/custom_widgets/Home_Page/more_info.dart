@@ -62,320 +62,326 @@ class _MoreInfoState extends State<MoreInfo> {
     }
 
     return MaterialApp(
-      home: Scaffold(
-        // backgroundColor: Colors.grey[300],
-        appBar: AppBar(
-          title: Text("More Info"),
-          backgroundColor: Colors.redAccent,
-          centerTitle: true,
-          leading: FlatButton(
-            onPressed: () async {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              List<TrainingSession> x = await widget.db.lastTenSessions();
-              List<TrainingSession> y = await widget.db.getJournal();
-              List<Event> upcoming = await widget.db.getEvents();
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                if (widget.returnHome) {
-                  return Home(
-                    db: widget.db,
-                    user: widget.user,
-                    recentTen: x,
-                    upcoming: upcoming,
-                  );
-                } else {
-                  return EntriesPage(
-                    db: widget.db,
-                    user: widget.user,
-                    allEntries: y,
-                  );
-                }
-              }));
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
+      home: WillPopScope(
+        onWillPop: () {
+          return Future.value(false);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("More Info"),
+            backgroundColor: Colors.redAccent,
+            centerTitle: true,
+            leading: FlatButton(
+              onPressed: () async {
+                FocusScope.of(context).requestFocus(new FocusNode());
+                List<TrainingSession> x = await widget.db.lastTenSessions();
+                List<TrainingSession> y = await widget.db.getJournal();
+                List<Event> upcoming = await widget.db.getEvents();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  if (widget.returnHome) {
+                    return Home(
+                      db: widget.db,
+                      user: widget.user,
+                      recentTen: x,
+                      upcoming: upcoming,
+                    );
+                  } else {
+                    return EntriesPage(
+                      db: widget.db,
+                      user: widget.user,
+                      allEntries: y,
+                    );
+                  }
+                }));
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
             ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditSession(
+                                db: widget.db,
+                                user: widget.user,
+                                ts: widget.ts,
+                                returnHome: widget.returnHome,
+                              )));
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  _confirmDelete();
+                },
+              ),
+            ],
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditSession(
-                              db: widget.db,
-                              user: widget.user,
-                              ts: widget.ts,
-                              returnHome: widget.returnHome,
-                            )));
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                _confirmDelete();
-              },
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Center(
-                  child: Padding(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "${widget.ts.title}",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            "Date:",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          "${DateFormat('d/M/y').format(widget.ts.date)}",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Text(
+                          "Activity:",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        )),
+                        Text(
+                          "${widget.ts.activity.name}",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: Icon(widget.ts.activity.icon),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            "Duration:",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          "${formatDuration(widget.ts.duration)}",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Text("Intensity:",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold))),
+                        StarRating(
+                          rating: widget.ts.difficulty.toDouble(),
+                          spaceBetween: 2,
+                          starConfig: StarConfig(
+                            size: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      "${widget.ts.title}",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      "Description:",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          "Date:",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width,
+                      alignment: Alignment.topLeft,
+                      decoration: BoxDecoration(
+                        border: Border.all(),
                       ),
-                      Text(
-                        "${DateFormat('d/M/y').format(widget.ts.date)}",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
                           child: Text(
-                        "Activity:",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                      Text(
-                        "${widget.ts.activity.name}",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: Icon(widget.ts.activity.icon),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          "Duration:",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "${formatDuration(widget.ts.duration)}",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: Text("Intensity:",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold))),
-                      StarRating(
-                        rating: widget.ts.difficulty.toDouble(),
-                        spaceBetween: 2,
-                        starConfig: StarConfig(
-                          size: 25,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    "Description:",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Container(
-                    height: 200,
-                    width: MediaQuery.of(context).size.width,
-                    alignment: Alignment.topLeft,
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                    ),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(
-                          "$description",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
+                            "$description",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          "Recovery Heart Rate:",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "$heartRate",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                  Divider(
+                    color: Colors.black,
                   ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          "Rate of Percieved Exertion:",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "$rpe",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          "Hours of sleep:",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "$hoursOfSleep ",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
                           child: Text(
-                        "Sleep Rating:",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                      StarRating(
-                        rating: sleepRating,
-                        spaceBetween: 2,
-                        starConfig: StarConfig(
-                          size: 25,
+                            "Recovery Heart Rate:",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          "Hydration Levels:",
+                        Text(
+                          "$heartRate",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      Text(
-                        "$hydration",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-              ],
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            "Rate of Percieved Exertion:",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          "$rpe",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            "Hours of sleep:",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          "$hoursOfSleep ",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Text(
+                          "Sleep Rating:",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        )),
+                        StarRating(
+                          rating: sleepRating,
+                          spaceBetween: 2,
+                          starConfig: StarConfig(
+                            size: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            "Hydration Levels:",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          "$hydration",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

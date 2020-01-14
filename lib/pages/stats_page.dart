@@ -29,88 +29,95 @@ class _StatsPageState extends State<StatsPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.grey[300],
-        appBar: AppBar(
+      home: WillPopScope(
+        onWillPop: () {
+          return Future.value(false);
+        },
+        child: Scaffold(
           backgroundColor: Colors.grey[300],
-          elevation: 0,
-          title: Text(
-            "My Statistics",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
-          ),
-          centerTitle: false,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.share),
-              color: Colors.black,
-              iconSize: 30,
-              onPressed: () async {
-                await _createFile();
-              },
+          appBar: AppBar(
+            backgroundColor: Colors.grey[300],
+            elevation: 0,
+            title: Text(
+              "My Statistics",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25),
             ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ThisWeekStats(
-                sm: widget.sm,
-              ),
-              ThisMonthStats(
-                sm: widget.sm,
-              ),
-              ThisYearStats(
-                sm: widget.sm,
+            centerTitle: false,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.share),
+                color: Colors.black,
+                iconSize: 30,
+                onPressed: () async {
+                  await _createFile();
+                },
               ),
             ],
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: Colors.red[600],
-          currentIndex: 0,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.equalizer),
-              title: Text("Stats"),
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ThisWeekStats(
+                  sm: widget.sm,
+                ),
+                ThisMonthStats(
+                  sm: widget.sm,
+                ),
+                ThisYearStats(
+                  sm: widget.sm,
+                ),
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text("Home"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text("Profile"),
-            ),
-          ],
-          onTap: (index) async {
-            if (index == 2) {
-              List<Goal> goals = await widget.db.getGoals();
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfilePage(
-                            db: widget.db,
-                            user: widget.user,
-                            goals: goals,
-                          )));
-            } else if (index == 1) {
-              List<TrainingSession> recentTen =
-                  await widget.db.lastTenSessions();
-              List<Event> upcoming = await widget.db.getEvents();
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Home(
-                            db: widget.db,
-                            user: widget.user,
-                            recentTen: recentTen,
-                            upcoming: upcoming,
-                          )));
-            }
-          },
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: Colors.red[600],
+            currentIndex: 0,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.equalizer),
+                title: Text("Stats"),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text("Home"),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                title: Text("Profile"),
+              ),
+            ],
+            onTap: (index) async {
+              if (index == 2) {
+                List<Goal> goals = await widget.db.getGoals();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                              db: widget.db,
+                              user: widget.user,
+                              goals: goals,
+                            )));
+              } else if (index == 1) {
+                List<TrainingSession> recentTen =
+                    await widget.db.lastTenSessions();
+                List<Event> upcoming = await widget.db.getEvents();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Home(
+                              db: widget.db,
+                              user: widget.user,
+                              recentTen: recentTen,
+                              upcoming: upcoming,
+                            )));
+              }
+            },
+          ),
         ),
       ),
     );
