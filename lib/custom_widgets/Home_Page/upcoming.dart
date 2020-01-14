@@ -1,0 +1,152 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/event.dart';
+import 'package:training_journal/pages/edit_event.dart';
+import 'package:training_journal/pages/home.dart';
+import 'package:training_journal/training_session.dart';
+import 'package:training_journal/user.dart';
+
+class UpcomingCard extends StatefulWidget {
+  final Event event;
+  final DBHelper db;
+  final User user;
+  const UpcomingCard({this.db, this.event, this.user});
+
+  @override
+  _UpcomingCardState createState() => _UpcomingCardState();
+}
+
+class _UpcomingCardState extends State<UpcomingCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300,
+      width: 380,
+      //margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(15),
+        ),
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(30.0, 30, 30, 20),
+                child: Text("${widget.event.name}",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+            ),
+            Text(
+              "${DateFormat('d/M/y').format(widget.event.date)}",
+              style: TextStyle(
+                fontSize: 26,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditEvent(
+                                  db: widget.db,
+                                  user: widget.user,
+                                  event: widget.event,
+                                )));
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 80),
+                  child: Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                    size: 60,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    _confirmDelete();
+                  },
+                ),
+              ],
+            ),
+            Text(
+              "${widget.event.startTime.format(context)}",
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _confirmDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Event'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you would like to delete this?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ok',
+                style: TextStyle(color: Colors.blue[800]),
+              ),
+              onPressed: () async {
+                await widget.db.deleteEvent(widget.event.id);
+                Navigator.of(context).pop();
+                List<TrainingSession> x = await widget.db.lastTenSessions();
+                List<Event> upcoming = await widget.db.getEvents();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Home(
+                              db: widget.db,
+                              user: widget.user,
+                              recentTen: x,
+                              upcoming: upcoming,
+                            )));
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'CANCEL',
+                style: TextStyle(color: Colors.blue[800]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
