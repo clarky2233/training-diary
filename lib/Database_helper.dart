@@ -20,7 +20,7 @@ class DBHelper {
     Future<Database> database = openDatabase(
       join(await getDatabasesPath(), 'journal_database.db'),
       onCreate: (db, version) {
-        return db.execute('''CREATE TABLE journal(
+        return db.execute('''CREATE TABLE IF NOT EXISTS journal(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             userID INTEGER NOT NULL,
             title TEXT NOT NULL,
