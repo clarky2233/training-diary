@@ -277,7 +277,7 @@ class _HomeState extends State<Home> {
                   "  Your statistics/upcoming events will be displayed here.")));
     } else if (showStats) {
       return Container(
-        height: MediaQuery.of(context).size.height / 2.58,
+        height: 300, //MediaQuery.of(context).size.height / 2.58,
         margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
         child: SummaryStatsCard(
           sm: sm,
@@ -286,7 +286,8 @@ class _HomeState extends State<Home> {
       );
     } else {
       return Container(
-        height: MediaQuery.of(context).size.height / 2.58,
+        height: 300, // MediaQuery.of(context).size.height / 2.58,
+        //width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.fromLTRB(15, 5, 0, 10),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,

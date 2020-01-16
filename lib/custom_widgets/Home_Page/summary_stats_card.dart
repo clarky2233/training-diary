@@ -19,7 +19,7 @@ class _SummaryStatsCardState extends State<SummaryStatsCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 380,
+      width: MediaQuery.of(context).size.width - 20, //380,
       height: 300,
       child: Card(
         shape: RoundedRectangleBorder(

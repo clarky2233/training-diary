@@ -24,7 +24,7 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 380,
+        width: MediaQuery.of(context).size.width - 10, //380,
         height: 280,
         child: Card(
           shape: RoundedRectangleBorder(

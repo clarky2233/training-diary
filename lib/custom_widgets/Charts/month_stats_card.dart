@@ -21,7 +21,7 @@ class _MonthStatsCardState extends State<MonthStatsCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 380,
+      width: MediaQuery.of(context).size.width - 10,
       height: 280,
       child: Card(
         shape: RoundedRectangleBorder(

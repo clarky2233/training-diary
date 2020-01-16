@@ -32,6 +32,7 @@ class _SmallSessionCardState extends State<SmallSessionCard> {
                     )));
       },
       child: Container(
+          //height: 250,
           width: 180,
           margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
           child: Card(
@@ -53,7 +54,6 @@ class _SmallSessionCardState extends State<SmallSessionCard> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.all(30),
                     alignment: Alignment.center,
                     child: Icon(
                       widget.ts.activity.icon,

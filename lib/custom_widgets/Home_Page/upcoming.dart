@@ -22,7 +22,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      width: 380,
+      width: MediaQuery.of(context).size.width - 20, //380,
       //margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Card(
         shape: RoundedRectangleBorder(
