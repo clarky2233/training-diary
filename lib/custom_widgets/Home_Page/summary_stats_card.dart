@@ -20,7 +20,7 @@ class _SummaryStatsCardState extends State<SummaryStatsCard> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 20, //380,
-      height: 300,
+      height: 320,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(15),
@@ -44,7 +44,7 @@ class _SummaryStatsCardState extends State<SummaryStatsCard> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
                 child: FutureBuilder(
                   future: widget.sm.getSummaryData(),
                   builder: (context, snapshot) {

@@ -288,7 +288,7 @@ class _HomeState extends State<Home> {
       return Container(
         height: 300, // MediaQuery.of(context).size.height / 2.58,
         //width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.fromLTRB(15, 5, 0, 10),
+        margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: upcomingSize,
