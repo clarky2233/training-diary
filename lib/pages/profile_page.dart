@@ -89,24 +89,24 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                // Center(
-                //   child: Text(
-                //     "(${widget.user.username})",
-                //     style: TextStyle(
-                //       fontSize: 20,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
                 Center(
                   child: Text(
-                    "${getAge().floor()} years old",
+                    "(${widget.user.username})",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                // Center(
+                //   child: Text(
+                //     "${getAge().floor()} years old",
+                //     style: TextStyle(
+                //       fontSize: 20,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 30, 0, 0),
                   child: Text(

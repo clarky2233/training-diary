@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/Database_helper.dart';
-import 'package:training_journal/custom_widgets/Create_Profile/dob.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/full_name.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/height.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/restingHeartRate.dart';
@@ -21,6 +20,16 @@ class CreateProfile extends StatefulWidget {
 
 class _CreateProfileState extends State<CreateProfile> {
   User user = User();
+
+  String toISO(String date) {
+    List dateparts = date.split('/');
+    if (dateparts.length != 3) {
+      return null;
+    }
+    String dateString =
+        "${dateparts[2]}-${dateparts[1]}-${dateparts[0]} 00:00:00.000";
+    return dateString;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +81,10 @@ class _CreateProfileState extends State<CreateProfile> {
                   user: user,
                   isEdit: false,
                 ),
-                DOBInput(
-                  user: user,
-                  isEdit: false,
-                ),
+                // DOBInput(
+                //   user: user,
+                //   isEdit: false,
+                // ),
                 WeightInput(
                   user: user,
                   isEdit: false,
@@ -94,6 +103,7 @@ class _CreateProfileState extends State<CreateProfile> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
+            user.dob = DateTime.parse(toISO("01/01/1900"));
             if (User.isValid(user)) {
               FocusScope.of(context).requestFocus(new FocusNode());
               await widget.db.insertUser(user);

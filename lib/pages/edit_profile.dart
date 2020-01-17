@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/Database_helper.dart';
-import 'package:training_journal/custom_widgets/Create_Profile/dob.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/full_name.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/height.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/restingHeartRate.dart';
@@ -106,10 +105,10 @@ class _EditProfileState extends State<EditProfile> {
                     user: widget.user,
                     isEdit: true,
                   ),
-                  DOBInput(
-                    user: widget.user,
-                    isEdit: true,
-                  ),
+                  // DOBInput(
+                  //   user: widget.user,
+                  //   isEdit: true,
+                  // ),
                   WeightInput(
                     user: widget.user,
                     isEdit: true,
