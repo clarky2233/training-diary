@@ -41,6 +41,12 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  double getAge() {
+    DateTime dob = widget.user.dob;
+    double diff = DateTime.now().difference(dob).inDays / 365.floor();
+    return diff;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -83,9 +89,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
+                // Center(
+                //   child: Text(
+                //     "(${widget.user.username})",
+                //     style: TextStyle(
+                //       fontSize: 20,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
                 Center(
                   child: Text(
-                    "(${widget.user.username})",
+                    "${getAge().floor()} years old",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
