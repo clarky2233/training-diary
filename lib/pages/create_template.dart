@@ -7,16 +7,19 @@ import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class CreateTemplate extends StatefulWidget {
-
   final DBHelper db;
   final User user;
-  const CreateTemplate({@required this.db, @required this.user,});
+  const CreateTemplate({
+    @required this.db,
+    @required this.user,
+  });
 
   @override
   _CreateTemplateState createState() => _CreateTemplateState();
 }
 
-class _CreateTemplateState extends State<CreateTemplate> with SingleTickerProviderStateMixin {
+class _CreateTemplateState extends State<CreateTemplate>
+    with SingleTickerProviderStateMixin {
   TrainingSession ts = TrainingSession();
   TabController tabController;
 
@@ -35,7 +38,9 @@ class _CreateTemplateState extends State<CreateTemplate> with SingleTickerProvid
   Widget build(BuildContext context) {
     return MaterialApp(
       home: WillPopScope(
-        onWillPop: () {return Future.value(false);},
+        onWillPop: () {
+          return Future.value(false);
+        },
         child: Scaffold(
           backgroundColor: Colors.grey[400],
           appBar: AppBar(
@@ -47,11 +52,13 @@ class _CreateTemplateState extends State<CreateTemplate> with SingleTickerProvid
                 FocusScope.of(context).requestFocus(new FocusNode());
                 List<TrainingSession> x = await widget.db.getTemplates();
                 Navigator.pushReplacement(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => TemplatePage(db: widget.db, user: widget.user, templates: x,)
-                )
-              );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TemplatePage(
+                              db: widget.db,
+                              user: widget.user,
+                              templates: x,
+                            )));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -74,8 +81,18 @@ class _CreateTemplateState extends State<CreateTemplate> with SingleTickerProvid
           body: TabBarView(
             controller: tabController,
             children: <Widget>[
-              StandardSessionSettings(db: widget.db, user: widget.user, ts: ts, isEdit: false,),
-              AdvancedSessionSettings(db: widget.db, user: widget.user, ts: ts, isEdit: false,),
+              StandardSessionSettings(
+                db: widget.db,
+                user: widget.user,
+                ts: ts,
+                isEdit: false,
+              ),
+              AdvancedSessionSettings(
+                db: widget.db,
+                user: widget.user,
+                ts: ts,
+                isEdit: false,
+              ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -84,16 +101,16 @@ class _CreateTemplateState extends State<CreateTemplate> with SingleTickerProvid
                 ts.userID = widget.user.id;
                 await widget.db.insertTemplate(ts);
                 List<TrainingSession> x = await widget.db.getTemplates();
-                //Navigator.pop(context);
                 Navigator.pushReplacement(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => TemplatePage(db: widget.db, user: widget.user, templates: x,)
-                )
-              );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TemplatePage(
+                              db: widget.db,
+                              user: widget.user,
+                              templates: x,
+                            )));
                 //print(await widget.db.getJournal());
-              }
-              else {
+              } else {
                 _neverSatisfied();
               }
             },
@@ -106,29 +123,32 @@ class _CreateTemplateState extends State<CreateTemplate> with SingleTickerProvid
   }
 
   Future<void> _neverSatisfied() async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Incomplete Data'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('Please ensure the title is complete.'),
-            ],
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Incomplete Data'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Please ensure the title is complete.'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok', style: TextStyle(color: Colors.pink[800]),),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ok',
+                style: TextStyle(color: Colors.pink[800]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -45,6 +45,11 @@ class _ThisWeekStatsState extends State<ThisWeekStats> {
                 ),
                 WeekStatsCard(
                   sm: widget.sm,
+                  title: "Overall Enjoyment / 5",
+                  dataColumn: 'enjoymentRating',
+                ),
+                WeekStatsCard(
+                  sm: widget.sm,
                   title: "Hours of Sleep",
                   dataColumn: 'hoursOfSleep',
                 ),

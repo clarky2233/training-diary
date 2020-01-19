@@ -1,7 +1,6 @@
 import 'package:training_journal/activities.dart';
 
 class TrainingSession {
-
   int id;
   int userID;
   // Standard Settings //
@@ -10,6 +9,7 @@ class TrainingSession {
   String description;
   Activity activity;
   int difficulty; // out of 5
+  int enjoymentRating;
   DateTime date; // ISO8601
   // Advanced Settings //
   int heartRate;
@@ -19,7 +19,6 @@ class TrainingSession {
   double hydration;
   String mood;
 
-
   TrainingSession({
     this.id,
     this.userID,
@@ -28,6 +27,7 @@ class TrainingSession {
     this.description,
     this.activity,
     this.difficulty,
+    this.enjoymentRating,
     this.date,
     this.heartRate,
     this.hoursOfSleep,
@@ -42,14 +42,12 @@ class TrainingSession {
     String activityStr;
     if (date == null) {
       dateStr = null;
-    }
-    else {
+    } else {
       dateStr = date.toIso8601String();
     }
     if (activity == null) {
       activityStr = null;
-    }
-    else {
+    } else {
       activityStr = activity.name;
     }
 
@@ -62,6 +60,7 @@ class TrainingSession {
       'description': description,
       'activity': activityStr,
       'difficulty': difficulty,
+      'enjoymentRating': enjoymentRating,
       'heartRate': heartRate,
       'hoursOfSleep': hoursOfSleep,
       'rpe': rpe,
@@ -81,6 +80,7 @@ class TrainingSession {
       description: map['description'],
       activity: Activities.fromString(map['activity']),
       difficulty: map['difficulty'],
+      enjoymentRating: map['enjoymentRating'],
       heartRate: map['heartRate'],
       hoursOfSleep: map['hoursOfSleep'],
       rpe: map['rpe'],
@@ -91,8 +91,7 @@ class TrainingSession {
   }
 
   String toString() {
-    return 
-    '''Id: $id
+    return '''Id: $id
     UserID: $userID
     Title: $title
     Date: $date
@@ -103,10 +102,15 @@ class TrainingSession {
   }
 
   static bool isValid(TrainingSession ts) {
-    if (ts.title == null || ts.duration == null || ts.activity == null || ts.difficulty == null || ts.difficulty == 0) {
+    if (ts.title == null ||
+        ts.duration == null ||
+        ts.activity == null ||
+        ts.difficulty == null ||
+        ts.difficulty == 0 ||
+        ts.enjoymentRating == null ||
+        ts.enjoymentRating == 0) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -114,10 +118,8 @@ class TrainingSession {
   static bool isValidTemplate(TrainingSession ts) {
     if (ts.title == null || ts.title == "") {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
-
 }

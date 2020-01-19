@@ -79,6 +79,10 @@ class StatsManager {
 
   List<TSDataModel> monthTSData(
       List<Map<String, dynamic>> maps, String dataColumn) {
+    int difficultyCount = 0;
+    int difficultyTotal = 0;
+    int enjoymentCount = 0;
+    int enjoymentTotal = 0;
     List<TSDataModel> data = List<TSDataModel>();
     for (Map<String, dynamic> x in maps) {
       TSDataModel tsdm = TSDataModel(yValue: 0.0);
@@ -98,6 +102,14 @@ class StatsManager {
           tsdm.yValue += (x['$dataColumn'] / 60);
         } else if (dataColumn == 'hydration') {
           tsdm.yValue += x['$dataColumn'].toDouble();
+        } else if (dataColumn == 'difficulty') {
+          difficultyTotal += x['$dataColumn'];
+          difficultyCount++;
+          tsdm.yValue = difficultyTotal.toDouble() / difficultyCount.toDouble();
+        } else if (dataColumn == 'enjoymentRating') {
+          enjoymentTotal += x['$dataColumn'];
+          enjoymentCount++;
+          tsdm.yValue = enjoymentTotal.toDouble() / enjoymentCount.toDouble();
         } else {
           tsdm.yValue = x['$dataColumn'].toDouble();
         }
@@ -112,6 +124,10 @@ class StatsManager {
 
   List<BarDataModel> weekBarData(
       List<Map<String, dynamic>> maps, String dataColumn) {
+    int difficultyCount = 0;
+    int difficultyTotal = 0;
+    int enjoymentCount = 0;
+    int enjoymentTotal = 0;
     List<BarDataModel> data = List<BarDataModel>();
     data.add(BarDataModel(yValue: 0.0, xValue: "Mon"));
     data.add(BarDataModel(yValue: 0.0, xValue: "Tues"));
@@ -130,10 +146,14 @@ class StatsManager {
           if (dataColumn == 'duration') {
             day.yValue += (x['$dataColumn'] / 60);
           } else if (dataColumn == 'difficulty') {
-            day.yValue += x['$dataColumn'];
-            if (day.yValue > 5) {
-              day.yValue = 5;
-            }
+            difficultyTotal += x['$dataColumn'];
+            difficultyCount++;
+            day.yValue =
+                difficultyTotal.toDouble() / difficultyCount.toDouble();
+          } else if (dataColumn == 'enjoymentRating') {
+            enjoymentTotal += x['$dataColumn'];
+            enjoymentCount++;
+            day.yValue = enjoymentTotal.toDouble() / enjoymentCount.toDouble();
           } else if (dataColumn == 'hydration') {
             day.yValue += x['$dataColumn'].toDouble();
           } else {

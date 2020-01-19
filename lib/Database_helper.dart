@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:training_journal/DBUpgrades.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/activities.dart';
@@ -9,6 +10,14 @@ import 'package:training_journal/user.dart';
 
 class DBHelper {
   Future<Database> database;
+  final stableDatabaseVersion = 1;
+
+  List<DBUpgrade> upgrades = [
+    DBUpgrade(
+        version: 2, sql: "ALTER TABLE journal ADD enjoymentRating INTEGER"),
+    DBUpgrade(
+        version: 2, sql: "ALTER TABLE templates ADD enjoymentRating INTEGER"),
+  ];
 
   void setup() async {
     database = createDatabase();
@@ -38,7 +47,17 @@ class DBHelper {
             FOREIGN KEY(userID) REFERENCES users(id)
             )''');
       },
-      version: 1,
+      onUpgrade: (db, oldVersion, newVersion) {
+        print("Were UPGRADING");
+        print("Old version: $oldVersion");
+        print("New version: $newVersion");
+        for (DBUpgrade upgrade in upgrades) {
+          if (upgrade.version > oldVersion && upgrade.version <= newVersion) {
+            db.execute(upgrade.sql);
+          }
+        }
+      },
+      version: 2,
     );
     return database;
   }
@@ -232,6 +251,7 @@ class DBHelper {
           "description",
           "activity",
           "difficulty",
+          "enjoymentRating",
           "heartRate",
           "rpe",
           "hoursOfSleep",
@@ -399,6 +419,7 @@ class DBHelper {
       description: maps[i]['description'],
       activity: Activities.fromString(maps[i]['activity']),
       difficulty: maps[i]['difficulty'],
+      enjoymentRating: maps[i]['enjoymentRating'],
       heartRate: maps[i]['heartRate'],
       rpe: maps[i]['rpe'],
       hoursOfSleep: maps[i]['hoursOfSleep'],
@@ -424,6 +445,7 @@ class DBHelper {
       description: maps[i]['description'],
       activity: Activities.fromString(maps[i]['activity']),
       difficulty: maps[i]['difficulty'],
+      enjoymentRating: maps[i]['enjoymentRating'],
       heartRate: maps[i]['heartRate'],
       rpe: maps[i]['rpe'],
       hoursOfSleep: maps[i]['hoursOfSleep'],

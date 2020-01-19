@@ -26,6 +26,7 @@ class _MoreInfoState extends State<MoreInfo> {
   String rpe;
   String hoursOfSleep;
   double sleepRating;
+  double enjoymentRating;
   String hydration;
 
   @override
@@ -59,6 +60,11 @@ class _MoreInfoState extends State<MoreInfo> {
       sleepRating = 0.0;
     } else {
       sleepRating = widget.ts.sleepRating.toDouble();
+    }
+    if (widget.ts.enjoymentRating == null) {
+      enjoymentRating = 0.0;
+    } else {
+      enjoymentRating = widget.ts.enjoymentRating.toDouble();
     }
 
     return MaterialApp(
@@ -224,6 +230,28 @@ class _MoreInfoState extends State<MoreInfo> {
                                     fontWeight: FontWeight.bold))),
                         StarRating(
                           rating: widget.ts.difficulty.toDouble(),
+                          spaceBetween: 2,
+                          starConfig: StarConfig(
+                            size: 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Text("Overall Enjoyment:",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold))),
+                        StarRating(
+                          rating: enjoymentRating,
                           spaceBetween: 2,
                           starConfig: StarConfig(
                             size: 25,

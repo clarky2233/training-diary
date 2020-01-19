@@ -45,6 +45,11 @@ class _ThisYearStatsState extends State<ThisYearStats> {
                 ),
                 YearStatsCard(
                   sm: widget.sm,
+                  title: "Overall Enjoyment / 5",
+                  dataColumn: 'enjoymentRating',
+                ),
+                YearStatsCard(
+                  sm: widget.sm,
                   title: "Hours of Sleep",
                   dataColumn: 'hoursOfSleep',
                 ),
