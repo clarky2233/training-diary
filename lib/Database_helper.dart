@@ -48,9 +48,6 @@ class DBHelper {
             )''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
-        print("Were UPGRADING");
-        print("Old version: $oldVersion");
-        print("New version: $newVersion");
         for (DBUpgrade upgrade in upgrades) {
           if (upgrade.version > oldVersion && upgrade.version <= newVersion) {
             db.execute(upgrade.sql);
