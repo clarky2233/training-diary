@@ -10,7 +10,7 @@ import 'package:training_journal/user.dart';
 
 class DBHelper {
   Future<Database> database;
-  final stableDatabaseVersion = 1;
+  final stableDatabaseVersion = 2;
 
   List<DBUpgrade> upgrades = [
     DBUpgrade(
