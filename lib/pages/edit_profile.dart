@@ -162,8 +162,6 @@ class _EditProfileState extends State<EditProfile> {
             child: ListBody(
               children: <Widget>[
                 Text('Please complete all available fields.\n'),
-                Text('Ensure the date is in the format:\n'),
-                Text('  - DD/MM/YYYY'),
               ],
             ),
           ),

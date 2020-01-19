@@ -142,8 +142,6 @@ class _CreateProfileState extends State<CreateProfile> {
             child: ListBody(
               children: <Widget>[
                 Text('Please complete all available fields.\n'),
-                Text('Ensure the date is in the format:\n'),
-                Text('  - DD/MM/YYYY'),
                 Text('\nEnsure the weight is a decimal number'),
                 Text('  - E.g. 80.40'),
                 Text('\nEnsure the height is a whole number'),
