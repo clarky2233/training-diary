@@ -4,7 +4,6 @@ import 'package:training_journal/pages/profile_page.dart';
 import 'package:training_journal/user.dart';
 
 class GoalCard extends StatefulWidget {
-
   final DBHelper db;
   final User user;
   final Goal goal;
@@ -16,7 +15,6 @@ class GoalCard extends StatefulWidget {
 }
 
 class _GoalCardState extends State<GoalCard> {
-
   String goalValue;
   String titleStr;
 
@@ -32,8 +30,7 @@ class _GoalCardState extends State<GoalCard> {
   bool isValid(Goal goal) {
     if (goal.text == null || goal.title == null) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -59,6 +56,8 @@ class _GoalCardState extends State<GoalCard> {
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "${widget.goal.title}",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -90,7 +89,7 @@ class _GoalCardState extends State<GoalCard> {
                 child: Text(
                   "${widget.goal.text}",
                   softWrap: true,
-                  maxLines: 3,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -102,80 +101,90 @@ class _GoalCardState extends State<GoalCard> {
   }
 
   Future<void> _confirmDelete() async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Delete Goal'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('Are you sure you would like to delete this?'),
-            ],
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Goal'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you would like to delete this?'),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok', style: TextStyle(color: Colors.blue[800]),),
-            onPressed: () async {
-              await widget.db.deleteGoal(widget.goal.id);
-              Navigator.pop(context);
-              List<Goal> x = await widget.db.getGoals();
-              Navigator.pushReplacement(
-              context, 
-              MaterialPageRoute(
-                builder: (context) => ProfilePage(db: widget.db, user: widget.user, goals: x,)
-              )
-            );
-            },
-          ),
-          FlatButton(
-            child: Text('CANCEL', style: TextStyle(color: Colors.blue[800]),),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ok',
+                style: TextStyle(color: Colors.blue[800]),
+              ),
+              onPressed: () async {
+                await widget.db.deleteGoal(widget.goal.id);
+                Navigator.pop(context);
+                List<Goal> x = await widget.db.getGoals();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                              db: widget.db,
+                              user: widget.user,
+                              goals: x,
+                            )));
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'CANCEL',
+                style: TextStyle(color: Colors.blue[800]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> editGoal() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: Text('Edit Goal', style: TextStyle(fontSize: 26),),
+          title: Text(
+            'Edit Goal',
+            style: TextStyle(fontSize: 26),
+          ),
           contentPadding: EdgeInsets.all(5),
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(10),
               child: TextField(
-                  maxLines: 1,
-                  cursorColor: Colors.pink[400],
-                  controller: titleController,
-                  onChanged: (text) {
-                    setState(() {
-                      titleStr = text;
-                      widget.goal.title = titleStr;
-                    });
-                  },
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                  decoration: InputDecoration(
+                maxLines: 1,
+                cursorColor: Colors.pink[400],
+                controller: titleController,
+                onChanged: (text) {
+                  setState(() {
+                    titleStr = text;
+                    widget.goal.title = titleStr;
+                  });
+                },
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                decoration: InputDecoration(
                     hintText: "Title",
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.redAccent),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.redAccent),
-                    )
-                  ),
-                ),
+                    )),
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(10),
@@ -193,14 +202,11 @@ class _GoalCardState extends State<GoalCard> {
                   fontSize: 16,
                 ),
                 decoration: InputDecoration(
-                  hintText: "Description",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.redAccent[400])
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.redAccent[400])
-                  )
-                ),
+                    hintText: "Description",
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.redAccent[400])),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.redAccent[400]))),
               ),
             ),
             Row(
@@ -209,18 +215,19 @@ class _GoalCardState extends State<GoalCard> {
                 Container(
                   child: FlatButton(
                     onPressed: () async {
-                      Goal goal = new Goal(userID: widget.user.id, text: goalValue, title: titleStr);
-                      if (isValid(goal)) {
-                        await widget.db.updateGoal(goal);
+                      if (isValid(widget.goal)) {
+                        await widget.db.updateGoal(widget.goal);
                         List<Goal> goals = await widget.db.getGoals();
+                        //Navigator.of(context).pop();
                         Navigator.pushReplacement(
-                          context, 
-                          MaterialPageRoute(
-                            builder: (context) => ProfilePage(db: widget.db, user: widget.user, goals: goals,)
-                          )
-                        );
-                      }
-                      else {
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage(
+                                      db: widget.db,
+                                      user: widget.user,
+                                      goals: goals,
+                                    )));
+                      } else {
                         Navigator.pop(context);
                       }
                     },
@@ -256,21 +263,20 @@ class _GoalCardState extends State<GoalCard> {
   }
 
   Future<void> _moreInfo() async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: true, 
-    builder: (BuildContext context) {
-      return SimpleDialog(
-        title: Text('${widget.goal.title}', style: TextStyle(fontSize: 26),),
-        contentPadding: EdgeInsets.all(25),
-        children: <Widget>[
-          Text(
-            "${widget.goal.text}"
-          ),
-        ]
-      );
-    },
-  );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+            title: Text(
+              '${widget.goal.title}',
+              style: TextStyle(fontSize: 26),
+            ),
+            contentPadding: EdgeInsets.all(25),
+            children: <Widget>[
+              Text("${widget.goal.text}"),
+            ]);
+      },
+    );
   }
-
 }
