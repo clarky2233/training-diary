@@ -90,7 +90,7 @@ class _HydrationCardState extends State<HydrationCard> {
           children: <Widget>[
             Text(
                 '''This refers to the litres of water consumed the day of a training session.\n
-                If you have already recorded hydration levels for a training session today do not include previous volume of water.'''),
+If you have already recorded hydration levels for a training session today do not include previous volume of water.'''),
           ],
         );
       },
