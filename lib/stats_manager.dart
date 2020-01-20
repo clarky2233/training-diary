@@ -27,19 +27,34 @@ class StatsManager {
   Future<List<List<BarDataModel>>> getSummaryData() async {
     List<List<BarDataModel>> data = List<List<BarDataModel>>();
     final database = await dbhelper.database;
-    List<Map<String, dynamic>> maps = await database.rawQuery(
-        "SELECT date, duration FROM journal WHERE date >= (SELECT DATETIME('now', 'weekday 1', '-7 day')) AND date <= DATETIME('now', 'weekday 1') ORDER BY date ASC");
+    List<Map<String, dynamic>> maps;
+    List<Map<String, dynamic>> maps2;
+    if (DateTime.now().weekday == 1) {
+      maps = await database.rawQuery(
+          "SELECT date, duration FROM journal WHERE DATE(date) >= (SELECT DATE('now', 'start of day')) AND DATE(date) <= (SELECT DATE('now', 'start of day', '+7 days')) ORDER BY date ASC");
+      maps2 = await database.rawQuery(
+          "SELECT date, difficulty FROM journal WHERE DATE(date) >= (SELECT DATE('now', 'start of day')) AND DATE(date) <= (SELECT DATE('now', 'start of day', '+7 days')) ORDER BY date ASC");
+    } else {
+      maps = await database.rawQuery(
+          "SELECT date, duration FROM journal WHERE DATE(date) > (SELECT DATE('now', 'weekday 0', 'start of day', '-7 days')) AND date < (SELECT DATE('now', 'start of day', 'weekday 0', '+1 days')) ORDER BY date ASC");
+      maps2 = await database.rawQuery(
+          "SELECT date, difficulty FROM journal WHERE DATE(date) > (SELECT DATE('now', 'weekday 0', 'start of day', '-7 days')) AND date < (SELECT DATE('now', 'start of day', 'weekday 0', '+1 days')) ORDER BY date ASC");
+    }
     data.add(weekBarData(maps, 'duration'));
-    List<Map<String, dynamic>> maps2 = await database.rawQuery(
-        "SELECT date, difficulty FROM journal WHERE date >= (SELECT DATETIME('now', 'weekday 1', '-7 day')) AND date <= DATETIME('now', 'weekday 1') ORDER BY date ASC");
     data.add(weekBarData(maps2, 'difficulty'));
     return data;
   }
 
   Future<List<BarDataModel>> getWeekData(String dataColumn) async {
     final database = await dbhelper.database;
-    List<Map<String, dynamic>> maps = await database.rawQuery(
-        "SELECT date, $dataColumn FROM journal WHERE date >= (SELECT DATETIME('now', 'weekday 1', '-7 day')) AND date <= DATETIME('now', 'weekday 1') ORDER BY date ASC");
+    List<Map<String, dynamic>> maps;
+    if (DateTime.now().weekday == 1) {
+      maps = await database.rawQuery(
+          "SELECT date, $dataColumn FROM journal WHERE DATE(date) >= (SELECT DATE('now', 'start of day')) AND DATE(date) <= (SELECT DATE('now', 'start of day', '+7 days')) ORDER BY date ASC");
+    } else {
+      maps = await database.rawQuery(
+          "SELECT date, $dataColumn FROM journal WHERE DATE(date) > (SELECT DATE('now', 'weekday 0', 'start of day', '-7 days')) AND date < (SELECT DATE('now', 'start of day', 'weekday 0', '+1 days')) ORDER BY date ASC");
+    }
     if (dataColumn == 'activity') {
       return pieChartData(maps, dataColumn);
     } else {
