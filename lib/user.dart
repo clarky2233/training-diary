@@ -42,7 +42,19 @@ class User {
   }
 
   String toString() {
-    return "$name [$id] ($username) + $dob";
+    return "$name [$id] ($username) + $weight";
+  }
+
+  void setWeight(String text) {
+    if (text == "") {
+      weight = null;
+      return;
+    }
+    try {
+      weight = double.parse(text);
+    } catch (e) {
+      weight = -1234.0;
+    }
   }
 
   static bool isValid(User user) {

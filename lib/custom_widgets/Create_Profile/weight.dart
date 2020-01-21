@@ -49,7 +49,8 @@ class _WeightInputState extends State<WeightInput> {
         cursorColor: Colors.pink[400],
         onChanged: (text) {
           setState(() {
-            getWeightInput(text);
+            widget.user.setWeight(text);
+            //getWeightInput(text);
           });
         },
         style: TextStyle(

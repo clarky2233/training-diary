@@ -38,6 +38,9 @@ class _EditProfileState extends State<EditProfile> {
     original.name = user.name;
     original.username = user.username;
     original.dob = user.dob;
+    original.weight = user.weight;
+    original.height = user.height;
+    original.restingHeartRate = user.restingHeartRate;
     return original;
   }
 
@@ -130,6 +133,7 @@ class _EditProfileState extends State<EditProfile> {
               if (User.isValid(widget.user)) {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 await widget.db.updateUser(widget.user);
+                print(widget.user);
                 List<Goal> goals = await widget.db.getGoals();
                 Navigator.pushReplacement(
                     context,
