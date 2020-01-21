@@ -10,38 +10,11 @@ import 'package:training_journal/user.dart';
 
 class DBHelper {
   Future<Database> database;
-  int currentVersion = 1;
   final stableDatabaseVersion = 2;
 
   List<DBUpgrade> upgrades = [
-    DBUpgrade(version: 2, sqlUpgrades: [
-      "ALTER TABLE journal ADD enjoymentRating INTEGER",
-      "ALTER TABLE templates ADD enjoymentRating INTEGER"
-    ]),
-  ];
-
-  void setup() async {
-    database = createDatabase();
-    final Database db = await database;
-    await createTables(db);
-    if (currentVersion < stableDatabaseVersion) {
-      for (DBUpgrade upgrade in upgrades) {
-        for (String sql in upgrade.sqlUpgrades) {
-          if (upgrade.version > currentVersion &&
-              upgrade.version <= stableDatabaseVersion) {
-            db.execute(sql);
-          }
-        }
-        currentVersion = upgrade.version;
-      }
-    }
-  }
-
-  Future<Database> createDatabase() async {
-    Future<Database> database = openDatabase(
-      join(await getDatabasesPath(), 'journal_database.db'),
-      onCreate: (db, version) {
-        return db.execute('''CREATE TABLE IF NOT EXISTS journal(
+    DBUpgrade(version: 1, sqlUpgrades: [
+      '''CREATE TABLE IF NOT EXISTS journal(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             userID INTEGER NOT NULL,
             title TEXT NOT NULL,
@@ -57,51 +30,32 @@ class DBHelper {
             hydration REAL,
             mood TEXT,
             FOREIGN KEY(userID) REFERENCES users(id)
-            )''');
-      },
-      onUpgrade: (db, oldVersion, newVersion) {
-        print("old version: $oldVersion");
-        print("old version: $newVersion");
-        for (DBUpgrade upgrade in upgrades) {
-          for (String sql in upgrade.sqlUpgrades) {
-            if (upgrade.version > oldVersion && upgrade.version <= newVersion) {
-              db.execute(sql);
-            }
-          }
-          currentVersion = upgrade.version;
-        }
-      },
-      version: 2,
-    );
-    return database;
-  }
-
-  Future<void> createTables(Database db) async {
-    await db.execute('''CREATE TABLE IF NOT EXISTS users(
-        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        username type UNIQUE NOT NULL,
-        name TEXT NOT NULL,
-        dob TEXT NOT NULL,
-        weight REAL,
-        height INTEGER,
-        restingHeartRate INTEGER
-      )''');
-    await db.execute('''CREATE TABLE IF NOT EXISTS goals(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userID INTEGER NOT NULL,
-        title TEXT,
-        text TEXT,
-        FOREIGN KEY(userID) REFERENCES users(id)
-      )''');
-    await db.execute('''CREATE TABLE IF NOT EXISTS events(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userID INTEGER NOT NULL,
-        name TEXT,
-        date TEXT,
-        startTime TEXT,
-        FOREIGN KEY(userID) REFERENCES users(id)
-      )''');
-    await db.execute('''CREATE TABLE IF NOT EXISTS templates(
+      )''',
+      '''CREATE TABLE IF NOT EXISTS users(
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            username type UNIQUE NOT NULL,
+            name TEXT NOT NULL,
+            dob TEXT NOT NULL,
+            weight REAL,
+            height INTEGER,
+            restingHeartRate INTEGER
+      )''',
+      '''CREATE TABLE IF NOT EXISTS goals(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            userID INTEGER NOT NULL,
+            title TEXT,
+            text TEXT,
+            FOREIGN KEY(userID) REFERENCES users(id)
+      )''',
+      '''CREATE TABLE IF NOT EXISTS events(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            userID INTEGER NOT NULL,
+            name TEXT,
+            date TEXT,
+            startTime TEXT,
+            FOREIGN KEY(userID) REFERENCES users(id)
+      )''',
+      '''CREATE TABLE IF NOT EXISTS templates(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             userID INTEGER NOT NULL,
             title TEXT NOT NULL,
@@ -117,7 +71,33 @@ class DBHelper {
             hydration REAL,
             mood TEXT,
             FOREIGN KEY(userID) REFERENCES users(id)
-            )''');
+      )'''
+    ]),
+    DBUpgrade(version: 2, sqlUpgrades: [
+      "ALTER TABLE journal ADD enjoymentRating INTEGER",
+      "ALTER TABLE templates ADD enjoymentRating INTEGER"
+    ]),
+  ];
+
+  void setup() async {
+    database = createDatabase();
+  }
+
+  Future<Database> createDatabase() async {
+    Future<Database> database = openDatabase(
+      join(await getDatabasesPath(), 'journal_database.db'),
+      onUpgrade: (db, oldVersion, newVersion) {
+        for (DBUpgrade upgrade in upgrades) {
+          for (String sql in upgrade.sqlUpgrades) {
+            if (upgrade.version > oldVersion && upgrade.version <= newVersion) {
+              db.execute(sql);
+            }
+          }
+        }
+      },
+      version: 2,
+    );
+    return database;
   }
 
   Future<void> insertSession(TrainingSession ts) async {
