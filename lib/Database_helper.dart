@@ -10,19 +10,31 @@ import 'package:training_journal/user.dart';
 
 class DBHelper {
   Future<Database> database;
+  int currentVersion = 1;
   final stableDatabaseVersion = 2;
 
   List<DBUpgrade> upgrades = [
-    DBUpgrade(
-        version: 2, sql: "ALTER TABLE journal ADD enjoymentRating INTEGER"),
-    DBUpgrade(
-        version: 2, sql: "ALTER TABLE templates ADD enjoymentRating INTEGER"),
+    DBUpgrade(version: 2, sqlUpgrades: [
+      "ALTER TABLE journal ADD enjoymentRating INTEGER",
+      "ALTER TABLE templates ADD enjoymentRating INTEGER"
+    ]),
   ];
 
   void setup() async {
     database = createDatabase();
     final Database db = await database;
-    createTables(db);
+    await createTables(db);
+    if (currentVersion < stableDatabaseVersion) {
+      for (DBUpgrade upgrade in upgrades) {
+        for (String sql in upgrade.sqlUpgrades) {
+          if (upgrade.version > currentVersion &&
+              upgrade.version <= stableDatabaseVersion) {
+            db.execute(sql);
+          }
+        }
+        currentVersion = upgrade.version;
+      }
+    }
   }
 
   Future<Database> createDatabase() async {
@@ -48,10 +60,15 @@ class DBHelper {
             )''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
+        print("old version: $oldVersion");
+        print("old version: $newVersion");
         for (DBUpgrade upgrade in upgrades) {
-          if (upgrade.version > oldVersion && upgrade.version <= newVersion) {
-            db.execute(upgrade.sql);
+          for (String sql in upgrade.sqlUpgrades) {
+            if (upgrade.version > oldVersion && upgrade.version <= newVersion) {
+              db.execute(sql);
+            }
           }
+          currentVersion = upgrade.version;
         }
       },
       version: 2,
@@ -59,7 +76,7 @@ class DBHelper {
     return database;
   }
 
-  void createTables(Database db) async {
+  Future<void> createTables(Database db) async {
     await db.execute('''CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         username type UNIQUE NOT NULL,

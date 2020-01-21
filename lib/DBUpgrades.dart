@@ -1,6 +1,6 @@
 class DBUpgrade {
   int version;
-  String sql;
+  List<String> sqlUpgrades;
 
-  DBUpgrade({this.version, this.sql});
+  DBUpgrade({this.version, this.sqlUpgrades});
 }
