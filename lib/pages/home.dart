@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/auth.dart';
 import 'package:training_journal/custom_widgets/Home_Page/session_card.dart';
 import 'package:training_journal/custom_widgets/Home_Page/summary_stats_card.dart';
 import 'package:training_journal/custom_widgets/Home_Page/upcoming.dart';
@@ -30,6 +31,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final AuthService _auth = AuthService();
+
   void initState() {
     super.initState();
     if (widget.recentTen != null) {
@@ -232,15 +235,16 @@ class _HomeState extends State<Home> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  List<TrainingSession> x = await widget.db.getJournal();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EntriesPage(
-                                db: widget.db,
-                                user: widget.user,
-                                allEntries: x,
-                              )));
+                  await _auth.signOut();
+                  // List<TrainingSession> x = await widget.db.getJournal();
+                  // Navigator.pushReplacement(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => EntriesPage(
+                  //               db: widget.db,
+                  //               user: widget.user,
+                  //               allEntries: x,
+                  //             )));
                 },
               ),
             ),
@@ -307,7 +311,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget getBottomPanel() {
-    if (widget.recentTen.length == 0) {
+    if (widget.recentTen == null || widget.recentTen.length == 0) {
       return Container(
           height: 250,
           margin: EdgeInsets.fromLTRB(0, 5, 0, 20),

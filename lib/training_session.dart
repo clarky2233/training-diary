@@ -2,7 +2,7 @@ import 'package:training_journal/activities.dart';
 
 class TrainingSession {
   int id;
-  int userID;
+  String userID;
   // Standard Settings //
   String title;
   int duration; // this is in minutes

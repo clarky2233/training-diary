@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:training_journal/Authentication/authenticate.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/create_profile.dart';
@@ -13,38 +16,38 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-  DBHelper db;
+  // DBHelper db;
 
-  void initState() {
-    super.initState();
-    db = DBHelper();
-    db.setup();
-    checkProfileExists();
-  }
+  // void initState() {
+  //   super.initState();
+  //   db = DBHelper();
+  //   db.setup();
+  //   //checkProfileExists();
+  // }
 
-  void checkProfileExists() async {
-    if (await db.getUsersCount() != 0) {
-      User user = await db.getUser(1);
-      List<TrainingSession> recent = await db.lastTenSessions();
-      List<Event> upcoming = await db.getEvents();
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home(
-                    db: db,
-                    user: user,
-                    recentTen: recent,
-                    upcoming: upcoming,
-                  )));
-    } else {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CreateProfile(
-                    db: db,
-                  )));
-    }
-  }
+  // void checkProfileExists() async {
+  //   if (await db.getUsersCount() != 0) {
+  //     User user = await db.getUser(1);
+  //     List<TrainingSession> recent = await db.lastTenSessions();
+  //     List<Event> upcoming = await db.getEvents();
+  //     Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => Home(
+  //                   db: db,
+  //                   user: user,
+  //                   recentTen: recent,
+  //                   upcoming: upcoming,
+  //                 )));
+  //   } else {
+  //     Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => CreateProfile(
+  //                   db: db,
+  //                 )));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,7 @@ class _LoadingState extends State<Loading> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                "Training Diary +",
+                "Training Diary+",
                 style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
@@ -64,11 +67,10 @@ class _LoadingState extends State<Loading> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Icon(
-                  Icons.book,
-                  size: 30.0,
+                padding: const EdgeInsets.all(30.0),
+                child: SpinKitCircle(
                   color: Colors.white,
+                  size: 50,
                 ),
               ),
             ],

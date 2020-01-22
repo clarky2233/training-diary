@@ -1,5 +1,5 @@
 class User {
-  int id;
+  String id;
   String username;
   String name;
   DateTime dob;
@@ -75,7 +75,7 @@ class User {
 
 class Goal {
   int id;
-  int userID;
+  String userID;
   String title;
   String text;
 

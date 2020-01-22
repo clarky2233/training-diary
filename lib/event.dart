@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Event {
-
   int id;
-  int userID;
+  String userID;
   String name;
   DateTime date;
   TimeOfDay startTime;
-  
+
   Event({
     this.id,
     this.userID,
@@ -22,7 +21,7 @@ class Event {
       'userID': userID,
       'name': name,
       'date': date.toIso8601String(),
-      'startTime': startTime.toString().substring(10,14),
+      'startTime': startTime.toString().substring(10, 14),
     };
   }
 
@@ -32,8 +31,9 @@ class Event {
       userID: map['userID'],
       name: map['name'],
       date: DateTime.parse(map['date']),
-      startTime: TimeOfDay(hour: int.parse(map['startTime'].split(":")[0]), minute: int.parse(map['startTime'].split(":")[1])),
+      startTime: TimeOfDay(
+          hour: int.parse(map['startTime'].split(":")[0]),
+          minute: int.parse(map['startTime'].split(":")[1])),
     );
   }
-  
 }
