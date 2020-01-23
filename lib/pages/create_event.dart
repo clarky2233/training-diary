@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_date_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_time_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_title_card.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/home.dart';
+import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
@@ -20,8 +22,10 @@ class CreateEvent extends StatefulWidget {
 class _CreateEventState extends State<CreateEvent>
     with SingleTickerProviderStateMixin {
   Event event = Event();
+  DatabaseService firestore;
 
   void initState() {
+    firestore = DatabaseService(uid: widget.user.id);
     super.initState();
   }
 
@@ -54,16 +58,16 @@ class _CreateEventState extends State<CreateEvent>
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
+                              recentTen: null,
+                              upcoming: null,
                             )));
               },
               child: Icon(
@@ -99,17 +103,18 @@ class _CreateEventState extends State<CreateEvent>
               if (isValid(event)) {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 event.userID = widget.user.id;
-                await widget.db.insertEvent(event);
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                firestore.updateEvent(event);
+                // await widget.db.insertEvent(event);
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home(
+                        builder: (context) => Home2(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
+                              recentTen: null,
+                              upcoming: null,
                             )));
                 //print(await widget.db.getJournal());
               } else {

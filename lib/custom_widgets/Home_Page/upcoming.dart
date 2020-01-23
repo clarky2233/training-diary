@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/edit_event.dart';
 import 'package:training_journal/pages/home.dart';
+import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
@@ -18,6 +20,13 @@ class UpcomingCard extends StatefulWidget {
 }
 
 class _UpcomingCardState extends State<UpcomingCard> {
+  DatabaseService firestore;
+
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +43,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
           children: <Widget>[
             Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 5, 30),
+                padding: const EdgeInsets.fromLTRB(15, 30, 15, 30),
                 child: Text("${widget.event.name}",
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -58,6 +67,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
                     color: Colors.black,
                   ),
                   onPressed: () {
+                    print(widget.event.id);
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -122,17 +132,18 @@ class _UpcomingCardState extends State<UpcomingCard> {
               ),
               onPressed: () async {
                 //await widget.db.deleteEvent(widget.event.id);
+                firestore.deleteEvent(widget.event.id);
                 Navigator.of(context).pop();
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home(
+                        builder: (context) => Home2(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
+                              recentTen: null,
+                              upcoming: null,
                             )));
               },
             ),

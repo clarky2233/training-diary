@@ -56,6 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
           return Future.value(false);
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.grey[300],
           appBar: AppBar(
             backgroundColor: Colors.redAccent,
@@ -342,6 +343,14 @@ class _ProfilePageState extends State<ProfilePage> {
         stream: firestore.goals,
         initialData: List<Goal>(),
         builder: (context, snapshot) {
+          if (snapshot.data == null || snapshot.data.length == 0) {
+            return Container(
+              height: 400,
+              child: Center(
+                child: Text("You currently have no goals"),
+              ),
+            );
+          }
           return Expanded(
             child: Container(
               //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),

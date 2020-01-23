@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:training_journal/Services/auth.dart';
 import 'package:training_journal/activities.dart';
 import 'package:training_journal/event.dart';
@@ -33,16 +34,16 @@ class DatabaseService {
   }
 
   Future updateEvent(Event event) async {
-    return await eventCollection.document(uid).setData({
+    return await eventCollection.document(event.id).setData({
       'userID': event.userID,
       'name': event.name,
       'date': event.date,
-      'startTime': event.startTime,
+      'startTime': event.startTime.toString(),
     });
   }
 
   Future updateTrainingSession(TrainingSession ts) async {
-    return await journalCollection.document().setData({
+    return await journalCollection.document(ts.id).setData({
       //'id': ts.id,
       'title': ts.title,
       'userID': ts.userID,
@@ -61,7 +62,7 @@ class DatabaseService {
   }
 
   Future updateGoal(Goal goal) async {
-    return await goalCollection.document().setData({
+    return await goalCollection.document(goal.id).setData({
       'userID': goal.userID,
       'title': goal.title,
       'text': goal.text,
@@ -71,7 +72,7 @@ class DatabaseService {
   Future<User> getUser() {
     return userDataCollection.document(uid).get().then((doc) {
       return User(
-        id: uid ?? '',
+        id: uid ?? uid,
         name: doc.data['name'] ?? '',
         username: doc.data['username'] ?? '',
         height: doc.data['height'] ?? 0,
@@ -92,6 +93,14 @@ class DatabaseService {
         .map(_trainingSessionListFromSnapshot);
   }
 
+  Stream<List<Event>> get events {
+    return eventCollection
+        .where("userID", isEqualTo: uid)
+        .orderBy("date", descending: true)
+        .snapshots()
+        .map(_eventListFromSnapshot);
+  }
+
   Stream<List<TrainingSession>> get recent {
     return journalCollection
         .where("userID", isEqualTo: uid)
@@ -105,11 +114,33 @@ class DatabaseService {
     return goalCollection.document(docID).delete();
   }
 
+  Future deleteEvent(String docID) {
+    return eventCollection.document(docID).delete();
+  }
+
+  Future deleteTrainingSession(String docID) {
+    return journalCollection.document(docID).delete();
+  }
+
   Stream<List<Goal>> get goals {
     return goalCollection
         .where("userID", isEqualTo: uid)
         .snapshots()
         .map(_goalListFromSnapshot);
+  }
+
+  Stream<User> get user {
+    return userDataCollection.document(uid).snapshots().map(_userFromSnapshot);
+  }
+
+  User _userFromSnapshot(DocumentSnapshot snapshot) {
+    return User(
+      name: snapshot.data['name'] ?? '',
+      username: snapshot.data['username'] ?? '',
+      weight: snapshot.data['weight'] ?? 0.0,
+      height: snapshot.data['height'] ?? 0,
+      restingHeartRate: snapshot.data['restingHeartRate'] ?? 0,
+    );
   }
 
   List<Goal> _goalListFromSnapshot(QuerySnapshot snapshot) {
@@ -121,6 +152,27 @@ class DatabaseService {
         text: doc.data['text'] ?? '',
       );
     }).toList();
+  }
+
+  List<Event> _eventListFromSnapshot(QuerySnapshot snapshot) {
+    try {
+      return snapshot.documents.map((doc) {
+        return Event(
+          id: doc.documentID,
+          userID: doc.data['userID'],
+          name: doc.data['name'] ?? '',
+          date: doc.data['date'].toDate(),
+          startTime: TimeOfDay(
+              hour: int.parse(
+                  doc.data['startTime'].substring(10, 15).split(":")[0]),
+              minute: int.parse(
+                  doc.data['startTime'].substring(10, 15).split(":")[1])),
+        );
+      }).toList();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 
   List<TrainingSession> _trainingSessionListFromSnapshot(
@@ -137,8 +189,8 @@ class DatabaseService {
           difficulty: doc.data['difficulty'] ?? 0,
           enjoymentRating: doc.data['enjoymentRating'] ?? 0,
           date: doc.data['date'].toDate(),
-          heartRate: doc.data['heartRate'] ?? 0,
-          rpe: doc.data['rpe'] ?? 0,
+          heartRate: doc.data['heartRate'],
+          rpe: doc.data['rpe'],
           hoursOfSleep: doc.data['hoursOfSleep'] ?? 0.0,
           sleepRating: doc.data['sleepRating'] ?? 0,
           hydration: doc.data['hydration'] ?? 0.0,

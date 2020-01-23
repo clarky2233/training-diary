@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:intl/intl.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/all_entries.dart';
 import 'package:training_journal/pages/home.dart';
+import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/pages/edit_session.dart';
 import 'package:training_journal/user.dart';
@@ -28,6 +30,13 @@ class _MoreInfoState extends State<MoreInfo> {
   double sleepRating;
   double enjoymentRating;
   String hydration;
+
+  DatabaseService firestore;
+
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,23 +89,23 @@ class _MoreInfoState extends State<MoreInfo> {
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<TrainingSession> y = await widget.db.getJournal();
-                List<Event> upcoming = await widget.db.getEvents();
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<TrainingSession> y = await widget.db.getJournal();
+                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   if (widget.returnHome) {
-                    return Home(
+                    return Home2(
                       db: widget.db,
                       user: widget.user,
-                      recentTen: x,
-                      upcoming: upcoming,
+                      recentTen: null,
+                      upcoming: null,
                     );
                   } else {
                     return EntriesPage(
                       db: widget.db,
                       user: widget.user,
-                      allEntries: y,
+                      allEntries: null,
                     );
                   }
                 }));
@@ -439,18 +448,19 @@ class _MoreInfoState extends State<MoreInfo> {
               ),
               onPressed: () async {
                 //await widget.db.deleteJournalEntry(widget.ts.id);
+                firestore.deleteTrainingSession(widget.ts.id);
                 Navigator.of(context).pop();
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
                 if (widget.returnHome) {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Home(
+                          builder: (context) => Home2(
                                 db: widget.db,
                                 user: widget.user,
-                                recentTen: x,
-                                upcoming: upcoming,
+                                recentTen: null,
+                                upcoming: null,
                               )));
                 } else {
                   Navigator.pushReplacement(
@@ -459,7 +469,7 @@ class _MoreInfoState extends State<MoreInfo> {
                           builder: (context) => EntriesPage(
                                 db: widget.db,
                                 user: widget.user,
-                                allEntries: x,
+                                allEntries: null,
                               )));
                 }
               },

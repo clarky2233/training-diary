@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/auth.dart';
@@ -63,7 +64,9 @@ class _Home2State extends State<Home2> {
         child: FutureBuilder<User>(
             future: firestore.getUser(),
             builder: (context, snapshot) {
-              user = snapshot.data;
+              if (snapshot.connectionState == ConnectionState.done) {
+                user = snapshot.data;
+              }
               return Scaffold(
                 backgroundColor: Colors.grey[300],
                 appBar: AppBar(
@@ -81,6 +84,7 @@ class _Home2State extends State<Home2> {
                   child: ListView(
                     scrollDirection: Axis.vertical,
                     children: <Widget>[
+                      getTopPanel(),
                       getMiddleRow(),
                       getRecentSessions(),
                     ],
@@ -140,12 +144,61 @@ class _Home2State extends State<Home2> {
     );
   }
 
+  Widget getTopPanel() {
+    return StreamBuilder<List<Event>>(
+        stream: firestore.events,
+        builder: (context, snapshot) {
+          if (user == null) {
+            return Container(
+              height: 300,
+              margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+            );
+          }
+          if (snapshot.data == null) {
+            return Container(
+              height: 300,
+              margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+              child: Center(
+                child: Text(
+                    "Your statistics/upcoming events will be displayed here"),
+              ),
+            );
+          }
+          return Container(
+            height: 300, // MediaQuery.of(context).size.height / 2.58,
+            //width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return Hero(
+                    tag: 'UC$index',
+                    child: UpcomingCard(
+                      db: widget.db,
+                      user: user,
+                      event: snapshot.data[index],
+                    ));
+              },
+            ),
+          );
+        });
+  }
+
   Widget getRecentSessions() {
     return StreamBuilder<List<TrainingSession>>(
         stream: firestore.recent,
         builder: (context, snapshot) {
-          if (snapshot.data == null) {
+          if (user == null) {
             return Container();
+          }
+          if (snapshot.data == null) {
+            return Container(
+              height: MediaQuery.of(context).size.height / 4,
+              child: Center(
+                child: Text("Tap the plus icon to create a session"),
+              ),
+            );
           }
           return Container(
             height: 250,
@@ -168,6 +221,9 @@ class _Home2State extends State<Home2> {
   }
 
   Widget getMiddleRow() {
+    if (user == null) {
+      return Container();
+    }
     return Row(
       children: <Widget>[
         Expanded(

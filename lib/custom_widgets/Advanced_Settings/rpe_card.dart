@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:training_journal/training_session.dart';
 
 class RPECard extends StatefulWidget {
-
   final TrainingSession ts;
   final bool isEdit;
   const RPECard({this.ts, this.isEdit});
@@ -12,18 +11,20 @@ class RPECard extends StatefulWidget {
 }
 
 class _RPECardState extends State<RPECard> {
-
   static double sliderValue = 6.0;
   static double minValue = 6.0;
   static final double maxValue = 20.0;
   static int increments = 1;
-  static int divisions = (maxValue~/increments).toInt();
+  static int divisions = (maxValue ~/ increments).toInt();
 
   void initState() {
     if (widget.isEdit && widget.ts.rpe != null) {
-      sliderValue = widget.ts.rpe.toDouble();
-    }
-    else {
+      if (widget.ts.rpe < minValue) {
+        widget.ts.rpe = minValue.toInt();
+      } else {
+        sliderValue = widget.ts.rpe.toDouble();
+      }
+    } else {
       sliderValue = 6.0;
     }
     super.initState();
@@ -41,13 +42,13 @@ class _RPECardState extends State<RPECard> {
             Row(
               children: <Widget>[
                 Expanded(
-                   child: Text(
+                  child: Text(
                     "Percieved Rate of Exertion",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                       color: Colors.black,
-                    ),              
+                    ),
                   ),
                 ),
                 IconButton(
@@ -80,16 +81,19 @@ class _RPECardState extends State<RPECard> {
   }
 
   Future<void> _moreInfo() async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: true, 
-    builder: (BuildContext context) {
-      return SimpleDialog(
-        title: Text('Percieved Rate of Exertion', style: TextStyle(fontSize: 26),),
-        contentPadding: EdgeInsets.all(25),
-        children: <Widget>[
-          Text(
-            '''The rating of perceived exertion (RPE) is used to assess the intensity of training and competition.
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            'Percieved Rate of Exertion',
+            style: TextStyle(fontSize: 26),
+          ),
+          contentPadding: EdgeInsets.all(25),
+          children: <Widget>[
+            Text(
+                '''The rating of perceived exertion (RPE) is used to assess the intensity of training and competition.
             
             6 - No exertion at all
             7 - Extremely light
@@ -105,13 +109,10 @@ class _RPECardState extends State<RPECard> {
             17 - Very hard
             18
             19 - Extremely hard
-            20 - Maximum exertion'''
-          ),
-        ],
-        
-      );
-    },
-  );
+            20 - Maximum exertion'''),
+          ],
+        );
+      },
+    );
   }
-
 }
