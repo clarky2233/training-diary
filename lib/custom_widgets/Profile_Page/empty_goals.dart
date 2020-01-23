@@ -7,7 +7,6 @@ import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class EmptyGoals extends StatefulWidget {
-
   final DBHelper db;
   final User user;
   final List<Goal> goals;
@@ -18,12 +17,10 @@ class EmptyGoals extends StatefulWidget {
 }
 
 class _EmptyGoalsState extends State<EmptyGoals> {
-
   bool isValid(Goal goal) {
     if (goal.text == null || goal.title == null) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -79,8 +76,8 @@ class _EmptyGoalsState extends State<EmptyGoals> {
                 ),
               ),
               Expanded(
-                child: Center(child: Text("Tap the plus icon to create a goal"))
-              ),
+                  child: Center(
+                      child: Text("Tap the plus icon to create a goal"))),
             ],
           ),
         ),
@@ -97,7 +94,7 @@ class _EmptyGoalsState extends State<EmptyGoals> {
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: Colors.red[600],
           currentIndex: 2,
-          items: <BottomNavigationBarItem> [
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.assessment),
               title: Text("Stats"),
@@ -114,13 +111,16 @@ class _EmptyGoalsState extends State<EmptyGoals> {
           onTap: (index) async {
             if (index == 1) {
               List<TrainingSession> x = await widget.db.lastTenSessions();
-               List<Event> upcoming = await widget.db.getEvents();
+              List<Event> upcoming = await widget.db.getEvents();
               Navigator.pushReplacement(
-              context, 
-              MaterialPageRoute(
-                builder: (context) => Home(recentTen: x, db: widget.db, user: widget.user, upcoming: upcoming,)
-              )
-            );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Home(
+                            recentTen: x,
+                            db: widget.db,
+                            user: widget.user,
+                            upcoming: upcoming,
+                          )));
             }
           },
         ),
@@ -129,42 +129,43 @@ class _EmptyGoalsState extends State<EmptyGoals> {
   }
 
   Future<void> createGoal() async {
-
     String goalValue;
     String titleStr;
-  
+
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, 
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: Text('New Goal', style: TextStyle(fontSize: 26),),
+          title: Text(
+            'New Goal',
+            style: TextStyle(fontSize: 26),
+          ),
           contentPadding: EdgeInsets.all(5),
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(10),
               child: TextField(
-                  maxLines: 1,
-                  cursorColor: Colors.pink[400],
-                  //controller: textController,
-                  onChanged: (text) {
-                    setState(() {
-                      titleStr = text;
-                    });
-                  },
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                  decoration: InputDecoration(
+                maxLines: 1,
+                cursorColor: Colors.pink[400],
+                //controller: textController,
+                onChanged: (text) {
+                  setState(() {
+                    titleStr = text;
+                  });
+                },
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                decoration: InputDecoration(
                     hintText: "Title",
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.redAccent),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.redAccent),
-                    )
-                  ),
-                ),
+                    )),
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(10),
@@ -181,14 +182,11 @@ class _EmptyGoalsState extends State<EmptyGoals> {
                   fontSize: 16,
                 ),
                 decoration: InputDecoration(
-                  hintText: "Description",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.redAccent[400])
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.redAccent[400])
-                  )
-                ),
+                    hintText: "Description",
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.redAccent[400])),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.redAccent[400]))),
               ),
             ),
             Row(
@@ -197,18 +195,20 @@ class _EmptyGoalsState extends State<EmptyGoals> {
                 Container(
                   child: FlatButton(
                     onPressed: () async {
-                      Goal goal = new Goal(userID: widget.user.id, text: goalValue, title: titleStr);
+                      Goal goal = new Goal(
+                          userID: widget.user.id,
+                          text: goalValue,
+                          title: titleStr);
                       if (isValid(goal)) {
                         await widget.db.insertGoal(goal);
-                      List<Goal> goals = await widget.db.getGoals();
-                      Navigator.pushReplacement(
-                        context, 
-                        MaterialPageRoute(
-                          builder: (context) => ProfilePage(db: widget.db, user: widget.user, goals: goals,)
-                        )
-                      );
-                      }
-                      else {
+                        List<Goal> goals = await widget.db.getGoals();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage(
+                                      user: widget.user,
+                                    )));
+                      } else {
                         Navigator.pop(context);
                       }
                     },

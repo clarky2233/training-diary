@@ -183,7 +183,7 @@ class _EntriesPageState extends State<EntriesPage> {
                 ),
                 onPressed: () async {
                   for (TrainingSession ts in widget.allEntries) {
-                    await widget.db.deleteJournalEntry(ts.id);
+                    //await widget.db.deleteJournalEntry(ts.id);
                   }
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(context,

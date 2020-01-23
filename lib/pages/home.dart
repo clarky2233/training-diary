@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/auth.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Home_Page/session_card.dart';
 import 'package:training_journal/custom_widgets/Home_Page/summary_stats_card.dart';
 import 'package:training_journal/custom_widgets/Home_Page/upcoming.dart';
@@ -32,9 +34,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
+  DatabaseService firestore = DatabaseService();
+  //User currentUser;
 
   void initState() {
     super.initState();
+    //currentUser = Provider.of<User>(context);
     if (widget.recentTen != null) {
       trainingsize = widget.recentTen.length;
       upcomingSize = widget.upcoming.length;
@@ -72,7 +77,6 @@ class _HomeState extends State<Home> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
     titleText = getTopText();
 
     return MaterialApp(
@@ -179,9 +183,9 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfilePage(
-                              db: widget.db,
+                              //db: widget.db,
                               user: widget.user,
-                              goals: goals,
+                              //goals: goals,
                             )));
               } else if (index == 0) {
                 Navigator.pushReplacement(
@@ -235,16 +239,15 @@ class _HomeState extends State<Home> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  await _auth.signOut();
-                  // List<TrainingSession> x = await widget.db.getJournal();
-                  // Navigator.pushReplacement(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => EntriesPage(
-                  //               db: widget.db,
-                  //               user: widget.user,
-                  //               allEntries: x,
-                  //             )));
+                  List<TrainingSession> x = await widget.db.getJournal();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EntriesPage(
+                                db: widget.db,
+                                user: widget.user,
+                                allEntries: x,
+                              )));
                 },
               ),
             ),

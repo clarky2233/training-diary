@@ -98,9 +98,7 @@ class _StatsPageState extends State<StatsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfilePage(
-                              db: widget.db,
                               user: widget.user,
-                              goals: goals,
                             )));
               } else if (index == 1) {
                 List<TrainingSession> recentTen =

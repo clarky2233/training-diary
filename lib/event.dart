@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Event {
-  int id;
+  String id;
   String userID;
   String name;
   DateTime date;

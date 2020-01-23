@@ -14,6 +14,8 @@ class _RegisterState extends State<Register> {
   //GlobalKey<FormState> _formKey;
   String email = '';
   String password = '';
+  String name = '';
+  String username = '';
   String error = '';
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -74,6 +76,32 @@ class _RegisterState extends State<Register> {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: TextFormField(
                               validator: (val) =>
+                                  val.isEmpty ? 'Enter your name' : null,
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                  labelText: "Full name",
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.pink[400]),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.pink[400]),
+                                  )),
+                              onChanged: (val) {
+                                setState(() {
+                                  name = val;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: TextFormField(
+                              validator: (val) =>
                                   val.isEmpty ? 'Enter an Email' : null,
                               cursorColor: Colors.black,
                               decoration: InputDecoration(
@@ -92,6 +120,32 @@ class _RegisterState extends State<Register> {
                               onChanged: (val) {
                                 setState(() {
                                   email = val;
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: TextFormField(
+                              validator: (val) =>
+                                  val.isEmpty ? 'Enter a Username' : null,
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                  labelText: "Username",
+                                  labelStyle: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.pink[400]),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.pink[400]),
+                                  )),
+                              onChanged: (val) {
+                                setState(() {
+                                  username = val;
                                 });
                               },
                             ),
@@ -137,8 +191,8 @@ class _RegisterState extends State<Register> {
                                   setState(() {
                                     loading = true;
                                   });
-                                  dynamic result =
-                                      await _auth.register(email, password);
+                                  dynamic result = await _auth.register(
+                                      email, password, name, username);
                                   if (result == null) {
                                     setState(() {
                                       error = "Oops! Something went wrong";

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/pages/profile_page.dart';
 import 'package:training_journal/user.dart';
 
 class GoalCard extends StatefulWidget {
-  final DBHelper db;
   final User user;
   final Goal goal;
 
-  const GoalCard({this.db, this.user, this.goal});
+  const GoalCard({this.user, this.goal});
 
   @override
   _GoalCardState createState() => _GoalCardState();
@@ -18,12 +18,15 @@ class _GoalCardState extends State<GoalCard> {
   String goalValue;
   String titleStr;
 
+  DatabaseService firestore;
+
   final TextEditingController textController = new TextEditingController();
   final TextEditingController titleController = new TextEditingController();
 
   void initState() {
     textController.text = widget.goal.text;
     titleController.text = widget.goal.title;
+    firestore = DatabaseService(uid: widget.user.id);
     super.initState();
   }
 
@@ -121,16 +124,15 @@ class _GoalCardState extends State<GoalCard> {
                 style: TextStyle(color: Colors.blue[800]),
               ),
               onPressed: () async {
-                await widget.db.deleteGoal(widget.goal.id);
+                firestore.deleteGoal(widget.goal.id);
+                //await widget.db.deleteGoal(widget.goal.id);
                 Navigator.pop(context);
-                List<Goal> x = await widget.db.getGoals();
+                //List<Goal> x = await widget.db.getGoals();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfilePage(
-                              db: widget.db,
                               user: widget.user,
-                              goals: x,
                             )));
               },
             ),
@@ -216,16 +218,15 @@ class _GoalCardState extends State<GoalCard> {
                   child: FlatButton(
                     onPressed: () async {
                       if (isValid(widget.goal)) {
-                        await widget.db.updateGoal(widget.goal);
-                        List<Goal> goals = await widget.db.getGoals();
+                        //await widget.db.updateGoal(widget.goal);
+                        //List<Goal> goals = await widget.db.getGoals();
                         //Navigator.of(context).pop();
+                        firestore.updateGoal(widget.goal);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ProfilePage(
-                                      db: widget.db,
                                       user: widget.user,
-                                      goals: goals,
                                     )));
                       } else {
                         Navigator.pop(context);

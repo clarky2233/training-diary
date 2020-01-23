@@ -1,7 +1,7 @@
 import 'package:training_journal/activities.dart';
 
 class TrainingSession {
-  int id;
+  String id;
   String userID;
   // Standard Settings //
   String title;

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/user.dart';
 
 class AuthService {
@@ -6,7 +8,9 @@ class AuthService {
 
   User _userFromFirebaseUser(FirebaseUser user) {
     if (user != null) {
-      return User(id: user.uid);
+      return User(
+        id: user.uid,
+      );
     } else {
       return null;
     }
@@ -16,13 +20,19 @@ class AuthService {
     return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
   }
 
-  Future register(String email, String password) async {
+  Future<String> getCurrentUserUID() async {
+    FirebaseUser user = await _auth.currentUser();
+    return user.uid;
+  }
+
+  Future register(
+      String email, String password, String name, String username) async {
     try {
-      print(email);
-      print(password);
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+      await DatabaseService(uid: user.uid)
+          .updateUserData(name, username, 0.0, 0, 0);
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());

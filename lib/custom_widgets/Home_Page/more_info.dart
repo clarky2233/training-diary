@@ -438,7 +438,7 @@ class _MoreInfoState extends State<MoreInfo> {
                 style: TextStyle(color: Colors.blue[800]),
               ),
               onPressed: () async {
-                await widget.db.deleteJournalEntry(widget.ts.id);
+                //await widget.db.deleteJournalEntry(widget.ts.id);
                 Navigator.of(context).pop();
                 List<TrainingSession> x = await widget.db.lastTenSessions();
                 List<Event> upcoming = await widget.db.getEvents();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/full_name.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/height.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/restingHeartRate.dart';
@@ -9,9 +10,8 @@ import 'package:training_journal/pages/profile_page.dart';
 import 'package:training_journal/user.dart';
 
 class EditProfile extends StatefulWidget {
-  final DBHelper db;
   final User user;
-  const EditProfile({@required this.db, @required this.user});
+  const EditProfile({@required this.user});
 
   @override
   _EditProfileState createState() => _EditProfileState();
@@ -22,13 +22,14 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController nameController = new TextEditingController();
   final TextEditingController usernameController = new TextEditingController();
   final TextEditingController dobController = new TextEditingController();
+  DatabaseService firestore;
 
   void initState() {
     original = deepCopy(widget.user);
     nameController.text = widget.user.name;
     usernameController.text = widget.user.username;
-    dobController.text = fromISO(widget.user.dob.toIso8601String());
-    original = deepCopy(widget.user);
+    firestore = DatabaseService(uid: widget.user.id);
+    //dobController.text = fromISO(widget.user.dob.toIso8601String());
     super.initState();
   }
 
@@ -37,28 +38,28 @@ class _EditProfileState extends State<EditProfile> {
     original.id = user.id;
     original.name = user.name;
     original.username = user.username;
-    original.dob = user.dob;
+    //original.dob = user.dob;
     original.weight = user.weight;
     original.height = user.height;
     original.restingHeartRate = user.restingHeartRate;
     return original;
   }
 
-  String toISO(String date) {
-    List dateparts = date.split('/');
-    if (dateparts.length != 3) {
-      return null;
-    }
-    String dateString =
-        "${dateparts[2]}-${dateparts[1]}-${dateparts[0]} 00:00:00.000";
-    return dateString;
-  }
+  // String toISO(String date) {
+  //   List dateparts = date.split('/');
+  //   if (dateparts.length != 3) {
+  //     return null;
+  //   }
+  //   String dateString =
+  //       "${dateparts[2]}-${dateparts[1]}-${dateparts[0]} 00:00:00.000";
+  //   return dateString;
+  // }
 
-  String fromISO(String dobISO) {
-    List<String> str = dobISO.split("-");
-    String formatted = "${str[2].substring(0, 2)}/${str[1]}/${str[0]}";
-    return formatted;
-  }
+  // String fromISO(String dobISO) {
+  //   List<String> str = dobISO.split("-");
+  //   String formatted = "${str[2].substring(0, 2)}/${str[1]}/${str[0]}";
+  //   return formatted;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -75,15 +76,13 @@ class _EditProfileState extends State<EditProfile> {
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                await widget.db.updateUser(original);
-                List<Goal> goals = await widget.db.getGoals();
+                //await widget.db.updateUser(original);
+                //List<Goal> goals = await widget.db.getGoals();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfilePage(
-                              db: widget.db,
                               user: original,
-                              goals: goals,
                             )));
               },
               child: Icon(
@@ -132,16 +131,20 @@ class _EditProfileState extends State<EditProfile> {
             onPressed: () async {
               if (User.isValid(widget.user)) {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                await widget.db.updateUser(widget.user);
-                print(widget.user);
-                List<Goal> goals = await widget.db.getGoals();
+                firestore.updateUserData(
+                    widget.user.name,
+                    widget.user.username,
+                    widget.user.weight,
+                    widget.user.height,
+                    widget.user.restingHeartRate);
+                //await widget.db.updateUser(widget.user);
+                //print(widget.user);
+                //List<Goal> goals = await widget.db.getGoals();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfilePage(
-                              db: widget.db,
                               user: widget.user,
-                              goals: goals,
                             )));
               } else {
                 _neverSatisfied();

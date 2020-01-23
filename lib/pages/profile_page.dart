@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/auth.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Profile_Page/goal_card.dart';
-import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/edit_profile.dart';
 import 'package:training_journal/pages/home.dart';
+import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/pages/stats_page.dart';
 import 'package:training_journal/stats_manager.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class ProfilePage extends StatefulWidget {
-  final DBHelper db;
   final User user;
-  final List<Goal> goals;
-  const ProfilePage(
-      {@required this.db, @required this.user, @required this.goals});
+  const ProfilePage({
+    @required this.user,
+  });
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -22,12 +22,12 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int size = 0;
+  DatabaseService firestore;
+  AuthService _auth = AuthService();
 
   void initState() {
     super.initState();
-    if (widget.goals != null) {
-      size = widget.goals.length;
-    }
+    firestore = DatabaseService(uid: widget.user.id);
   }
 
   bool isValid(Goal goal) {
@@ -50,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: WillPopScope(
         onWillPop: () {
           return Future.value(false);
@@ -57,26 +58,45 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Scaffold(
           backgroundColor: Colors.grey[300],
           appBar: AppBar(
-            backgroundColor: Colors.grey[300],
+            backgroundColor: Colors.redAccent,
             elevation: 0,
+            title: Text("My Profile"),
             actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.edit),
-                color: Colors.black,
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  "Edit",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => EditProfile(
-                                db: widget.db,
                                 user: widget.user,
                               )));
+                },
+              ),
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  "Sign out",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  await _auth.signOut();
                 },
               ),
             ],
           ),
           body: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -98,15 +118,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                // Center(
-                //   child: Text(
-                //     "${getAge().floor()} years old",
-                //     style: TextStyle(
-                //       fontSize: 20,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 30, 0, 0),
                   child: Text(
@@ -151,26 +162,25 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
             onTap: (index) async {
               if (index == 1) {
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                //List<TrainingSession> x = await widget.db.lastTenSessions();
+                //List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home(
-                              recentTen: x,
-                              db: widget.db,
+                        builder: (context) => Home2(
+                              recentTen: null,
+                              db: null,
                               user: widget.user,
-                              upcoming: upcoming,
+                              upcoming: null,
                             )));
               } else if (index == 0) {
-                StatsManager sm = StatsManager(dbhelper: widget.db);
+                //StatsManager sm = StatsManager(dbhelper: widget.db);
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => StatsPage(
-                              sm: sm,
+                              sm: null,
                               user: widget.user,
-                              db: widget.db,
                             )));
               }
             },
@@ -252,15 +262,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           text: goalValue,
                           title: titleStr);
                       if (isValid(goal)) {
-                        await widget.db.insertGoal(goal);
-                        List<Goal> goals = await widget.db.getGoals();
+                        firestore.updateGoal(goal);
+                        //await widget.db.insertGoal(goal);
+                        //List<Goal> goals = await widget.db.getGoals();
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ProfilePage(
-                                      db: widget.db,
                                       user: widget.user,
-                                      goals: goals,
                                     )));
                       } else {
                         _neverSatisfied();
@@ -329,27 +338,51 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget getPanel() {
-    if (size == 0) {
-      return Expanded(
-          child: Center(child: Text("Tap the plus icon to create a goal")));
-    } else {
-      return Expanded(
-        child: Container(
-          //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: ListView.builder(
-            itemCount: size,
-            itemBuilder: (context, index) {
-              return Hero(
-                  tag: 'GC$index',
-                  child: GoalCard(
-                    db: widget.db,
-                    user: widget.user,
-                    goal: widget.goals[index],
-                  ));
-            },
-          ),
-        ),
-      );
-    }
+    return StreamBuilder<List<Goal>>(
+        stream: firestore.goals,
+        initialData: List<Goal>(),
+        builder: (context, snapshot) {
+          return Expanded(
+            child: Container(
+              //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Hero(
+                      tag: 'GC$index',
+                      child: GoalCard(
+                        user: widget.user,
+                        goal: snapshot.data[index],
+                      ));
+                },
+              ),
+            ),
+          );
+        });
+    // if (size == 0) {
+    //   return Expanded(
+    //       child: Center(child: Text("Tap the plus icon to create a goal")));
+    // } else {
+    //   return FutureBuilder<List<Goal>>(
+    //       future: firestore.getGoals(),
+    //       builder: (context, snapshot) {
+    //         return Expanded(
+    //           child: Container(
+    //             //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+    //             child: ListView.builder(
+    //               itemCount: snapshot.data.length,
+    //               itemBuilder: (context, index) {
+    //                 return Hero(
+    //                     tag: 'GC$index',
+    //                     child: GoalCard(
+    //                       db: widget.db,
+    //                       user: widget.user,
+    //                       goal: snapshot.data[index],
+    //                     ));
+    //               },
+    //             ),
+    //           ),
+    //         );
+    //       });
   }
 }

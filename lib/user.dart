@@ -60,7 +60,7 @@ class User {
   static bool isValid(User user) {
     if (user.name == null ||
         user.username == null ||
-        user.dob == null ||
+        //user.dob == null ||
         user.name == "" ||
         user.username == "" ||
         user.weight == -1234.0 ||
@@ -74,7 +74,7 @@ class User {
 }
 
 class Goal {
-  int id;
+  String id;
   String userID;
   String title;
   String text;
