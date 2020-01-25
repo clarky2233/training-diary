@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Advanced_Settings/advanced_session_setttings.dart';
 import 'package:training_journal/custom_widgets/Standard_Settings/standard_session_settings.dart';
 import 'package:training_journal/Database_helper.dart';
@@ -22,10 +23,12 @@ class _CreateTemplateState extends State<CreateTemplate>
     with SingleTickerProviderStateMixin {
   TrainingSession ts = TrainingSession();
   TabController tabController;
+  DatabaseService firestore;
 
   void initState() {
     tabController = TabController(length: 2, vsync: this);
     super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
   }
 
   @override
@@ -49,15 +52,15 @@ class _CreateTemplateState extends State<CreateTemplate>
             backgroundColor: Colors.pink[500],
             leading: FlatButton(
               onPressed: () async {
-                FocusScope.of(context).requestFocus(new FocusNode());
-                List<TrainingSession> x = await widget.db.getTemplates();
+                // FocusScope.of(context).requestFocus(new FocusNode());
+                // List<TrainingSession> x = await widget.db.getTemplates();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TemplatePage(
                               db: widget.db,
                               user: widget.user,
-                              templates: x,
+                              templates: null,
                             )));
               },
               child: Icon(
@@ -99,15 +102,16 @@ class _CreateTemplateState extends State<CreateTemplate>
             onPressed: () async {
               if (TrainingSession.isValidTemplate(ts)) {
                 ts.userID = widget.user.id;
-                await widget.db.insertTemplate(ts);
-                List<TrainingSession> x = await widget.db.getTemplates();
+                firestore.updateTemplate(ts);
+                // await widget.db.insertTemplate(ts);
+                // List<TrainingSession> x = await widget.db.getTemplates();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TemplatePage(
                               db: widget.db,
                               user: widget.user,
-                              templates: x,
+                              templates: null,
                             )));
                 //print(await widget.db.getJournal());
               } else {

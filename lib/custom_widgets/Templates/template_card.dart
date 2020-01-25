@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/pages/create_session_from_template.dart';
 import 'package:training_journal/pages/templates.dart';
 import 'package:training_journal/training_session.dart';
@@ -19,6 +20,12 @@ class TemplateCard extends StatefulWidget {
 class _TemplateCardState extends State<TemplateCard> {
   String description;
   String titleStr;
+  DatabaseService firestore;
+
+  void intiState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,15 +117,16 @@ class _TemplateCardState extends State<TemplateCard> {
               ),
               onPressed: () async {
                 //await widget.db.deleteTemplate(widget.template.id);
+                firestore.deleteTemplate(widget.template.id);
                 Navigator.pop(context);
-                List<TrainingSession> x = await widget.db.getTemplates();
+                // List<TrainingSession> x = await widget.db.getTemplates();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TemplatePage(
                               db: widget.db,
                               user: widget.user,
-                              templates: x,
+                              templates: null,
                             )));
               },
             ),

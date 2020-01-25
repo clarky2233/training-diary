@@ -64,8 +64,8 @@ class _RPECardState extends State<RPECard> {
               max: maxValue,
               value: sliderValue,
               divisions: divisions,
-              activeColor: Colors.pink[400],
-              inactiveColor: Colors.pink[100],
+              activeColor: Colors.redAccent,
+              inactiveColor: Colors.red[100],
               label: sliderValue.toInt().toString(),
               onChanged: (newValue) {
                 setState(() {

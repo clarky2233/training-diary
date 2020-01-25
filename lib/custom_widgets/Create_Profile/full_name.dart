@@ -31,7 +31,7 @@ class _FullNameInputState extends State<FullNameInput> {
       child: TextFormField(
         maxLines: 1,
         controller: textController,
-        cursorColor: Colors.pink[400],
+        cursorColor: Colors.redAccent,
         onChanged: (text) {
           setState(() {
             widget.user.name = text;
@@ -46,10 +46,10 @@ class _FullNameInputState extends State<FullNameInput> {
               color: Colors.black,
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.pink[400]),
+              borderSide: BorderSide(color: Colors.redAccent),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.pink[400]),
+              borderSide: BorderSide(color: Colors.redAccent),
             )),
       ),
     );

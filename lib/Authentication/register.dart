@@ -29,9 +29,12 @@ class _RegisterState extends State<Register> {
         : MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.pinkAccent,
+                backgroundColor: Colors.redAccent,
                 elevation: 0,
-                title: Text("Register"),
+                title: Text(
+                  "Register",
+                  style: TextStyle(fontSize: 25),
+                ),
                 actions: <Widget>[
                   FlatButton.icon(
                     icon: Icon(
@@ -77,7 +80,7 @@ class _RegisterState extends State<Register> {
                             child: TextFormField(
                               validator: (val) =>
                                   val.isEmpty ? 'Enter your name' : null,
-                              cursorColor: Colors.black,
+                              cursorColor: Colors.redAccent,
                               decoration: InputDecoration(
                                   labelText: "Full name",
                                   labelStyle: TextStyle(
@@ -85,11 +88,11 @@ class _RegisterState extends State<Register> {
                                   ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   )),
                               onChanged: (val) {
                                 setState(() {
@@ -103,7 +106,7 @@ class _RegisterState extends State<Register> {
                             child: TextFormField(
                               validator: (val) =>
                                   val.isEmpty ? 'Enter an Email' : null,
-                              cursorColor: Colors.black,
+                              cursorColor: Colors.redAccent,
                               decoration: InputDecoration(
                                   labelText: "Email",
                                   labelStyle: TextStyle(
@@ -111,11 +114,11 @@ class _RegisterState extends State<Register> {
                                   ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   )),
                               onChanged: (val) {
                                 setState(() {
@@ -129,7 +132,7 @@ class _RegisterState extends State<Register> {
                             child: TextFormField(
                               validator: (val) =>
                                   val.isEmpty ? 'Enter a Username' : null,
-                              cursorColor: Colors.black,
+                              cursorColor: Colors.redAccent,
                               decoration: InputDecoration(
                                   labelText: "Username",
                                   labelStyle: TextStyle(
@@ -137,11 +140,11 @@ class _RegisterState extends State<Register> {
                                   ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   )),
                               onChanged: (val) {
                                 setState(() {
@@ -156,7 +159,7 @@ class _RegisterState extends State<Register> {
                               validator: (val) => val.length < 6
                                   ? 'Enter a password 6 or more charaters long'
                                   : null,
-                              cursorColor: Colors.black,
+                              cursorColor: Colors.redAccent,
                               decoration: InputDecoration(
                                   labelText: "Password",
                                   labelStyle: TextStyle(
@@ -164,11 +167,11 @@ class _RegisterState extends State<Register> {
                                   ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   )),
                               obscureText: true,
                               onChanged: (val) {
@@ -181,7 +184,7 @@ class _RegisterState extends State<Register> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: RaisedButton(
-                              color: Colors.pinkAccent,
+                              color: Colors.redAccent,
                               child: Text(
                                 "Register",
                                 style: TextStyle(color: Colors.white),

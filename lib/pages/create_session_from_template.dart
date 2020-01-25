@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Advanced_Settings/advanced_session_setttings.dart';
 import 'package:training_journal/custom_widgets/Standard_Settings/standard_session_settings.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/home.dart';
+import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/pages/templates.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
@@ -24,6 +26,7 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
     with SingleTickerProviderStateMixin {
   TrainingSession ts = TrainingSession();
   TabController tabController;
+  DatabaseService firestore;
 
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -31,6 +34,7 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
       ts = widget.template;
     }
     super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
   }
 
   @override
@@ -51,20 +55,20 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
           appBar: AppBar(
             title: Text('New Training Session'),
             centerTitle: true,
-            backgroundColor: Colors.pink[500],
+            backgroundColor: Colors.redAccent,
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home(
+                        builder: (context) => Home2(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
+                              recentTen: null,
+                              upcoming: null,
                             )));
               },
               child: Icon(
@@ -77,14 +81,14 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
                 icon: Icon(Icons.save),
                 onPressed: () async {
                   FocusScope.of(context).requestFocus(new FocusNode());
-                  List<TrainingSession> x = await widget.db.getTemplates();
+                  // List<TrainingSession> x = await widget.db.getTemplates();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => TemplatePage(
                                 db: widget.db,
                                 user: widget.user,
-                                templates: x,
+                                templates: null,
                               )));
                 },
               ),
@@ -124,17 +128,18 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
               if (TrainingSession.isValid(ts)) {
                 ts.id = null;
                 ts.userID = widget.user.id;
-                await widget.db.insertSession(ts);
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                firestore.updateTrainingSession(ts);
+                // await widget.db.insertSession(ts);
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
+                              recentTen: null,
+                              upcoming: null,
                             )));
                 //print(await widget.db.getJournal());
               } else {
@@ -142,7 +147,7 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
               }
             },
             child: Icon(Icons.done_outline),
-            backgroundColor: Colors.pink[600],
+            backgroundColor: Colors.redAccent,
           ),
         ),
       ),
@@ -168,7 +173,7 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.pink[800]),
+                style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:training_journal/training_session.dart';
 
 class DescriptionCard extends StatefulWidget {
-
   final TrainingSession ts;
   final bool isEdit;
   const DescriptionCard({this.ts, this.isEdit});
@@ -12,7 +11,6 @@ class DescriptionCard extends StatefulWidget {
 }
 
 class _DescriptionCardState extends State<DescriptionCard> {
-
   String descriptionValue;
 
   final TextEditingController textController = new TextEditingController();
@@ -42,12 +40,12 @@ class _DescriptionCardState extends State<DescriptionCard> {
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.black,
-                ),              
+                ),
               ),
             ),
             TextField(
               maxLines: 10,
-              cursorColor: Colors.pink[400],
+              cursorColor: Colors.redAccent,
               controller: textController,
               onChanged: (text) {
                 setState(() {
@@ -59,13 +57,10 @@ class _DescriptionCardState extends State<DescriptionCard> {
                 fontSize: 16,
               ),
               decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pink[400])
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pink[400])
-                )
-              ),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.redAccent)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.redAccent))),
             ),
           ],
         ),

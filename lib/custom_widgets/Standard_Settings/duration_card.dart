@@ -69,8 +69,8 @@ class _DurationCardState extends State<DurationCard> {
               max: maxValue,
               value: sliderValue,
               divisions: divisions,
-              activeColor: Colors.pink[400],
-              inactiveColor: Colors.pink[100],
+              activeColor: Colors.red[400],
+              inactiveColor: Colors.red[100],
               label: formatDuration(sliderValue.toInt()),
               onChanged: (newValue) {
                 setState(() {

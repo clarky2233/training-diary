@@ -22,6 +22,9 @@ class DatabaseService {
   final CollectionReference eventCollection =
       Firestore.instance.collection('events');
 
+  final CollectionReference templateCollection =
+      Firestore.instance.collection('templates');
+
   Future updateUserData(String name, String username, double weight, int height,
       int restingHeartRate) async {
     return await userDataCollection.document(uid).setData({
@@ -39,6 +42,24 @@ class DatabaseService {
       'name': event.name,
       'date': event.date,
       'startTime': event.startTime.toString(),
+    });
+  }
+
+  Future updateTemplate(TrainingSession ts) async {
+    return await templateCollection.document(ts.id).setData({
+      'title': ts.title,
+      'userID': ts.userID,
+      'date': ts.date,
+      'duration': ts.duration,
+      'description': ts.description,
+      'activity': ts.activity.name,
+      'difficulty': ts.difficulty,
+      'enjoymentRating': ts.enjoymentRating,
+      'heartRate': ts.heartRate,
+      'hoursOfSleep': ts.hoursOfSleep,
+      'rpe': ts.rpe,
+      'sleepRating': ts.sleepRating,
+      'hydration': ts.hydration,
     });
   }
 
@@ -89,6 +110,28 @@ class DatabaseService {
   Stream<List<TrainingSession>> get journal {
     return journalCollection
         .where("userID", isEqualTo: uid)
+        .orderBy("date", descending: true)
+        .snapshots()
+        .map(_trainingSessionListFromSnapshot);
+  }
+
+  Stream<List<TrainingSession>> filtered(DateTime month) {
+    if (month == null) {
+      return journal;
+    }
+    return journalCollection
+        .where("userID", isEqualTo: uid)
+        .where("date", isGreaterThanOrEqualTo: month)
+        .where("date",
+            isLessThan: DateTime(month.year, month.month + 1, month.day))
+        .orderBy("date", descending: true)
+        .snapshots()
+        .map(_trainingSessionListFromSnapshot);
+  }
+
+  Stream<List<TrainingSession>> get templates {
+    return templateCollection
+        .where("userID", isEqualTo: uid)
         .snapshots()
         .map(_trainingSessionListFromSnapshot);
   }
@@ -120,6 +163,10 @@ class DatabaseService {
 
   Future deleteTrainingSession(String docID) {
     return journalCollection.document(docID).delete();
+  }
+
+  Future deleteTemplate(String docID) {
+    return templateCollection.document(docID).delete();
   }
 
   Stream<List<Goal>> get goals {
@@ -179,6 +226,10 @@ class DatabaseService {
       QuerySnapshot snapshot) {
     try {
       return snapshot.documents.map((doc) {
+        DateTime date;
+        doc.data['date'] == null
+            ? date = null
+            : date = doc.data['date'].toDate();
         return TrainingSession(
           id: doc.documentID,
           userID: doc.data['userID'],
@@ -188,7 +239,7 @@ class DatabaseService {
           activity: Activities.fromString(doc.data['activity']) ?? '',
           difficulty: doc.data['difficulty'] ?? 0,
           enjoymentRating: doc.data['enjoymentRating'] ?? 0,
-          date: doc.data['date'].toDate(),
+          date: date,
           heartRate: doc.data['heartRate'],
           rpe: doc.data['rpe'],
           hoursOfSleep: doc.data['hoursOfSleep'] ?? 0.0,

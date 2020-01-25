@@ -54,7 +54,7 @@ class _CreateEventState extends State<CreateEvent>
           appBar: AppBar(
             title: Text('New Upcoming Event'),
             centerTitle: true,
-            backgroundColor: Colors.pink[500],
+            backgroundColor: Colors.redAccent,
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
@@ -63,7 +63,7 @@ class _CreateEventState extends State<CreateEvent>
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home(
+                        builder: (context) => Home2(
                               db: widget.db,
                               user: widget.user,
                               recentTen: null,
@@ -122,7 +122,7 @@ class _CreateEventState extends State<CreateEvent>
               }
             },
             child: Icon(Icons.done_outline),
-            backgroundColor: Colors.pink[600],
+            backgroundColor: Colors.redAccent,
           ),
         ),
       ),
@@ -147,7 +147,7 @@ class _CreateEventState extends State<CreateEvent>
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.pink[800]),
+                style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

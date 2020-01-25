@@ -46,7 +46,7 @@ class _WeightInputState extends State<WeightInput> {
       child: TextFormField(
         maxLines: 1,
         controller: textController,
-        cursorColor: Colors.pink[400],
+        cursorColor: Colors.redAccent,
         onChanged: (text) {
           setState(() {
             widget.user.setWeight(text);
@@ -61,10 +61,10 @@ class _WeightInputState extends State<WeightInput> {
             labelStyle: TextStyle(color: Colors.black),
             hintText: "Enter in Kilograms",
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.pink[400]),
+              borderSide: BorderSide(color: Colors.redAccent),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.pink[400]),
+              borderSide: BorderSide(color: Colors.redAccent),
             )),
       ),
     );

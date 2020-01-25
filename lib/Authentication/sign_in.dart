@@ -26,9 +26,12 @@ class _SignInState extends State<SignIn> {
         : MaterialApp(
             home: Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.pinkAccent,
+                backgroundColor: Colors.redAccent,
                 elevation: 0,
-                title: Text("Sign in"),
+                title: Text(
+                  "Sign in",
+                  style: TextStyle(fontSize: 25),
+                ),
                 actions: <Widget>[
                   FlatButton.icon(
                     icon: Icon(
@@ -74,7 +77,7 @@ class _SignInState extends State<SignIn> {
                             child: TextFormField(
                               validator: (val) =>
                                   val.isEmpty ? 'Enter an Email' : null,
-                              cursorColor: Colors.black,
+                              cursorColor: Colors.redAccent,
                               decoration: InputDecoration(
                                   labelText: "Email",
                                   labelStyle: TextStyle(
@@ -82,11 +85,11 @@ class _SignInState extends State<SignIn> {
                                   ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   )),
                               onChanged: (val) {
                                 setState(() {
@@ -101,7 +104,7 @@ class _SignInState extends State<SignIn> {
                               validator: (val) => val.length < 6
                                   ? 'Enter a password 6 or more charaters long'
                                   : null,
-                              cursorColor: Colors.black,
+                              cursorColor: Colors.redAccent,
                               decoration: InputDecoration(
                                   labelText: "Password",
                                   labelStyle: TextStyle(
@@ -109,11 +112,11 @@ class _SignInState extends State<SignIn> {
                                   ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pink[400]),
+                                        BorderSide(color: Colors.redAccent),
                                   )),
                               obscureText: true,
                               onChanged: (val) {
@@ -126,10 +129,12 @@ class _SignInState extends State<SignIn> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: RaisedButton(
-                              color: Colors.pinkAccent,
+                              color: Colors.redAccent,
                               child: Text(
                                 "Sign in",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {

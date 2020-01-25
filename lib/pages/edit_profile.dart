@@ -72,7 +72,7 @@ class _EditProfileState extends State<EditProfile> {
           appBar: AppBar(
             title: Text("Edit Profile"),
             centerTitle: true,
-            backgroundColor: Colors.pink[500],
+            backgroundColor: Colors.redAccent,
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
@@ -151,7 +151,7 @@ class _EditProfileState extends State<EditProfile> {
               }
             },
             child: Icon(Icons.save),
-            backgroundColor: Colors.pink[600],
+            backgroundColor: Colors.redAccent,
           ),
         ),
       ),
@@ -176,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.pink[800]),
+                style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

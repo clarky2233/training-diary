@@ -46,7 +46,7 @@ class _HeightInputState extends State<HeightInput> {
       child: TextFormField(
         maxLines: 1,
         controller: textController,
-        cursorColor: Colors.pink[400],
+        cursorColor: Colors.redAccent,
         onChanged: (text) {
           setState(() {
             getHeightInput(text);
@@ -60,10 +60,10 @@ class _HeightInputState extends State<HeightInput> {
             labelStyle: TextStyle(color: Colors.black),
             hintText: "Enter in Centimeters",
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.pink[400]),
+              borderSide: BorderSide(color: Colors.redAccent),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.pink[400]),
+              borderSide: BorderSide(color: Colors.redAccent),
             )),
       ),
     );

@@ -61,7 +61,10 @@ class _ProfilePageState extends State<ProfilePage> {
           appBar: AppBar(
             backgroundColor: Colors.redAccent,
             elevation: 0,
-            title: Text("My Profile"),
+            title: Text(
+              "My Profile",
+              style: TextStyle(fontSize: 25),
+            ),
             actions: <Widget>[
               FlatButton.icon(
                 icon: Icon(
@@ -141,11 +144,11 @@ class _ProfilePageState extends State<ProfilePage> {
             },
             icon: Icon(Icons.add),
             label: Text("New Goal"),
-            backgroundColor: Colors.red[600],
+            backgroundColor: Colors.redAccent,
             elevation: 2,
           ),
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.red[600],
+            selectedItemColor: Colors.redAccent,
             currentIndex: 2,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
@@ -234,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: EdgeInsets.all(10),
               child: TextField(
                 maxLines: 10,
-                cursorColor: Colors.redAccent[400],
+                cursorColor: Colors.redAccent,
                 //controller: textController,
                 onChanged: (text) {
                   setState(() {
@@ -326,7 +329,7 @@ class _ProfilePageState extends State<ProfilePage> {
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.pink[800]),
+                style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

@@ -67,7 +67,7 @@ class _EditEventState extends State<EditEvent>
           appBar: AppBar(
             title: Text('Edit Upcoming Event'),
             centerTitle: true,
-            backgroundColor: Colors.pink[500],
+            backgroundColor: Colors.redAccent,
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
@@ -132,7 +132,7 @@ class _EditEventState extends State<EditEvent>
               }
             },
             child: Icon(Icons.done_outline),
-            backgroundColor: Colors.pink[600],
+            backgroundColor: Colors.redAccent,
           ),
         ),
       ),
@@ -157,7 +157,7 @@ class _EditEventState extends State<EditEvent>
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.pink[800]),
+                style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

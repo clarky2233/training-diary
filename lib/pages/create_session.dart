@@ -52,7 +52,7 @@ class _CreateSessionState extends State<CreateSession>
           appBar: AppBar(
             title: Text('New Training Session'),
             centerTitle: true,
-            backgroundColor: Colors.pink[500],
+            backgroundColor: Colors.redAccent,
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
@@ -143,7 +143,7 @@ class _CreateSessionState extends State<CreateSession>
               }
             },
             child: Icon(Icons.done_outline),
-            backgroundColor: Colors.pink[600],
+            backgroundColor: Colors.redAccent,
           ),
         ),
       ),
@@ -169,7 +169,7 @@ class _CreateSessionState extends State<CreateSession>
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.pink[800]),
+                style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

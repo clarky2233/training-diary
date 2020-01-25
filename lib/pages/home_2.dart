@@ -70,13 +70,26 @@ class _Home2State extends State<Home2> {
               return Scaffold(
                 backgroundColor: Colors.grey[300],
                 appBar: AppBar(
-                  title: Text("$appBarText"),
+                  title: Text(
+                    "$appBarText",
+                    style: TextStyle(fontSize: 25),
+                  ),
                   elevation: 0,
                   backgroundColor: Colors.redAccent,
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.library_books),
-                      onPressed: () {},
+                      iconSize: 30,
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EntriesPage(
+                                      db: widget.db,
+                                      user: user,
+                                      allEntries: null,
+                                    )));
+                      },
                     ),
                   ],
                 ),
@@ -103,11 +116,11 @@ class _Home2State extends State<Home2> {
                                 )));
                   },
                   child: Icon(Icons.add),
-                  backgroundColor: Colors.red[600],
+                  backgroundColor: Colors.redAccent,
                   elevation: 2,
                 ),
                 bottomNavigationBar: BottomNavigationBar(
-                  selectedItemColor: Colors.red[600],
+                  selectedItemColor: Colors.redAccent,
                   currentIndex: 1,
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
@@ -244,7 +257,7 @@ class _Home2State extends State<Home2> {
           child: Align(
             alignment: Alignment.topRight,
             child: RaisedButton(
-              color: Colors.red[400],
+              color: Colors.redAccent,
               child: Text(
                 "New Event",
                 style: TextStyle(color: Colors.white),
