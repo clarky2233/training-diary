@@ -1,5 +1,6 @@
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/stats_manager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 

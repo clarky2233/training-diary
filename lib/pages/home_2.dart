@@ -22,13 +22,10 @@ import 'package:training_journal/user.dart';
 class Home2 extends StatefulWidget {
   final DBHelper db;
   final User user;
-  final List<TrainingSession> recentTen;
-  final List<Event> upcoming;
-  const Home2(
-      {@required this.db,
-      @required this.user,
-      @required this.recentTen,
-      @required this.upcoming});
+  const Home2({
+    @required this.db,
+    @required this.user,
+  });
 
   @override
   _Home2State createState() => _Home2State();
@@ -39,9 +36,11 @@ class _Home2State extends State<Home2> {
   User user;
   DatabaseService firestore;
   String appBarText;
+  bool showStats;
 
   void initState() {
     appBarText = "Dashboard";
+    showStats = true;
     super.initState();
   }
 
@@ -74,20 +73,29 @@ class _Home2State extends State<Home2> {
                     "$appBarText",
                     style: TextStyle(fontSize: 25),
                   ),
+                  centerTitle: true,
                   elevation: 0,
                   backgroundColor: Colors.redAccent,
+                  leading: IconButton(
+                    icon: Icon(Icons.swap_vertical_circle),
+                    iconSize: 30,
+                    onPressed: () {
+                      setState(() {
+                        showStats = !showStats;
+                      });
+                    },
+                  ),
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.library_books),
                       iconSize: 30,
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EntriesPage(
                                       db: widget.db,
                                       user: user,
-                                      allEntries: null,
                                     )));
                       },
                     ),
@@ -107,7 +115,7 @@ class _Home2State extends State<Home2> {
                     FloatingActionButtonLocation.endFloat,
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CreateSession(
@@ -138,15 +146,14 @@ class _Home2State extends State<Home2> {
                   ],
                   onTap: (index) async {
                     if (index == 2) {
-                      //List<Goal> goals = await widget.db.getGoals();
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProfilePage(
                                     user: user,
                                   )));
                     } else if (index == 0) {
-                      Navigator.pushReplacement(context,
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) => StatsPage()));
                     }
                   },
@@ -158,44 +165,57 @@ class _Home2State extends State<Home2> {
   }
 
   Widget getTopPanel() {
-    return StreamBuilder<List<Event>>(
-        stream: firestore.events,
-        builder: (context, snapshot) {
-          if (user == null) {
+    if (showStats) {
+      return Container(
+        height: 300,
+        margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+      );
+    } else {
+      return StreamBuilder<List<Event>>(
+          stream: firestore.events,
+          builder: (context, snapshot) {
+            if (user == null) {
+              return Container(
+                height: 300,
+                margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+              );
+            }
+            if (!snapshot.hasData) {
+              return Container(
+                height: 300,
+                margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                          "Your statistics/upcoming events will be displayed here\n"),
+                      Text("Tap the swap icon above to switch views"),
+                    ],
+                  ),
+                ),
+              );
+            }
             return Container(
-              height: 300,
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
-            );
-          }
-          if (snapshot.data == null) {
-            return Container(
-              height: 300,
-              margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
-              child: Center(
-                child: Text(
-                    "Your statistics/upcoming events will be displayed here"),
+              height: 300, // MediaQuery.of(context).size.height / 2.58,
+              //width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Hero(
+                      tag: 'UC$index',
+                      child: UpcomingCard(
+                        db: widget.db,
+                        user: user,
+                        event: snapshot.data[index],
+                      ));
+                },
               ),
             );
-          }
-          return Container(
-            height: 300, // MediaQuery.of(context).size.height / 2.58,
-            //width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return Hero(
-                    tag: 'UC$index',
-                    child: UpcomingCard(
-                      db: widget.db,
-                      user: user,
-                      event: snapshot.data[index],
-                    ));
-              },
-            ),
-          );
-        });
+          });
+    }
   }
 
   Widget getRecentSessions() {
@@ -263,7 +283,7 @@ class _Home2State extends State<Home2> {
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => CreateEvent(

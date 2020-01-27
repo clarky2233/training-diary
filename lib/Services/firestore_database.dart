@@ -252,4 +252,74 @@ class DatabaseService {
       return null;
     }
   }
+
+  Future getWeekData(String field) async {
+    List<List<BarDataModel>> data = List<List<BarDataModel>>();
+    dynamic result = journalCollection
+        .where("userID", isEqualTo: uid)
+        .orderBy("date", descending: true)
+        .limit(10)
+        .getDocuments()
+        .then((snapshot) {
+      snapshot.documents.map((doc) {
+        return BarDataModel(
+            xValue: doc.data['date'], yValue: doc.data['$field']);
+      });
+    });
+    data.add(result);
+  }
+
+  Future getSummaryData() async {
+    List<List<BarDataModel>> data = List<List<BarDataModel>>();
+    dynamic result = await journalCollection
+        .where("userID", isEqualTo: uid)
+        .orderBy("date", descending: true)
+        .getDocuments()
+        .then((snapshot) {
+      snapshot.documents.map((doc) {
+        return BarDataModel(
+            xValue: doc.data['date'].toString(),
+            yValue: doc.data['duration'].toDouble());
+      }).toList();
+    });
+    data.add(result);
+    dynamic result2 = await journalCollection
+        .where("userID", isEqualTo: uid)
+        .orderBy("date", descending: true)
+        .getDocuments()
+        .then((snapshot) {
+      snapshot.documents.map((doc) {
+        return BarDataModel(
+            xValue: doc.data['date'].toString(),
+            yValue: doc.data['difficulty'].toDouble());
+      }).toList();
+    });
+    data.add(result2);
+    return data;
+  }
+}
+
+class TSDataModel {
+  DateTime xValue;
+  double yValue;
+
+  TSDataModel({this.xValue, this.yValue});
+
+  String toString() {
+    return "$xValue ($yValue)";
+  }
+}
+
+class BarDataModel {
+  final String xValue;
+  double yValue;
+
+  BarDataModel({this.xValue, this.yValue});
+}
+
+class PieDataModel {
+  String name;
+  int total;
+
+  PieDataModel({this.name, this.total});
 }

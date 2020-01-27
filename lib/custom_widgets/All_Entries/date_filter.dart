@@ -48,7 +48,6 @@ class _DateFilterState extends State<DateFilter> {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
                     return EntriesPage(
-                      allEntries: null,
                       db: widget.db,
                       user: widget.user,
                       currentFilter: date,

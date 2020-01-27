@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/firestore_database.dart';
-import 'package:training_journal/pages/profile_page.dart';
 import 'package:training_journal/user.dart';
 
 class GoalCard extends StatefulWidget {
@@ -26,12 +24,17 @@ class _GoalCardState extends State<GoalCard> {
   void initState() {
     textController.text = widget.goal.text;
     titleController.text = widget.goal.title;
+    titleStr = titleController.text;
+    goalValue = textController.text;
     firestore = DatabaseService(uid: widget.user.id);
     super.initState();
   }
 
   bool isValid(Goal goal) {
-    if (goal.text == null || goal.title == null) {
+    if (goal.text == null ||
+        goal.title == null ||
+        goal.title == '' ||
+        goal.text == '') {
       return false;
     } else {
       return true;
@@ -125,15 +128,7 @@ class _GoalCardState extends State<GoalCard> {
               ),
               onPressed: () async {
                 firestore.deleteGoal(widget.goal.id);
-                //await widget.db.deleteGoal(widget.goal.id);
                 Navigator.pop(context);
-                //List<Goal> x = await widget.db.getGoals();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProfilePage(
-                              user: widget.user,
-                            )));
               },
             ),
             FlatButton(
@@ -156,108 +151,111 @@ class _GoalCardState extends State<GoalCard> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return SimpleDialog(
-          title: Text(
-            'Edit Goal',
-            style: TextStyle(fontSize: 26),
-          ),
-          contentPadding: EdgeInsets.all(5),
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                maxLines: 1,
-                cursorColor: Colors.pink[400],
-                controller: titleController,
-                onChanged: (text) {
-                  setState(() {
-                    titleStr = text;
-                    widget.goal.title = titleStr;
-                  });
-                },
-                style: TextStyle(
-                  fontSize: 20,
+        return WillPopScope(
+          onWillPop: () {
+            Navigator.pop(context);
+            titleController.text = widget.goal.title;
+            textController.text = widget.goal.text;
+            return;
+          },
+          child: SimpleDialog(
+            title: Text(
+              'Edit Goal',
+              style: TextStyle(fontSize: 26),
+            ),
+            contentPadding: EdgeInsets.all(5),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  maxLines: 1,
+                  cursorColor: Colors.pink[400],
+                  controller: titleController,
+                  onChanged: (text) {
+                    setState(() {
+                      titleStr = text;
+                    });
+                  },
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  decoration: InputDecoration(
+                      hintText: "Title",
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.redAccent),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.redAccent),
+                      )),
                 ),
-                decoration: InputDecoration(
-                    hintText: "Title",
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.redAccent),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: TextField(
+                  maxLines: 10,
+                  cursorColor: Colors.redAccent[400],
+                  controller: textController,
+                  onChanged: (text) {
+                    setState(() {
+                      goalValue = text;
+                    });
+                  },
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                  decoration: InputDecoration(
+                      hintText: "Description",
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.redAccent[400])),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.redAccent[400]))),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                    child: FlatButton(
+                      onPressed: () async {
+                        widget.goal.title = titleStr;
+                        widget.goal.text = goalValue;
+                        if (isValid(widget.goal)) {
+                          firestore.updateGoal(widget.goal);
+                          Navigator.of(context).pop();
+                        } else {
+                          _neverSatisfied();
+                        }
+                      },
+                      child: Text(
+                        "OK",
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.redAccent),
-                    )),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                maxLines: 10,
-                cursorColor: Colors.redAccent[400],
-                controller: textController,
-                onChanged: (text) {
-                  setState(() {
-                    goalValue = text;
-                    widget.goal.text = goalValue;
-                  });
-                },
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-                decoration: InputDecoration(
-                    hintText: "Description",
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.redAccent[400])),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.redAccent[400]))),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  child: FlatButton(
-                    onPressed: () async {
-                      if (isValid(widget.goal)) {
-                        //await widget.db.updateGoal(widget.goal);
-                        //List<Goal> goals = await widget.db.getGoals();
-                        //Navigator.of(context).pop();
-                        firestore.updateGoal(widget.goal);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfilePage(
-                                      user: widget.user,
-                                    )));
-                      } else {
+                  ),
+                  Container(
+                    child: FlatButton(
+                      onPressed: () {
                         Navigator.pop(context);
-                      }
-                    },
-                    child: Text(
-                      "OK",
-                      style: TextStyle(
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.bold,
+                        textController.text = widget.goal.text;
+                        titleController.text = widget.goal.title;
+                      },
+                      child: Text(
+                        "CANCEL",
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  child: FlatButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "CANCEL",
-                      style: TextStyle(
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         );
       },
     );
@@ -277,6 +275,36 @@ class _GoalCardState extends State<GoalCard> {
             children: <Widget>[
               Text("${widget.goal.text}"),
             ]);
+      },
+    );
+  }
+
+  Future<void> _neverSatisfied() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Incomplete Data'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Please complete all available fields.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ok',
+                style: TextStyle(color: Colors.redAccent),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }

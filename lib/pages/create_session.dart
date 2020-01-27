@@ -64,8 +64,6 @@ class _CreateSessionState extends State<CreateSession>
                         builder: (context) => Home2(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
                             )));
               },
               child: Icon(
@@ -134,8 +132,6 @@ class _CreateSessionState extends State<CreateSession>
                         builder: (context) => Home2(
                               db: null,
                               user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
                             )));
                 //print(await widget.db.getJournal());
               } else {

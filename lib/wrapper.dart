@@ -29,12 +29,14 @@ class _WrapperState extends State<Wrapper> {
     if (user == null) {
       return Authenticate();
     } else {
-      return Home2(
-        db: db,
-        user: user,
-        recentTen: null,
-        upcoming: null,
-      );
+      return FutureBuilder<User>(
+          future: firestore.getUser(),
+          builder: (context, snapshot) {
+            return Home2(
+              db: db,
+              user: snapshot.data,
+            );
+          });
     }
   }
 }

@@ -58,17 +58,14 @@ class _CreateEventState extends State<CreateEvent>
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home2(
-                              db: widget.db,
-                              user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
-                            )));
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => Home2(
+                //               db: widget.db,
+                //               user: widget.user,
+                //             )));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -104,19 +101,14 @@ class _CreateEventState extends State<CreateEvent>
                 FocusScope.of(context).requestFocus(new FocusNode());
                 event.userID = widget.user.id;
                 firestore.updateEvent(event);
-                // await widget.db.insertEvent(event);
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home2(
-                              db: widget.db,
-                              user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
-                            )));
-                //print(await widget.db.getJournal());
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => Home2(
+                //               db: widget.db,
+                //               user: widget.user,
+                //             )));
               } else {
                 _neverSatisfied();
               }

@@ -1,6 +1,7 @@
 import 'package:date_util/date_util.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/activities.dart';
 
 class StatsManager {
@@ -258,27 +259,27 @@ class StatsManager {
   }
 }
 
-class TSDataModel {
-  DateTime xValue;
-  double yValue;
+// class TSDataModel {
+//   DateTime xValue;
+//   double yValue;
 
-  TSDataModel({this.xValue, this.yValue});
+//   TSDataModel({this.xValue, this.yValue});
 
-  String toString() {
-    return "$xValue ($yValue)";
-  }
-}
+//   String toString() {
+//     return "$xValue ($yValue)";
+//   }
+// }
 
-class BarDataModel {
-  final String xValue;
-  double yValue;
+// class BarDataModel {
+//   final String xValue;
+//   double yValue;
 
-  BarDataModel({this.xValue, this.yValue});
-}
+//   BarDataModel({this.xValue, this.yValue});
+// }
 
-class PieDataModel {
-  String name;
-  int total;
+// class PieDataModel {
+//   String name;
+//   int total;
 
-  PieDataModel({this.name, this.total});
-}
+//   PieDataModel({this.name, this.total});
+// }

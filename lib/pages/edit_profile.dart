@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/full_name.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/height.dart';
@@ -29,7 +28,6 @@ class _EditProfileState extends State<EditProfile> {
     nameController.text = widget.user.name;
     usernameController.text = widget.user.username;
     firestore = DatabaseService(uid: widget.user.id);
-    //dobController.text = fromISO(widget.user.dob.toIso8601String());
     super.initState();
   }
 
@@ -38,34 +36,23 @@ class _EditProfileState extends State<EditProfile> {
     original.id = user.id;
     original.name = user.name;
     original.username = user.username;
-    //original.dob = user.dob;
     original.weight = user.weight;
     original.height = user.height;
     original.restingHeartRate = user.restingHeartRate;
     return original;
   }
 
-  // String toISO(String date) {
-  //   List dateparts = date.split('/');
-  //   if (dateparts.length != 3) {
-  //     return null;
-  //   }
-  //   String dateString =
-  //       "${dateparts[2]}-${dateparts[1]}-${dateparts[0]} 00:00:00.000";
-  //   return dateString;
-  // }
-
-  // String fromISO(String dobISO) {
-  //   List<String> str = dobISO.split("-");
-  //   String formatted = "${str[2].substring(0, 2)}/${str[1]}/${str[0]}";
-  //   return formatted;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: WillPopScope(
         onWillPop: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                        user: original,
+                      )));
           return Future.value(false);
         },
         child: Scaffold(
@@ -76,8 +63,7 @@ class _EditProfileState extends State<EditProfile> {
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                //await widget.db.updateUser(original);
-                //List<Goal> goals = await widget.db.getGoals();
+                Navigator.pop(context);
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -107,10 +93,6 @@ class _EditProfileState extends State<EditProfile> {
                     user: widget.user,
                     isEdit: true,
                   ),
-                  // DOBInput(
-                  //   user: widget.user,
-                  //   isEdit: true,
-                  // ),
                   WeightInput(
                     user: widget.user,
                     isEdit: true,
@@ -137,9 +119,6 @@ class _EditProfileState extends State<EditProfile> {
                     widget.user.weight,
                     widget.user.height,
                     widget.user.restingHeartRate);
-                //await widget.db.updateUser(widget.user);
-                //print(widget.user);
-                //List<Goal> goals = await widget.db.getGoals();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -169,6 +148,12 @@ class _EditProfileState extends State<EditProfile> {
             child: ListBody(
               children: <Widget>[
                 Text('Please complete all available fields.\n'),
+                Text('\nEnsure the weight is a decimal number'),
+                Text('  - E.g. 80.40'),
+                Text('\nEnsure the height is a whole number'),
+                Text('  - E.g. 183'),
+                Text('\nEnsure the heart rate is a whole number'),
+                Text('  - E.g. 60'),
               ],
             ),
           ),
@@ -176,7 +161,7 @@ class _EditProfileState extends State<EditProfile> {
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.redAccent),
+                style: TextStyle(color: Colors.pink[800]),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

@@ -35,7 +35,6 @@ class _ClearFilterState extends State<ClearFilter> {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
                 return EntriesPage(
-                  allEntries: null,
                   db: widget.db,
                   user: widget.user,
                 );

@@ -67,8 +67,6 @@ class _CreateSessionFromTemplateState extends State<CreateSessionFromTemplate>
                         builder: (context) => Home2(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
                             )));
               },
               child: Icon(

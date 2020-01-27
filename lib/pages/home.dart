@@ -246,7 +246,6 @@ class _HomeState extends State<Home> {
                           builder: (context) => EntriesPage(
                                 db: widget.db,
                                 user: widget.user,
-                                allEntries: x,
                               )));
                 },
               ),
@@ -287,7 +286,7 @@ class _HomeState extends State<Home> {
         height: 300, //MediaQuery.of(context).size.height / 2.58,
         margin: EdgeInsets.fromLTRB(10, 5, 0, 10),
         child: SummaryStatsCard(
-          sm: sm,
+          user: null,
           title: "Duration (blue) and Intensity / 5 (red)",
         ),
       );

@@ -14,13 +14,9 @@ import 'package:training_journal/user.dart';
 class EntriesPage extends StatefulWidget {
   final DBHelper db;
   final User user;
-  final List<TrainingSession> allEntries;
   final DateTime currentFilter;
   const EntriesPage(
-      {@required this.db,
-      @required this.user,
-      @required this.allEntries,
-      this.currentFilter});
+      {@required this.db, @required this.user, this.currentFilter});
 
   @override
   _EntriesPageState createState() => _EntriesPageState();
@@ -31,9 +27,6 @@ class _EntriesPageState extends State<EntriesPage> {
   void initState() {
     super.initState();
     firestore = DatabaseService(uid: widget.user.id);
-    if (widget.allEntries != null) {
-      size = widget.allEntries.length;
-    }
     if (widget.currentFilter != null) {
       filterText = DateFormat.yMMMM("en_US").format(widget.currentFilter);
     }
@@ -51,7 +44,8 @@ class _EntriesPageState extends State<EntriesPage> {
     return MaterialApp(
       home: WillPopScope(
         onWillPop: () {
-          return Future.value(false);
+          return;
+          Future.value(false);
         },
         child: Scaffold(
           backgroundColor: Colors.grey[300],
@@ -61,16 +55,12 @@ class _EntriesPageState extends State<EntriesPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: IconButton(
                   onPressed: () async {
-                    // List<TrainingSession> x = await widget.db.lastTenSessions();
-                    // List<Event> upcoming = await widget.db.getEvents();
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Home2(
                                   db: widget.db,
                                   user: widget.user,
-                                  recentTen: null,
-                                  upcoming: null,
                                 )));
                   },
                   icon: Icon(Icons.home),
@@ -153,10 +143,13 @@ class _EntriesPageState extends State<EntriesPage> {
                           crossAxisCount: 2,
                           children:
                               List.generate(snapshot.data.length, (index) {
-                            return SmallSessionCard(
-                              ts: snapshot.data[index],
-                              db: widget.db,
-                              user: widget.user,
+                            return Hero(
+                              tag: "SMC$index",
+                              child: SmallSessionCard(
+                                ts: snapshot.data[index],
+                                db: widget.db,
+                                user: widget.user,
+                              ),
                             );
                           }));
                     }),
@@ -204,7 +197,6 @@ class _EntriesPageState extends State<EntriesPage> {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
                     return EntriesPage(
-                      allEntries: [],
                       db: widget.db,
                       user: widget.user,
                       currentFilter: null,

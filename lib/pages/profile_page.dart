@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => EditProfile(
@@ -166,20 +166,15 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
             onTap: (index) async {
               if (index == 1) {
-                //List<TrainingSession> x = await widget.db.lastTenSessions();
-                //List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home2(
-                              recentTen: null,
                               db: null,
                               user: widget.user,
-                              upcoming: null,
                             )));
               } else if (index == 0) {
-                //StatsManager sm = StatsManager(dbhelper: widget.db);
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => StatsPage(
@@ -214,7 +209,6 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TextField(
                 maxLines: 1,
                 cursorColor: Colors.pink[400],
-                //controller: textController,
                 onChanged: (text) {
                   setState(() {
                     titleStr = text;
@@ -238,7 +232,6 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TextField(
                 maxLines: 10,
                 cursorColor: Colors.redAccent,
-                //controller: textController,
                 onChanged: (text) {
                   setState(() {
                     goalValue = text;
@@ -267,14 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           title: titleStr);
                       if (isValid(goal)) {
                         firestore.updateGoal(goal);
-                        //await widget.db.insertGoal(goal);
-                        //List<Goal> goals = await widget.db.getGoals();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfilePage(
-                                      user: widget.user,
-                                    )));
+                        Navigator.pop(context);
                       } else {
                         _neverSatisfied();
                       }
@@ -321,7 +307,6 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListBody(
               children: <Widget>[
                 Text('Please complete all available fields.'),
-                Text('The Description field is optional.'),
               ],
             ),
           ),
@@ -356,7 +341,6 @@ class _ProfilePageState extends State<ProfilePage> {
           }
           return Expanded(
             child: Container(
-              //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
@@ -371,30 +355,5 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           );
         });
-    // if (size == 0) {
-    //   return Expanded(
-    //       child: Center(child: Text("Tap the plus icon to create a goal")));
-    // } else {
-    //   return FutureBuilder<List<Goal>>(
-    //       future: firestore.getGoals(),
-    //       builder: (context, snapshot) {
-    //         return Expanded(
-    //           child: Container(
-    //             //margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-    //             child: ListView.builder(
-    //               itemCount: snapshot.data.length,
-    //               itemBuilder: (context, index) {
-    //                 return Hero(
-    //                     tag: 'GC$index',
-    //                     child: GoalCard(
-    //                       db: widget.db,
-    //                       user: widget.user,
-    //                       goal: snapshot.data[index],
-    //                     ));
-    //               },
-    //             ),
-    //           ),
-    //         );
-    //       });
   }
 }

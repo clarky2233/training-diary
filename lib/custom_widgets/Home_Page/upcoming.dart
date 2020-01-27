@@ -67,8 +67,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
                     color: Colors.black,
                   ),
                   onPressed: () {
-                    print(widget.event.id);
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditEvent(
@@ -142,8 +141,6 @@ class _UpcomingCardState extends State<UpcomingCard> {
                         builder: (context) => Home2(
                               db: widget.db,
                               user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
                             )));
               },
             ),

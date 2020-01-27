@@ -21,7 +21,7 @@ class _SessionCardState extends State<SessionCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => MoreInfo(

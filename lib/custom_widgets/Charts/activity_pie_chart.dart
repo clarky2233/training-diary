@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/stats_manager.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:training_journal/Services/firestore_database.dart';
 
 class ActivityPieChart extends StatelessWidget {
   final List<BarDataModel> data;

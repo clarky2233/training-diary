@@ -71,18 +71,14 @@ class _EditEventState extends State<EditEvent>
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                // await widget.db.updateEvent(original);
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home2(
-                              db: widget.db,
-                              user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
-                            )));
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => Home2(
+                //               db: widget.db,
+                //               user: widget.user,
+                //             )));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -114,19 +110,14 @@ class _EditEventState extends State<EditEvent>
               if (isValid(widget.event)) {
                 widget.event.userID = widget.user.id;
                 firestore.updateEvent(widget.event);
-                // await widget.db.updateEvent(widget.event);
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home2(
-                              db: widget.db,
-                              user: widget.user,
-                              recentTen: null,
-                              upcoming: null,
-                            )));
-                //print(await widget.db.getJournal());
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => Home2(
+                //               db: widget.db,
+                //               user: widget.user,
+                //             )));
               } else {
                 _neverSatisfied();
               }

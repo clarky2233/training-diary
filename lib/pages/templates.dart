@@ -73,8 +73,6 @@ class _TemplatePageState extends State<TemplatePage> {
                             builder: (context) => Home2(
                                   db: widget.db,
                                   user: widget.user,
-                                  recentTen: null,
-                                  upcoming: null,
                                 )));
                   },
                   icon: Icon(Icons.home),

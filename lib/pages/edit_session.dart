@@ -79,27 +79,21 @@ class _EditSessionState extends State<EditSession>
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                //await widget.db.updateJournalEntry(original);
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<TrainingSession> y = await widget.db.getJournal();
-                // List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) {
-                  if (widget.returnHome) {
-                    return Home2(
-                      db: widget.db,
-                      user: widget.user,
-                      recentTen: null,
-                      upcoming: null,
-                    );
-                  } else {
-                    return EntriesPage(
-                      db: widget.db,
-                      user: widget.user,
-                      allEntries: null,
-                    );
-                  }
-                }));
+                Navigator.pop(context);
+                // Navigator.pushReplacement(context,
+                //     MaterialPageRoute(builder: (context) {
+                //   if (widget.returnHome) {
+                //     return Home2(
+                //       db: widget.db,
+                //       user: widget.user,
+                //     );
+                //   } else {
+                //     return EntriesPage(
+                //       db: widget.db,
+                //       user: widget.user,
+                //     );
+                //   }
+                // }));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -152,14 +146,11 @@ class _EditSessionState extends State<EditSession>
                     return Home2(
                       db: widget.db,
                       user: widget.user,
-                      recentTen: null,
-                      upcoming: null,
                     );
                   } else {
                     return EntriesPage(
                       db: widget.db,
                       user: widget.user,
-                      allEntries: null,
                     );
                   }
                 }));

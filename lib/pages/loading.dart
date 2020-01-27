@@ -53,7 +53,7 @@ class _LoadingState extends State<Loading> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: Colors.redAccent,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

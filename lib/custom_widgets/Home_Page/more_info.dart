@@ -89,23 +89,17 @@ class _MoreInfoState extends State<MoreInfo> {
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<TrainingSession> y = await widget.db.getJournal();
-                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   if (widget.returnHome) {
                     return Home2(
                       db: widget.db,
                       user: widget.user,
-                      recentTen: null,
-                      upcoming: null,
                     );
                   } else {
                     return EntriesPage(
                       db: widget.db,
                       user: widget.user,
-                      allEntries: null,
                     );
                   }
                 }));
@@ -119,7 +113,7 @@ class _MoreInfoState extends State<MoreInfo> {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => EditSession(
@@ -459,8 +453,6 @@ class _MoreInfoState extends State<MoreInfo> {
                           builder: (context) => Home2(
                                 db: widget.db,
                                 user: widget.user,
-                                recentTen: null,
-                                upcoming: null,
                               )));
                 } else {
                   Navigator.pushReplacement(
@@ -469,7 +461,6 @@ class _MoreInfoState extends State<MoreInfo> {
                           builder: (context) => EntriesPage(
                                 db: widget.db,
                                 user: widget.user,
-                                allEntries: null,
                               )));
                 }
               },
