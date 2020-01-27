@@ -139,10 +139,6 @@ class StatsManager {
 
   List<BarDataModel> weekBarData(
       List<Map<String, dynamic>> maps, String dataColumn) {
-    int difficultyCount = 0;
-    int difficultyTotal = 0;
-    int enjoymentCount = 0;
-    int enjoymentTotal = 0;
     List<BarDataModel> data = List<BarDataModel>();
     data.add(BarDataModel(yValue: 0.0, xValue: "Mon"));
     data.add(BarDataModel(yValue: 0.0, xValue: "Tues"));
@@ -156,6 +152,10 @@ class StatsManager {
     }
     for (Map<String, dynamic> x in maps) {
       for (BarDataModel day in data) {
+        int difficultyCount = 0;
+        int difficultyTotal = 0;
+        int enjoymentCount = 0;
+        int enjoymentTotal = 0;
         if (day.xValue == getDayOfWeek(DateTime.parse(x['date']).weekday) &&
             x['$dataColumn'] != null) {
           if (dataColumn == 'duration') {
