@@ -34,6 +34,7 @@ class _CreateProfileState extends State<CreateProfile> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SingleChildScrollView(
           child: GestureDetector(

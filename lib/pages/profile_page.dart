@@ -50,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: WillPopScope(
         onWillPop: () {
           return Future.value(false);
