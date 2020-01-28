@@ -4,7 +4,6 @@ import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_porter/utils/csv_utils.dart';
 import 'package:training_journal/Database_helper.dart';
-import 'package:training_journal/custom_widgets/Stats_Page/dropdown.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_month_stats.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_week_stats.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_year_stats.dart';
