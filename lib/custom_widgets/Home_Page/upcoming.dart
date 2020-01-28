@@ -34,7 +34,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
           children: <Widget>[
             Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 5, 30),
+                padding: const EdgeInsets.fromLTRB(15, 30, 15, 30),
                 child: Text("${widget.event.name}",
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
