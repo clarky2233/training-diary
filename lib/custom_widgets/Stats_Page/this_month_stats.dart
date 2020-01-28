@@ -27,7 +27,7 @@ class _ThisMonthStatsState extends State<ThisMonthStats> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            height: 280,
+            height: MediaQuery.of(context).size.height - 200, //280,
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: ListView(

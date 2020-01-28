@@ -20,7 +20,7 @@ class TSChart extends StatelessWidget {
       )
     ];
     return Container(
-      height: 200,
+      height: MediaQuery.of(context).size.height - 300, //200,
       width: MediaQuery.of(context).size.width,
       child: TimeSeriesChart(
         series,

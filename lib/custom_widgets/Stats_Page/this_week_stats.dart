@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_journal/custom_widgets/Charts/new_stats_card.dart';
 import 'package:training_journal/custom_widgets/Charts/week_stats_card.dart';
 import 'package:training_journal/stats_manager.dart';
 
@@ -27,7 +28,7 @@ class _ThisWeekStatsState extends State<ThisWeekStats> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            height: 280,
+            height: MediaQuery.of(context).size.height - 200, //580,
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: ListView(

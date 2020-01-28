@@ -4,6 +4,7 @@ import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_porter/utils/csv_utils.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/custom_widgets/Stats_Page/dropdown.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_month_stats.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_week_stats.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_year_stats.dart';
@@ -25,6 +26,7 @@ class StatsPage extends StatefulWidget {
 }
 
 class _StatsPageState extends State<StatsPage> {
+  String dropdownValue = 'This Week';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,6 +49,7 @@ class _StatsPageState extends State<StatsPage> {
             ),
             centerTitle: false,
             actions: <Widget>[
+              getDropDown(),
               IconButton(
                 icon: Icon(Icons.share),
                 color: Colors.black,
@@ -57,23 +60,7 @@ class _StatsPageState extends State<StatsPage> {
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ThisWeekStats(
-                  sm: widget.sm,
-                ),
-                ThisMonthStats(
-                  sm: widget.sm,
-                ),
-                ThisYearStats(
-                  sm: widget.sm,
-                ),
-              ],
-            ),
-          ),
+          body: SingleChildScrollView(child: getStats()),
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: Colors.red[600],
             currentIndex: 0,
@@ -125,6 +112,29 @@ class _StatsPageState extends State<StatsPage> {
 
   _createFile() async {
     await sendData();
+  }
+
+  Widget getStats() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (dropdownValue == "This Week") {
+          return ThisWeekStats(
+            sm: widget.sm,
+          );
+        } else if (dropdownValue == "This Year") {
+          return ThisYearStats(
+            sm: widget.sm,
+          );
+        } else if (dropdownValue == "This Month") {
+          return ThisMonthStats(
+            sm: widget.sm,
+          );
+        }
+        return ThisWeekStats(
+          sm: widget.sm,
+        );
+      },
+    );
   }
 
   Future<void> sendData() async {
@@ -187,5 +197,35 @@ class _StatsPageState extends State<StatsPage> {
     );
 
     await FlutterMailer.send(mailOptions);
+  }
+
+  Widget getDropDown() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 25, 0),
+        child: DropdownButton<String>(
+          value: dropdownValue,
+          icon: Icon(Icons.arrow_drop_down),
+          iconSize: 30,
+          elevation: 0,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              dropdownValue = newValue;
+            });
+          },
+          items: <String>['This Week', 'This Month', 'This Year']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Center(child: Text(value)),
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 }

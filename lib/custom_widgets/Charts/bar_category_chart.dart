@@ -20,7 +20,7 @@ class BarCategoryChart extends StatelessWidget {
               '${model.yValue.toStringAsFixed(1)}'),
     ];
     return Container(
-      height: 200,
+      height: MediaQuery.of(context).size.height - 300, //200,
       width: MediaQuery.of(context).size.width,
       child: charts.BarChart(
         series,
