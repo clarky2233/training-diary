@@ -253,49 +253,63 @@ class DatabaseService {
     }
   }
 
-  Future getWeekData(String field) async {
-    List<List<BarDataModel>> data = List<List<BarDataModel>>();
-    dynamic result = journalCollection
+  Future<List<BarDataModel>> getWeekData(String dataColumn) async {
+    List<TrainingSession> sessions = await journalCollection
         .where("userID", isEqualTo: uid)
-        .orderBy("date", descending: true)
-        .limit(10)
         .getDocuments()
-        .then((snapshot) {
-      snapshot.documents.map((doc) {
-        return BarDataModel(
-            xValue: doc.data['date'], yValue: doc.data['$field']);
-      });
-    });
-    data.add(result);
+        .then(_trainingSessionListFromSnapshot);
+    List<BarDataModel> data = List<BarDataModel>();
+    data.add(BarDataModel(yValue: 0.0, xValue: "Mon"));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Tues"));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Wed"));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Thur"));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Fri"));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Sat"));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Sun"));
+    if (sessions == null || sessions.length == 0) {
+      return data;
+    }
+    for (TrainingSession session in sessions) {
+      for (BarDataModel day in data) {
+        if (day.xValue == getDayOfWeek(session.date.weekday)) {
+          if (dataColumn == 'duration' && session.duration != null) {
+            day.yValue += (session.duration / 60);
+          } else if (dataColumn == 'difficulty' && session.difficulty != null) {
+            difficultyTotal += x['$dataColumn'];
+            difficultyCount++;
+            day.yValue =
+                difficultyTotal.toDouble() / difficultyCount.toDouble();
+          } else if (dataColumn == 'enjoymentRating') {
+            enjoymentTotal += x['$dataColumn'];
+            enjoymentCount++;
+            day.yValue = enjoymentTotal.toDouble() / enjoymentCount.toDouble();
+          } else if (dataColumn == 'hydration') {
+            day.yValue += x['$dataColumn'].toDouble();
+          } else {
+            day.yValue = x['$dataColumn'].toDouble();
+          }
+        }
+      }
+    }
   }
 
-  Future getSummaryData() async {
-    List<List<BarDataModel>> data = List<List<BarDataModel>>();
-    dynamic result = await journalCollection
-        .where("userID", isEqualTo: uid)
-        .orderBy("date", descending: true)
-        .getDocuments()
-        .then((snapshot) {
-      snapshot.documents.map((doc) {
-        return BarDataModel(
-            xValue: doc.data['date'].toString(),
-            yValue: doc.data['duration'].toDouble());
-      }).toList();
-    });
-    data.add(result);
-    dynamic result2 = await journalCollection
-        .where("userID", isEqualTo: uid)
-        .orderBy("date", descending: true)
-        .getDocuments()
-        .then((snapshot) {
-      snapshot.documents.map((doc) {
-        return BarDataModel(
-            xValue: doc.data['date'].toString(),
-            yValue: doc.data['difficulty'].toDouble());
-      }).toList();
-    });
-    data.add(result2);
-    return data;
+  String getDayOfWeek(int i) {
+    if (i == 1) {
+      return "Mon";
+    } else if (i == 2) {
+      return "Tues";
+    } else if (i == 3) {
+      return "Wed";
+    } else if (i == 4) {
+      return "Thur";
+    } else if (i == 5) {
+      return "Fri";
+    } else if (i == 6) {
+      return "Sat";
+    } else if (i == 7) {
+      return "Sun";
+    }
+    return "NULL";
   }
 }
 
@@ -315,6 +329,11 @@ class BarDataModel {
   double yValue;
 
   BarDataModel({this.xValue, this.yValue});
+
+  static BarDataModel fromMap(Map<String, dynamic> map, String dataColumn) {
+    return BarDataModel(
+        xValue: map['date'] ?? null, yValue: map['$dataColumn']);
+  }
 }
 
 class PieDataModel {

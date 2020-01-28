@@ -54,7 +54,7 @@ class _SummaryStatsCardState extends State<SummaryStatsCard> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
                 child: FutureBuilder(
-                  future: firestore.getSummaryData(),
+                  //future: firestore.getSummaryData(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return SpinKitDualRing(
