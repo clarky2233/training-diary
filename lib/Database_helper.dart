@@ -107,7 +107,7 @@ class DBHelper {
       } catch (_) {}
 
       // Copy from asset
-      ByteData data = await rootBundle.load(join("copy_journal_database.db"));
+      ByteData data = await rootBundle.load(join("journal_database.db"));
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
@@ -116,7 +116,7 @@ class DBHelper {
     } else {
       print("Opening existing database");
     }
-    Database db = await openDatabase(path);
+    Database db = await openDatabase(path, readOnly: true);
     List<TrainingSession> x = await getJournal(db);
     print(x.length);
   }
