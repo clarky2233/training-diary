@@ -89,8 +89,10 @@ class DBHelper {
 
   void setup() async {
     firestore = DatabaseService(uid: user.id);
-    copyDatabase();
-    //database = createDatabase();
+    //copyDatabase();
+    database = createDatabase();
+    List<TrainingSession> x = await getJournal(await database);
+    print(x.length);
   }
 
   void copyDatabase() async {
@@ -117,8 +119,6 @@ class DBHelper {
       print("Opening existing database");
     }
     Database db = await openDatabase(path, readOnly: true);
-    List<TrainingSession> x = await getJournal(db);
-    print(x.length);
   }
 
   Future<Database> createDatabase() async {
