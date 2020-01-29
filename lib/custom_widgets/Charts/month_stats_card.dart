@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Charts/time_series_chart.dart';
 import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/user.dart';
 
 class MonthStatsCard extends StatefulWidget {
-  final StatsManager sm;
+  final User user;
   final String title;
   final String dataColumn;
   const MonthStatsCard({
-    this.sm,
+    this.user,
     this.title,
     this.dataColumn,
   });
@@ -18,6 +20,12 @@ class MonthStatsCard extends StatefulWidget {
 }
 
 class _MonthStatsCardState extends State<MonthStatsCard> {
+  DatabaseService firestore;
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,7 +56,7 @@ class _MonthStatsCardState extends State<MonthStatsCard> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FutureBuilder(
-                  future: widget.sm.getMonthData('${widget.dataColumn}'),
+                  future: firestore.getMonthData('${widget.dataColumn}'),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return TSChart(

@@ -3,13 +3,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Charts/bar_category_chart.dart';
 import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/user.dart';
 
 class WeekStatsCard extends StatefulWidget {
-  final StatsManager sm;
+  final User user;
   final String title;
   final String dataColumn;
   const WeekStatsCard({
-    this.sm,
+    this.user,
     this.title,
     this.dataColumn,
   });
@@ -20,6 +21,13 @@ class WeekStatsCard extends StatefulWidget {
 
 class _WeekStatsCardState extends State<WeekStatsCard> {
   List<BarDataModel> data;
+  DatabaseService firestore;
+
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -52,7 +60,7 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder(
-                    future: widget.sm.getWeekData('${widget.dataColumn}'),
+                    future: firestore.getWeekData('${widget.dataColumn}'),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         data = snapshot.data;

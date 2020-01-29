@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/custom_widgets/Charts/week_stats_card.dart';
 import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/user.dart';
 
 class ThisWeekStats extends StatefulWidget {
-  final StatsManager sm;
+  final User user;
 
-  const ThisWeekStats({this.sm});
+  const ThisWeekStats({this.user});
 
   @override
   _ThisWeekStatsState createState() => _ThisWeekStatsState();
@@ -34,42 +35,42 @@ class _ThisWeekStatsState extends State<ThisWeekStats> {
               scrollDirection: Axis.horizontal,
               children: <Widget>[
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Duration (hrs)",
                   dataColumn: 'duration',
                 ),
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Intensity / 5",
                   dataColumn: 'difficulty',
                 ),
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Overall Enjoyment / 5",
                   dataColumn: 'enjoymentRating',
                 ),
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Hours of Sleep",
                   dataColumn: 'hoursOfSleep',
                 ),
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Recovery Heart Rate (bpm)",
                   dataColumn: 'heartRate',
                 ),
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Sleep Rating / 5",
                   dataColumn: 'sleepRating',
                 ),
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "RPE (6 - 20)",
                   dataColumn: 'rpe',
                 ),
                 WeekStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Hydration (Litres)",
                   dataColumn: 'hydration',
                 ),

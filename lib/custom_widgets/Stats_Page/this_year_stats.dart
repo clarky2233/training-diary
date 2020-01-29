@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/custom_widgets/Charts/year_stats_card.dart';
 import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/user.dart';
 
 class ThisYearStats extends StatefulWidget {
-  final StatsManager sm;
+  final User user;
 
-  const ThisYearStats({this.sm});
+  const ThisYearStats({this.user});
 
   @override
   _ThisYearStatsState createState() => _ThisYearStatsState();
@@ -34,42 +35,42 @@ class _ThisYearStatsState extends State<ThisYearStats> {
               scrollDirection: Axis.horizontal,
               children: <Widget>[
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Duration (hrs)",
                   dataColumn: 'duration',
                 ),
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Intensity / 5",
                   dataColumn: 'difficulty',
                 ),
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Overall Enjoyment / 5",
                   dataColumn: 'enjoymentRating',
                 ),
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Hours of Sleep",
                   dataColumn: 'hoursOfSleep',
                 ),
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Recovery Heart Rate (bpm)",
                   dataColumn: 'heartRate',
                 ),
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Sleep Rating / 5",
                   dataColumn: 'sleepRating',
                 ),
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "RPE (6 - 20)",
                   dataColumn: 'rpe',
                 ),
                 YearStatsCard(
-                  sm: widget.sm,
+                  user: widget.user,
                   title: "Hydration (Litres)",
                   dataColumn: 'hydration',
                 ),

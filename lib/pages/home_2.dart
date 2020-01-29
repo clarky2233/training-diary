@@ -153,8 +153,12 @@ class _Home2State extends State<Home2> {
                                     user: user,
                                   )));
                     } else if (index == 0) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => StatsPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StatsPage(
+                                    user: user,
+                                  )));
                     }
                   },
                 ),
@@ -166,10 +170,6 @@ class _Home2State extends State<Home2> {
 
   Widget getTopPanel() {
     if (showStats) {
-      return Container(
-        height: 300,
-        margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
-      );
     } else {
       return StreamBuilder<List<Event>>(
           stream: firestore.events,

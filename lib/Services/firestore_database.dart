@@ -254,10 +254,85 @@ class DatabaseService {
   }
 
   Future<List<BarDataModel>> getWeekData(String dataColumn) async {
-    List<TrainingSession> sessions = await journalCollection
-        .where("userID", isEqualTo: uid)
-        .getDocuments()
-        .then(_trainingSessionListFromSnapshot);
+    try {
+      DateTime startOfWeek =
+          DateTime.now().subtract(Duration(days: DateTime.now().weekday));
+      List<TrainingSession> sessions = await journalCollection
+          .where("userID", isEqualTo: uid)
+          .where("date", isGreaterThanOrEqualTo: startOfWeek)
+          .where("date", isLessThan: startOfWeek.add(Duration(days: 7)))
+          .orderBy("date", descending: true)
+          .getDocuments()
+          .then(_trainingSessionListFromSnapshot);
+      return weekBarData(sessions, dataColumn);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<List<List<BarDataModel>>> getSummaryData() async {
+    try {
+      List<List<BarDataModel>> data = List<List<BarDataModel>>();
+      DateTime startOfWeek =
+          DateTime.now().subtract(Duration(days: DateTime.now().weekday));
+      List<TrainingSession> sessions = await journalCollection
+          .where("userID", isEqualTo: uid)
+          .where("date", isGreaterThanOrEqualTo: startOfWeek)
+          .where("date", isLessThan: startOfWeek.add(Duration(days: 7)))
+          .orderBy("date", descending: true)
+          .getDocuments()
+          .then(_trainingSessionListFromSnapshot);
+      data.add(weekBarData(sessions, "duration"));
+      data.add(weekBarData(sessions, "difficulty"));
+      return data;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<List<TSDataModel>> getMonthData(String dataColumn) async {
+    DateTime startOfMonth =
+        DateTime.now().subtract(Duration(days: DateTime.now().day));
+    try {
+      List<TrainingSession> sessions = await journalCollection
+          .where("userID", isEqualTo: uid)
+          .where("date", isGreaterThanOrEqualTo: startOfMonth)
+          .where("date",
+              isLessThanOrEqualTo: DateTime(
+                  startOfMonth.year, startOfMonth.month + 1, startOfMonth.day))
+          .orderBy("date", descending: true)
+          .getDocuments()
+          .then(_trainingSessionListFromSnapshot);
+      return monthTSData(sessions, dataColumn);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<List<TSDataModel>> getYearData(String dataColumn) async {
+    DateTime startOfYear = DateTime(DateTime.now().year, 1, 1);
+    try {
+      List<TrainingSession> sessions = await journalCollection
+          .where("userID", isEqualTo: uid)
+          .where("date", isGreaterThanOrEqualTo: startOfYear)
+          .where("date",
+              isLessThan: DateTime(
+                  startOfYear.year + 1, startOfYear.month, startOfYear.day))
+          .orderBy("date", descending: true)
+          .getDocuments()
+          .then(_trainingSessionListFromSnapshot);
+      return monthTSData(sessions, dataColumn);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  List<BarDataModel> weekBarData(
+      List<TrainingSession> sessions, String dataColumn) {
     List<BarDataModel> data = List<BarDataModel>();
     data.add(BarDataModel(yValue: 0.0, xValue: "Mon"));
     data.add(BarDataModel(yValue: 0.0, xValue: "Tues"));
@@ -270,11 +345,17 @@ class DatabaseService {
       return data;
     }
     for (TrainingSession session in sessions) {
+      Map x = session.toMap();
       for (BarDataModel day in data) {
-        if (day.xValue == getDayOfWeek(session.date.weekday)) {
-          if (dataColumn == 'duration' && session.duration != null) {
-            day.yValue += (session.duration / 60);
-          } else if (dataColumn == 'difficulty' && session.difficulty != null) {
+        int difficultyCount = 0;
+        int difficultyTotal = 0;
+        int enjoymentCount = 0;
+        int enjoymentTotal = 0;
+        if (day.xValue == getDayOfWeek(x['date'].weekday) &&
+            x['$dataColumn'] != null) {
+          if (dataColumn == 'duration') {
+            day.yValue += (x['$dataColumn'] / 60);
+          } else if (dataColumn == 'difficulty') {
             difficultyTotal += x['$dataColumn'];
             difficultyCount++;
             day.yValue =
@@ -291,6 +372,52 @@ class DatabaseService {
         }
       }
     }
+    return data;
+  }
+
+  List<TSDataModel> monthTSData(
+      List<TrainingSession> sessions, String dataColumn) {
+    int difficultyCount = 0;
+    int difficultyTotal = 0;
+    int enjoymentCount = 0;
+    int enjoymentTotal = 0;
+    List<TSDataModel> data = List<TSDataModel>();
+    for (TrainingSession session in sessions) {
+      Map x = session.toMap();
+      TSDataModel tsdm = TSDataModel(yValue: 0.0);
+      for (TSDataModel y in data) {
+        if (y.xValue.day == x['date'].day &&
+            y.xValue.month == x['date'].month &&
+            y.xValue.year == x['date'].year) {
+          tsdm = y;
+          break;
+        } else {}
+      }
+      if (tsdm.xValue == null) {
+        tsdm.xValue = x['date'];
+      }
+      if (x['$dataColumn'] != null) {
+        if (dataColumn == 'duration') {
+          tsdm.yValue += (x['$dataColumn'] / 60);
+        } else if (dataColumn == 'hydration') {
+          tsdm.yValue += x['$dataColumn'].toDouble();
+        } else if (dataColumn == 'difficulty') {
+          difficultyTotal += x['$dataColumn'];
+          difficultyCount++;
+          tsdm.yValue = difficultyTotal.toDouble() / difficultyCount.toDouble();
+        } else if (dataColumn == 'enjoymentRating') {
+          enjoymentTotal += x['$dataColumn'];
+          enjoymentCount++;
+          tsdm.yValue = enjoymentTotal.toDouble() / enjoymentCount.toDouble();
+        } else {
+          tsdm.yValue = x['$dataColumn'].toDouble();
+        }
+      }
+      if (tsdm.yValue != 0.0) {
+        data.add(tsdm);
+      }
+    }
+    return data;
   }
 
   String getDayOfWeek(int i) {

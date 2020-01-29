@@ -9,6 +9,7 @@ import 'package:training_journal/custom_widgets/Stats_Page/this_week_stats.dart'
 import 'package:training_journal/custom_widgets/Stats_Page/this_year_stats.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/home.dart';
+import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/pages/profile_page.dart';
 import 'package:training_journal/stats_manager.dart';
 import 'package:training_journal/training_session.dart';
@@ -36,12 +37,12 @@ class _StatsPageState extends State<StatsPage> {
         child: Scaffold(
           backgroundColor: Colors.grey[300],
           appBar: AppBar(
-            backgroundColor: Colors.grey[300],
+            backgroundColor: Colors.redAccent,
             elevation: 0,
             title: Text(
               "My Statistics",
               style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 25),
             ),
@@ -49,7 +50,7 @@ class _StatsPageState extends State<StatsPage> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.share),
-                color: Colors.black,
+                color: Colors.white,
                 iconSize: 30,
                 onPressed: () async {
                   await _createFile();
@@ -63,13 +64,13 @@ class _StatsPageState extends State<StatsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ThisWeekStats(
-                  sm: widget.sm,
+                  user: widget.user,
                 ),
                 ThisMonthStats(
-                  sm: widget.sm,
+                  user: widget.user,
                 ),
                 ThisYearStats(
-                  sm: widget.sm,
+                  user: widget.user,
                 ),
               ],
             ),
@@ -93,25 +94,23 @@ class _StatsPageState extends State<StatsPage> {
             ],
             onTap: (index) async {
               if (index == 2) {
-                List<Goal> goals = await widget.db.getGoals();
-                Navigator.pushReplacement(
+                //List<Goal> goals = await widget.db.getGoals();
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfilePage(
                               user: widget.user,
                             )));
               } else if (index == 1) {
-                List<TrainingSession> recentTen =
-                    await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
+                // List<TrainingSession> recentTen =
+                //     await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home(
-                              db: widget.db,
+                        builder: (context) => Home2(
+                              db: null,
                               user: widget.user,
-                              recentTen: recentTen,
-                              upcoming: upcoming,
                             )));
               }
             },
