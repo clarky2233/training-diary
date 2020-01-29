@@ -170,11 +170,25 @@ class _Home2State extends State<Home2> {
 
   Widget getTopPanel() {
     if (showStats) {
+      if (user == null) {
+        return Container(
+          height: 300,
+          margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+        );
+      }
+      return Container(
+        height: 300, //MediaQuery.of(context).size.height / 2.58,
+        margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
+        child: SummaryStatsCard(
+          user: user,
+          title: "Duration (blue) and Intensity / 5 (red)",
+        ),
+      );
     } else {
       return StreamBuilder<List<Event>>(
           stream: firestore.events,
           builder: (context, snapshot) {
-            if (user == null) {
+            if (user == null || snapshot.data == null) {
               return Container(
                 height: 300,
                 margin: EdgeInsets.fromLTRB(0, 5, 0, 10),

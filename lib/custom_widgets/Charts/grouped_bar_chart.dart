@@ -31,7 +31,7 @@ class GroupedBarChart extends StatelessWidget {
     ];
     return Container(
       height: 200,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width - 20,
       child: charts.BarChart(
         series,
         animate: true,
