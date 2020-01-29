@@ -13,6 +13,7 @@ class DBHelper {
   Future<Database> database;
   final stableDatabaseVersion = 2;
   User user;
+  DatabaseService firestore;
 
   DBHelper({this.user});
 
@@ -84,10 +85,8 @@ class DBHelper {
   ];
 
   void setup() async {
+    firestore = DatabaseService(uid: user.id);
     database = createDatabase();
-    DatabaseService firestore = DatabaseService(uid: user.id);
-    firestore.uploadData(await getJournal(), await getTemplates(),
-        await getGoals(), await getEvents());
   }
 
   Future<Database> createDatabase() async {
@@ -101,6 +100,8 @@ class DBHelper {
             }
           }
         }
+        List<TrainingSession> x = await getJournal(db);
+        print(x.length);
       },
       version: 2,
     );
@@ -131,8 +132,8 @@ class DBHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<TrainingSession>> getJournal() async {
-    final Database db = await database;
+  Future<List<TrainingSession>> getJournal(Database db) async {
+    //final Database db = await database;
     final List<Map<String, dynamic>> maps =
         await db.rawQuery('SELECT * FROM journal ORDER BY date DESC');
     return List.generate(maps.length, (i) {
