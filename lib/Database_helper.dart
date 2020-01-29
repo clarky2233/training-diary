@@ -95,7 +95,7 @@ class DBHelper {
 
   void copyDatabase() async {
     var databasesPath = await getDatabasesPath();
-    var path = join(databasesPath, "journal_database.db");
+    var path = join(databasesPath, "copy_journal_database.db");
     var exists = await databaseExists(path);
     if (!exists) {
       // Should happen only the first time you launch your application
