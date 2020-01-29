@@ -59,4 +59,33 @@ class AuthService {
       return null;
     }
   }
+
+  Future deleteUser() async {
+    try {
+      FirebaseUser user = await _auth.currentUser();
+      return user.delete();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future reAuthenticateUser(AuthCredential credential) async {
+    try {
+      FirebaseUser user = await _auth.currentUser();
+      return await user.reauthenticateWithCredential(credential);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future resetPassword(String email) async {
+    try {
+      return await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print(e.toString());
+      return Error;
+    }
+  }
 }

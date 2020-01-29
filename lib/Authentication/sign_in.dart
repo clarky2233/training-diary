@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_journal/Authentication/reset_password.dart';
 import 'package:training_journal/Services/auth.dart';
 import 'package:training_journal/pages/loading.dart';
 
@@ -169,6 +170,22 @@ class _SignInState extends State<SignIn> {
                                 ),
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 30),
+                              child: GestureDetector(
+                                onTap: () {
+                                  resetPassword();
+                                },
+                                child: Text(
+                                  "Forgot/Reset Password?",
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -178,5 +195,23 @@ class _SignInState extends State<SignIn> {
               ),
             ),
           );
+  }
+
+  Future<void> resetPassword() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            'Reset Password',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 26),
+          ),
+          contentPadding: EdgeInsets.all(5),
+          children: [ResetPassword()],
+        );
+      },
+    );
   }
 }

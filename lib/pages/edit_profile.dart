@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:training_journal/Authentication/re_authenticate.dart';
+import 'package:training_journal/Services/auth.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/full_name.dart';
 import 'package:training_journal/custom_widgets/Create_Profile/height.dart';
@@ -22,6 +25,8 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController usernameController = new TextEditingController();
   final TextEditingController dobController = new TextEditingController();
   DatabaseService firestore;
+  final AuthService _auth = AuthService();
+  String invalid = '';
 
   void initState() {
     original = deepCopy(widget.user);
@@ -45,6 +50,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: WillPopScope(
         onWillPop: () {
           Navigator.pushReplacement(
@@ -76,6 +82,22 @@ class _EditProfileState extends State<EditProfile> {
                 color: Colors.white,
               ),
             ),
+            actions: <Widget>[
+              FlatButton.icon(
+                icon: Icon(
+                  Icons.cancel,
+                  size: 30,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  "Delete",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  _confirmDelete();
+                },
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: GestureDetector(
@@ -168,6 +190,68 @@ class _EditProfileState extends State<EditProfile> {
               },
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmDelete() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Account'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Are you sure you would like to delete your account?\n\nYou will lose all your data!'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ok',
+                style: TextStyle(color: Colors.red[800]),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                try {
+                  await _auth.deleteUser();
+                } catch (e) {
+                  reAuthenticateUser();
+                }
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'CANCEL',
+                style: TextStyle(color: Colors.red[800]),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> reAuthenticateUser() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            'Enter Credentials',
+            style: TextStyle(fontSize: 26),
+          ),
+          contentPadding: EdgeInsets.all(5),
+          children: [ReAthenticate()],
         );
       },
     );
