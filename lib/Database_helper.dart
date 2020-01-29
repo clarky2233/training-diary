@@ -84,7 +84,7 @@ class DBHelper {
   ];
 
   void setup() async {
-    //database = createDatabase();
+    database = createDatabase();
     DatabaseService firestore = DatabaseService(uid: user.id);
     firestore.uploadData(await getJournal(), await getTemplates(),
         await getGoals(), await getEvents());
@@ -93,7 +93,7 @@ class DBHelper {
   Future<Database> createDatabase() async {
     Future<Database> database = openDatabase(
       join(await getDatabasesPath(), 'journal_database.db'),
-      onUpgrade: (db, oldVersion, newVersion) {
+      onUpgrade: (db, oldVersion, newVersion) async {
         for (DBUpgrade upgrade in upgrades) {
           for (String sql in upgrade.sqlUpgrades) {
             if (upgrade.version > oldVersion && upgrade.version <= newVersion) {

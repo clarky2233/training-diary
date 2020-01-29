@@ -514,8 +514,15 @@ class DatabaseService {
 
   void uploadData(List<TrainingSession> journal,
       List<TrainingSession> templates, List<Goal> goals, List<Event> events) {
+    print("uplaoding");
+    print(journal.length);
     for (TrainingSession session in journal) {
-      updateTrainingSession(session);
+      try {
+        print("hello");
+        updateTrainingSession(session);
+      } catch (e) {
+        print(e.toString());
+      }
     }
     for (TrainingSession template in templates) {
       updateTemplate(template);

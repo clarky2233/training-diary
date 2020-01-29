@@ -22,13 +22,13 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    firestore = DatabaseService(uid: user.id);
-    db = DBHelper(user: user);
-    db.setup();
 
     if (user == null) {
       return Authenticate();
     } else {
+      firestore = DatabaseService(uid: user.id);
+      db = DBHelper(user: user);
+      db.setup();
       return FutureBuilder<User>(
           future: firestore.getUser(),
           builder: (context, snapshot) {
