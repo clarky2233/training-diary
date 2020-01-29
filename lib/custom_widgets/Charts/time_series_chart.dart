@@ -17,11 +17,11 @@ class TSChart extends StatelessWidget {
         data: data,
         domainFn: (TSDataModel model, _) => model.xValue,
         measureFn: (TSDataModel model, _) => model.yValue,
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.blueAccent),
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.redAccent),
       )
     ];
     return Container(
-      height: 200,
+      height: MediaQuery.of(context).size.height - 300, //200,
       width: MediaQuery.of(context).size.width,
       child: TimeSeriesChart(
         series,

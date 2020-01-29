@@ -29,8 +29,8 @@ class _MonthStatsCardState extends State<MonthStatsCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width - 10,
-      height: 280,
+      width: MediaQuery.of(context).size.width - 20, //380,
+      height: MediaQuery.of(context).size.height - 200, //280,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(15),
@@ -42,16 +42,30 @@ class _MonthStatsCardState extends State<MonthStatsCard> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                child: Center(
-                  child: Text(
-                    "${widget.title}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text(
+                        "${widget.title}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: IconButton(
+                      icon: Icon(Icons.expand_more),
+                      onPressed: () {
+                        //_showBottomSheet();
+                      },
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

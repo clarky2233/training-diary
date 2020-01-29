@@ -18,17 +18,17 @@ class _ThisYearStatsState extends State<ThisYearStats> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
+        //   child: Text(
+        //     "This Year",
+        //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        //   ),
+        // ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
-          child: Text(
-            "This Year",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
           child: Container(
-            height: 280,
+            height: MediaQuery.of(context).size.height - 200, //580,
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: ListView(

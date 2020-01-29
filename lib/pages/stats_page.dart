@@ -26,6 +26,7 @@ class StatsPage extends StatefulWidget {
 }
 
 class _StatsPageState extends State<StatsPage> {
+  String dropdownValue = 'This Week';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -59,19 +60,11 @@ class _StatsPageState extends State<StatsPage> {
             ],
           ),
           body: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ThisWeekStats(
-                  user: widget.user,
-                ),
-                ThisMonthStats(
-                  user: widget.user,
-                ),
-                ThisYearStats(
-                  user: widget.user,
-                ),
+                getDropDown(),
+                getStats(),
               ],
             ),
           ),
@@ -122,6 +115,29 @@ class _StatsPageState extends State<StatsPage> {
 
   _createFile() async {
     await sendData();
+  }
+
+  Widget getStats() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (dropdownValue == "This Week") {
+          return ThisWeekStats(
+            user: widget.user,
+          );
+        } else if (dropdownValue == "This Year") {
+          return ThisYearStats(
+            user: widget.user,
+          );
+        } else if (dropdownValue == "This Month") {
+          return ThisMonthStats(
+            user: widget.user,
+          );
+        }
+        return ThisWeekStats(
+          user: widget.user,
+        );
+      },
+    );
   }
 
   Future<void> sendData() async {
@@ -184,5 +200,40 @@ class _StatsPageState extends State<StatsPage> {
     );
 
     await FlutterMailer.send(mailOptions);
+  }
+
+  Widget getDropDown() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 25, 0),
+      child: DropdownButton<String>(
+        value: dropdownValue,
+        icon: Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black,
+        ),
+        iconSize: 30,
+        elevation: 0,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+        onChanged: (String newValue) {
+          setState(() {
+            dropdownValue = newValue;
+          });
+        },
+        items: <String>['This Week', 'This Month', 'This Year']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Center(
+                child: Text(
+              value,
+              style: TextStyle(color: Colors.black),
+            )),
+          );
+        }).toList(),
+      ),
+    );
   }
 }

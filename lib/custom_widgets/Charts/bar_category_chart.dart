@@ -16,12 +16,12 @@ class BarCategoryChart extends StatelessWidget {
           data: data,
           domainFn: (BarDataModel model, _) => model.xValue,
           measureFn: (BarDataModel model, _) => model.yValue,
-          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.blueAccent),
+          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.redAccent),
           labelAccessorFn: (BarDataModel model, _) =>
               '${model.yValue.toStringAsFixed(1)}'),
     ];
     return Container(
-      height: 200,
+      height: MediaQuery.of(context).size.height - 300, //200,
       width: MediaQuery.of(context).size.width,
       child: charts.BarChart(
         series,
