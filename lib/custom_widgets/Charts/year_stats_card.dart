@@ -8,10 +8,12 @@ class YearStatsCard extends StatefulWidget {
   final User user;
   final String title;
   final String dataColumn;
+  final bool thisYear;
   const YearStatsCard({
     this.user,
     this.title,
     this.dataColumn,
+    this.thisYear,
   });
 
   @override
@@ -113,7 +115,9 @@ class _YearStatsCardState extends State<YearStatsCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder(
-                    future: firestore.getYearData('${widget.dataColumn}'),
+                    future: widget.thisYear
+                        ? firestore.getYearData('${widget.dataColumn}')
+                        : firestore.getLastYearData('${widget.dataColumn}'),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         data = snapshot.data;

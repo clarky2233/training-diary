@@ -270,6 +270,25 @@ class DatabaseService {
     }
   }
 
+  Future<List<BarDataModel>> getLastWeekData(String dataColumn) async {
+    try {
+      DateTime startOfWeek =
+          DateTime.now().subtract(Duration(days: DateTime.now().weekday));
+      List<TrainingSession> sessions = await journalCollection
+          .where("userID", isEqualTo: uid)
+          .where("date",
+              isGreaterThanOrEqualTo: startOfWeek.subtract(Duration(days: 7)))
+          .where("date", isLessThan: startOfWeek)
+          .orderBy("date", descending: true)
+          .getDocuments()
+          .then(_trainingSessionListFromSnapshot);
+      return weekBarData(sessions, dataColumn);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future<List<List<BarDataModel>>> getSummaryData() async {
     try {
       List<List<BarDataModel>> data = List<List<BarDataModel>>();
@@ -311,6 +330,26 @@ class DatabaseService {
     }
   }
 
+  Future<List<TSDataModel>> getLastMonthData(String dataColumn) async {
+    DateTime startOfMonth =
+        DateTime.now().subtract(Duration(days: DateTime.now().day));
+    try {
+      List<TrainingSession> sessions = await journalCollection
+          .where("userID", isEqualTo: uid)
+          .where("date",
+              isGreaterThanOrEqualTo: DateTime(
+                  startOfMonth.year, startOfMonth.month - 1, startOfMonth.day))
+          .where("date", isLessThanOrEqualTo: startOfMonth)
+          .orderBy("date", descending: true)
+          .getDocuments()
+          .then(_trainingSessionListFromSnapshot);
+      return monthTSData(sessions, dataColumn);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future<List<TSDataModel>> getYearData(String dataColumn) async {
     DateTime startOfYear = DateTime(DateTime.now().year, 1, 1);
     try {
@@ -320,6 +359,25 @@ class DatabaseService {
           .where("date",
               isLessThan: DateTime(
                   startOfYear.year + 1, startOfYear.month, startOfYear.day))
+          .orderBy("date", descending: true)
+          .getDocuments()
+          .then(_trainingSessionListFromSnapshot);
+      return monthTSData(sessions, dataColumn);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<List<TSDataModel>> getLastYearData(String dataColumn) async {
+    DateTime startOfYear = DateTime(DateTime.now().year, 1, 1);
+    try {
+      List<TrainingSession> sessions = await journalCollection
+          .where("userID", isEqualTo: uid)
+          .where("date",
+              isGreaterThanOrEqualTo: DateTime(
+                  startOfYear.year - 1, startOfYear.month, startOfYear.day))
+          .where("date", isLessThan: startOfYear)
           .orderBy("date", descending: true)
           .getDocuments()
           .then(_trainingSessionListFromSnapshot);

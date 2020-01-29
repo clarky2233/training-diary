@@ -118,18 +118,37 @@ class _StatsPageState extends State<StatsPage> {
         if (dropdownValue == "This Week") {
           return ThisWeekStats(
             user: widget.user,
+            thisWeek: true,
           );
         } else if (dropdownValue == "This Year") {
           return ThisYearStats(
             user: widget.user,
+            thisYear: true,
           );
         } else if (dropdownValue == "This Month") {
           return ThisMonthStats(
             user: widget.user,
+            thisMonth: true,
+          );
+        } else if (dropdownValue == "Last Week") {
+          return ThisWeekStats(
+            user: widget.user,
+            thisWeek: false,
+          );
+        } else if (dropdownValue == "Last Year") {
+          return ThisYearStats(
+            user: widget.user,
+            thisYear: false,
+          );
+        } else if (dropdownValue == "Last Month") {
+          return ThisMonthStats(
+            user: widget.user,
+            thisMonth: false,
           );
         }
         return ThisWeekStats(
           user: widget.user,
+          thisWeek: true,
         );
       },
     );
@@ -192,8 +211,14 @@ class _StatsPageState extends State<StatsPage> {
             dropdownValue = newValue;
           });
         },
-        items: <String>['This Week', 'This Month', 'This Year']
-            .map<DropdownMenuItem<String>>((String value) {
+        items: <String>[
+          'This Week',
+          'This Month',
+          'This Year',
+          'Last Week',
+          'Last Month',
+          'Last Year'
+        ].map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Center(

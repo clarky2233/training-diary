@@ -8,10 +8,12 @@ class WeekStatsCard extends StatefulWidget {
   final User user;
   final String title;
   final String dataColumn;
+  final bool thisWeek;
   const WeekStatsCard({
     this.user,
     this.title,
     this.dataColumn,
+    this.thisWeek,
   });
 
   @override
@@ -114,7 +116,9 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder(
-                    future: firestore.getWeekData('${widget.dataColumn}'),
+                    future: widget.thisWeek
+                        ? firestore.getWeekData('${widget.dataColumn}')
+                        : firestore.getLastWeekData('${widget.dataColumn}'),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         data = snapshot.data;

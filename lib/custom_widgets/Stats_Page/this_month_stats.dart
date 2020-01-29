@@ -4,8 +4,8 @@ import 'package:training_journal/user.dart';
 
 class ThisMonthStats extends StatefulWidget {
   final User user;
-
-  const ThisMonthStats({this.user});
+  final bool thisMonth;
+  const ThisMonthStats({this.user, this.thisMonth});
 
   @override
   _ThisMonthStatsState createState() => _ThisMonthStatsState();
@@ -30,41 +30,49 @@ class _ThisMonthStatsState extends State<ThisMonthStats> {
                   user: widget.user,
                   title: "Duration (hrs)",
                   dataColumn: 'duration',
+                  thisMonth: widget.thisMonth,
                 ),
                 MonthStatsCard(
                   user: widget.user,
                   title: "Intensity / 5",
                   dataColumn: 'difficulty',
+                  thisMonth: widget.thisMonth,
                 ),
                 MonthStatsCard(
                   user: widget.user,
                   title: "Overall Enjoyment / 5",
                   dataColumn: 'enjoymentRating',
+                  thisMonth: widget.thisMonth,
                 ),
                 MonthStatsCard(
                   user: widget.user,
                   title: "Hours of Sleep",
                   dataColumn: 'hoursOfSleep',
+                  thisMonth: widget.thisMonth,
                 ),
                 MonthStatsCard(
                   user: widget.user,
                   title: "Recovery Heart Rate (bpm)",
                   dataColumn: 'heartRate',
+                  thisMonth: widget.thisMonth,
                 ),
                 MonthStatsCard(
                   user: widget.user,
                   title: "Sleep Rating / 5",
                   dataColumn: 'sleepRating',
+                  thisMonth: widget.thisMonth,
                 ),
                 MonthStatsCard(
                   user: widget.user,
                   title: "RPE (6 - 20)",
                   dataColumn: 'rpe',
+                  thisMonth: widget.thisMonth,
                 ),
                 MonthStatsCard(
                   user: widget.user,
                   title: "Hydration (Litres)",
                   dataColumn: 'hydration',
+                  thisMonth: widget.thisMonth,
                 ),
               ],
             ),

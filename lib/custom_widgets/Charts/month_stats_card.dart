@@ -8,10 +8,12 @@ class MonthStatsCard extends StatefulWidget {
   final User user;
   final String title;
   final String dataColumn;
+  final bool thisMonth;
   const MonthStatsCard({
     this.user,
     this.title,
     this.dataColumn,
+    this.thisMonth,
   });
 
   @override
@@ -113,7 +115,9 @@ class _MonthStatsCardState extends State<MonthStatsCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder(
-                    future: firestore.getMonthData('${widget.dataColumn}'),
+                    future: widget.thisMonth
+                        ? firestore.getMonthData('${widget.dataColumn}')
+                        : firestore.getLastMonthData('${widget.dataColumn}'),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         data = snapshot.data;

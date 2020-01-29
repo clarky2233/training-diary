@@ -12,7 +12,7 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  DBHelper db;
+  // DBHelper db;
   DatabaseService firestore;
 
   void initState() {
@@ -27,8 +27,8 @@ class _WrapperState extends State<Wrapper> {
       return Authenticate();
     } else {
       firestore = DatabaseService(uid: user.id);
-      db = DBHelper(user: user);
-      db.setup();
+      // db = DBHelper(user: user);
+      // db.setup();
       return FutureBuilder<User>(
           future: firestore.getUser(),
           builder: (context, snapshot) {

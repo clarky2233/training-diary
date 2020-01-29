@@ -4,8 +4,8 @@ import 'package:training_journal/user.dart';
 
 class ThisYearStats extends StatefulWidget {
   final User user;
-
-  const ThisYearStats({this.user});
+  final bool thisYear;
+  const ThisYearStats({this.user, this.thisYear});
 
   @override
   _ThisYearStatsState createState() => _ThisYearStatsState();
@@ -30,41 +30,49 @@ class _ThisYearStatsState extends State<ThisYearStats> {
                   user: widget.user,
                   title: "Duration (hrs)",
                   dataColumn: 'duration',
+                  thisYear: widget.thisYear,
                 ),
                 YearStatsCard(
                   user: widget.user,
                   title: "Intensity / 5",
                   dataColumn: 'difficulty',
+                  thisYear: widget.thisYear,
                 ),
                 YearStatsCard(
                   user: widget.user,
                   title: "Overall Enjoyment / 5",
                   dataColumn: 'enjoymentRating',
+                  thisYear: widget.thisYear,
                 ),
                 YearStatsCard(
                   user: widget.user,
                   title: "Hours of Sleep",
                   dataColumn: 'hoursOfSleep',
+                  thisYear: widget.thisYear,
                 ),
                 YearStatsCard(
                   user: widget.user,
                   title: "Recovery Heart Rate (bpm)",
                   dataColumn: 'heartRate',
+                  thisYear: widget.thisYear,
                 ),
                 YearStatsCard(
                   user: widget.user,
                   title: "Sleep Rating / 5",
                   dataColumn: 'sleepRating',
+                  thisYear: widget.thisYear,
                 ),
                 YearStatsCard(
                   user: widget.user,
                   title: "RPE (6 - 20)",
                   dataColumn: 'rpe',
+                  thisYear: widget.thisYear,
                 ),
                 YearStatsCard(
                   user: widget.user,
                   title: "Hydration (Litres)",
                   dataColumn: 'hydration',
+                  thisYear: widget.thisYear,
                 ),
               ],
             ),
