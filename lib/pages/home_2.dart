@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:training_journal/Database_helper.dart';
-import 'package:training_journal/Services/auth.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Home_Page/session_card.dart';
 import 'package:training_journal/custom_widgets/Home_Page/summary_stats_card.dart';
 import 'package:training_journal/custom_widgets/Home_Page/upcoming.dart';
-import 'package:training_journal/custom_widgets/Profile_Page/goal_card.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/create_event.dart';
 import 'package:training_journal/pages/create_session.dart';
 import 'package:training_journal/pages/all_entries.dart';
 import 'package:training_journal/pages/profile_page.dart';
 import 'package:training_journal/pages/stats_page.dart';
-import 'package:training_journal/stats_manager.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class Home2 extends StatefulWidget {
-  final DBHelper db;
   final User user;
   const Home2({
-    @required this.db,
     @required this.user,
   });
 
@@ -94,7 +87,6 @@ class _Home2State extends State<Home2> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EntriesPage(
-                                      db: widget.db,
                                       user: user,
                                     )));
                       },
@@ -119,7 +111,6 @@ class _Home2State extends State<Home2> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => CreateSession(
-                                  db: widget.db,
                                   user: user,
                                 )));
                   },
@@ -221,7 +212,6 @@ class _Home2State extends State<Home2> {
                   return Hero(
                       tag: 'UC$index',
                       child: UpcomingCard(
-                        db: widget.db,
                         user: user,
                         event: snapshot.data[index],
                       ));
@@ -258,7 +248,6 @@ class _Home2State extends State<Home2> {
                     tag: 'SC$index',
                     child: SessionCard(
                       ts: snapshot.data[index],
-                      db: widget.db,
                       user: user,
                     ));
               },
@@ -301,7 +290,6 @@ class _Home2State extends State<Home2> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => CreateEvent(
-                              db: widget.db,
                               user: user,
                             )));
               },

@@ -3,17 +3,12 @@ import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_date_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_time_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_title_card.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/event.dart';
-import 'package:training_journal/pages/home.dart';
-import 'package:training_journal/pages/home_2.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class CreateEvent extends StatefulWidget {
-  final DBHelper db;
   final User user;
-  const CreateEvent({@required this.db, @required this.user});
+  const CreateEvent({@required this.user});
 
   @override
   _CreateEventState createState() => _CreateEventState();

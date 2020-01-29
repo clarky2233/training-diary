@@ -41,7 +41,6 @@ class _TemplateCardState extends State<TemplateCard> {
             context,
             MaterialPageRoute(
                 builder: (context) => CreateSessionFromTemplate(
-                      db: widget.db,
                       user: widget.user,
                       template: widget.template,
                     )));
@@ -116,15 +115,12 @@ class _TemplateCardState extends State<TemplateCard> {
                 style: TextStyle(color: Colors.blue[800]),
               ),
               onPressed: () async {
-                //await widget.db.deleteTemplate(widget.template.id);
                 firestore.deleteTemplate(widget.template.id);
                 Navigator.pop(context);
-                // List<TrainingSession> x = await widget.db.getTemplates();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TemplatePage(
-                              db: widget.db,
                               user: widget.user,
                               templates: null,
                             )));

@@ -50,7 +50,6 @@ class _WeightInputState extends State<WeightInput> {
         onChanged: (text) {
           setState(() {
             widget.user.setWeight(text);
-            //getWeightInput(text);
           });
         },
         style: TextStyle(

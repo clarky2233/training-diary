@@ -63,7 +63,6 @@ class _ActivityCardState extends State<ActivityCard> {
                           widget.ts.activity = Activities.activities[value];
                         }
                       }
-                      //value = selected ? index : null;
                     });
                   },
                 );

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:training_journal/Authentication/authenticate.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/firestore_database.dart';
-import 'package:training_journal/pages/home.dart';
 import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/user.dart';
 
@@ -33,7 +32,6 @@ class _WrapperState extends State<Wrapper> {
           future: firestore.getUser(),
           builder: (context, snapshot) {
             return Home2(
-              db: db,
               user: snapshot.data,
             );
           });

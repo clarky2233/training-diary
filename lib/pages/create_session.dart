@@ -2,19 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Advanced_Settings/advanced_session_setttings.dart';
 import 'package:training_journal/custom_widgets/Standard_Settings/standard_session_settings.dart';
-import 'package:training_journal/Database_helper.dart';
-import 'package:training_journal/event.dart';
-import 'package:training_journal/pages/home.dart';
 import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/pages/templates.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class CreateSession extends StatefulWidget {
-  final DBHelper db;
   final User user;
   const CreateSession({
-    @required this.db,
     @required this.user,
   });
 
@@ -56,13 +51,10 @@ class _CreateSessionState extends State<CreateSession>
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                //List<TrainingSession> x = await widget.db.lastTenSessions();
-                //List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home2(
-                              db: widget.db,
                               user: widget.user,
                             )));
               },
@@ -76,12 +68,10 @@ class _CreateSessionState extends State<CreateSession>
                 icon: Icon(Icons.save),
                 onPressed: () async {
                   FocusScope.of(context).requestFocus(new FocusNode());
-                  //List<TrainingSession> x = await widget.db.getTemplates();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => TemplatePage(
-                                db: widget.db,
                                 user: widget.user,
                                 templates: null,
                               )));
@@ -105,13 +95,11 @@ class _CreateSessionState extends State<CreateSession>
             controller: tabController,
             children: <Widget>[
               StandardSessionSettings(
-                db: widget.db,
                 user: widget.user,
                 ts: ts,
                 isEdit: false,
               ),
               AdvancedSessionSettings(
-                db: widget.db,
                 user: widget.user,
                 ts: ts,
                 isEdit: false,
@@ -123,17 +111,12 @@ class _CreateSessionState extends State<CreateSession>
               if (TrainingSession.isValid(ts)) {
                 ts.userID = widget.user.id;
                 firestore.updateTrainingSession(ts);
-                //await widget.db.insertSession(ts);
-                //List<TrainingSession> x = await widget.db.lastTenSessions();
-                //List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home2(
-                              db: null,
                               user: widget.user,
                             )));
-                //print(await widget.db.getJournal());
               } else {
                 _neverSatisfied();
               }

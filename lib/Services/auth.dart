@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/user.dart';

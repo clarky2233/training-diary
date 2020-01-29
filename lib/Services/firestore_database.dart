@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:training_journal/Services/auth.dart';
 import 'package:training_journal/activities.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/training_session.dart';
@@ -437,6 +436,80 @@ class DatabaseService {
       return "Sun";
     }
     return "NULL";
+  }
+
+  List<double> barGraphStats(List<BarDataModel> data) {
+    List<double> stats = [0.0, 0.0, 0.0];
+    if (data == null || data.length == 0) {
+      return stats;
+    }
+    int today = DateTime.now().weekday - 1; // Monday is 1
+    double sum = 0.0;
+    double count = 0.0;
+    double max = data[0].yValue;
+    double min = data[0].yValue;
+    for (BarDataModel value in data) {
+      if (data.indexOf(value) > today) {
+        break;
+      }
+      sum += value.yValue;
+      count++;
+      if (value.yValue > max) {
+        max = value.yValue;
+      }
+      if (value.yValue < min) {
+        min = value.yValue;
+      }
+    }
+    double average = sum / count;
+    stats[0] = average;
+    stats[1] = max;
+    stats[2] = min;
+    return stats;
+  }
+
+  List<double> tsGraphStats(List<TSDataModel> data) {
+    List<double> stats = [0.0, 0.0, 0.0];
+    if (data == null || data.length == 0) {
+      print("hello");
+      return stats;
+    }
+    double sum = 0.0;
+    double max = data[0].yValue;
+    double min = data[0].yValue;
+    for (TSDataModel value in data) {
+      sum += value.yValue;
+      if (value.yValue > max) {
+        max = value.yValue;
+      }
+      if (value.yValue < min) {
+        min = value.yValue;
+      }
+    }
+    double average = sum / data.length;
+    stats[0] = average;
+    stats[1] = max;
+    stats[2] = min;
+    return stats;
+  }
+
+  Future<List<Map<String, dynamic>>> getRawJournal() async {
+    List<TrainingSession> journal = await journalCollection
+        .where("userID", isEqualTo: uid)
+        .getDocuments()
+        .then(_trainingSessionListFromSnapshot);
+    List<Map<String, dynamic>> result = List();
+    for (TrainingSession session in journal) {
+      result.add(session.toMap());
+    }
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getRawUser() async {
+    List<Map<String, dynamic>> result = List();
+    User user = await getUser();
+    result.add(user.toMap());
+    return result;
   }
 }
 

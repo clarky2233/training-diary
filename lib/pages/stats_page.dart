@@ -3,29 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_porter/utils/csv_utils.dart';
-import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_month_stats.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_week_stats.dart';
 import 'package:training_journal/custom_widgets/Stats_Page/this_year_stats.dart';
-import 'package:training_journal/event.dart';
-import 'package:training_journal/pages/home.dart';
 import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/pages/profile_page.dart';
-import 'package:training_journal/stats_manager.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class StatsPage extends StatefulWidget {
-  final StatsManager sm;
   final User user;
-  final DBHelper db;
-  const StatsPage({this.sm, this.user, this.db});
+  const StatsPage({this.user});
 
   @override
   _StatsPageState createState() => _StatsPageState();
 }
 
 class _StatsPageState extends State<StatsPage> {
+  DatabaseService firestore;
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   String dropdownValue = 'This Week';
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,6 @@ class _StatsPageState extends State<StatsPage> {
             ],
             onTap: (index) async {
               if (index == 2) {
-                //List<Goal> goals = await widget.db.getGoals();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -95,14 +94,10 @@ class _StatsPageState extends State<StatsPage> {
                               user: widget.user,
                             )));
               } else if (index == 1) {
-                // List<TrainingSession> recentTen =
-                //     await widget.db.lastTenSessions();
-                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home2(
-                              db: null,
                               user: widget.user,
                             )));
               }
@@ -145,7 +140,7 @@ class _StatsPageState extends State<StatsPage> {
     String localPath = directory.path;
     final file = File('$localPath/all_training_sessions.csv');
 
-    var result = await widget.db.getRawJournal();
+    var result = await firestore.getRawJournal();
     var csv = mapListToCsv(result);
 
     IOSink sink = file.openWrite();
@@ -156,46 +151,21 @@ class _StatsPageState extends State<StatsPage> {
     String localPath2 = directory2.path;
     final file2 = File('$localPath2/user_data.csv');
 
-    var result2 = await widget.db.getRawUser();
+    var result2 = await firestore.getRawUser();
     var csv2 = mapListToCsv(result2);
 
     IOSink sink2 = file2.openWrite();
     sink2.writeln(csv2);
     sink2.close();
 
-    final directory3 = await getTemporaryDirectory();
-    String localPath3 = directory3.path;
-    final file3 = File('$localPath3/last_month.csv');
-
-    var result3 = await widget.db.getRawLastMonth();
-    var csv3 = mapListToCsv(result3);
-
-    IOSink sink3 = file3.openWrite();
-    sink3.writeln(csv3);
-    sink3.close();
-
-    final directory4 = await getTemporaryDirectory();
-    String localPath4 = directory4.path;
-    final file4 = File('$localPath4/last_year.csv');
-
-    var result4 = await widget.db.getRawLastYear();
-    var csv4 = mapListToCsv(result4);
-
-    IOSink sink4 = file4.openWrite();
-    sink4.writeln(csv4);
-    sink4.close();
-
     final MailOptions mailOptions = MailOptions(
       body:
-          '''Open these files using Microsoft Excel to view the data. To format the date use, the following Excel formula:\n
-      =DATE(LEFT(D2, 4),MID(D2, 6,2),MID(D2,9,2))''',
+          '''Open these files using Microsoft Excel to view the data. To format the date select the column then the format tab and select your desired format.''',
       subject: 'Training Diary Data',
       isHTML: true,
       attachments: [
         file.path,
         file2.path,
-        file3.path,
-        file4.path,
       ],
     );
 

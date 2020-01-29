@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/custom_widgets/Charts/month_stats_card.dart';
-import 'package:training_journal/stats_manager.dart';
 import 'package:training_journal/user.dart';
 
 class ThisMonthStats extends StatefulWidget {
@@ -18,13 +17,6 @@ class _ThisMonthStatsState extends State<ThisMonthStats> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // Padding(
-        //   padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
-        //   child: Text(
-        //     "This Month",
-        //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
           child: Container(

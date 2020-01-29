@@ -278,7 +278,7 @@ class DBHelper {
       return User(
         id: maps[i]['id'],
         username: maps[i]['username'],
-        dob: DateTime.parse(maps[i]['dob']),
+        //dob: DateTime.parse(maps[i]['dob']),
         name: maps[i]['name'],
         weight: maps[i]['weight'],
         height: maps[i]['height'],

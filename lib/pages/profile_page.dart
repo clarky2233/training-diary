@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/auth.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Profile_Page/goal_card.dart';
 import 'package:training_journal/pages/edit_profile.dart';
-import 'package:training_journal/pages/home.dart';
 import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/pages/stats_page.dart';
-import 'package:training_journal/stats_manager.dart';
 import 'package:training_journal/user.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -41,12 +38,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  double getAge() {
-    DateTime dob = widget.user.dob;
-    double diff = DateTime.now().difference(dob).inDays / 365.floor();
-    return diff;
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -68,11 +59,11 @@ class _ProfilePageState extends State<ProfilePage> {
             actions: <Widget>[
               FlatButton.icon(
                 icon: Icon(
-                  Icons.edit,
+                  Icons.settings,
                   color: Colors.white,
                 ),
                 label: Text(
-                  "Edit",
+                  "Settings",
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
@@ -170,7 +161,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home2(
-                              db: null,
                               user: widget.user,
                             )));
               } else if (index == 0) {
@@ -178,7 +168,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => StatsPage(
-                              sm: null,
                               user: widget.user,
                             )));
               }

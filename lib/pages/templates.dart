@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Templates/template_card.dart';
-import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/create_session.dart';
 import 'package:training_journal/pages/create_template.dart';
-import 'package:training_journal/pages/home.dart';
 import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class TemplatePage extends StatefulWidget {
-  final DBHelper db;
   final User user;
   final List<TrainingSession> templates;
-  const TemplatePage(
-      {@required this.db, @required this.user, @required this.templates});
+  const TemplatePage({@required this.user, @required this.templates});
 
   @override
   _TemplatePageState createState() => _TemplatePageState();
@@ -51,7 +46,6 @@ class _TemplatePageState extends State<TemplatePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => CreateSession(
-                              db: widget.db,
                               user: widget.user,
                             )));
               },
@@ -65,13 +59,10 @@ class _TemplatePageState extends State<TemplatePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: IconButton(
                   onPressed: () async {
-                    // List<TrainingSession> x = await widget.db.lastTenSessions();
-                    // List<Event> upcoming = await widget.db.getEvents();
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Home2(
-                                  db: widget.db,
                                   user: widget.user,
                                 )));
                   },
@@ -111,7 +102,6 @@ class _TemplatePageState extends State<TemplatePage> {
                               return Hero(
                                   tag: 'TC$index',
                                   child: TemplateCard(
-                                    db: widget.db,
                                     user: widget.user,
                                     template: snapshot.data[index],
                                   ));
@@ -130,7 +120,6 @@ class _TemplatePageState extends State<TemplatePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CreateTemplate(
-                            db: widget.db,
                             user: widget.user,
                           )));
             },

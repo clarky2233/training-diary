@@ -2,24 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Advanced_Settings/advanced_session_setttings.dart';
 import 'package:training_journal/custom_widgets/Standard_Settings/standard_session_settings.dart';
-import 'package:training_journal/Database_helper.dart';
-import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/all_entries.dart';
-import 'package:training_journal/pages/home.dart';
 import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class EditSession extends StatefulWidget {
-  final DBHelper db;
   final User user;
   final TrainingSession ts;
   final bool returnHome;
   const EditSession(
-      {@required this.db,
-      @required this.user,
-      @required this.ts,
-      @required this.returnHome});
+      {@required this.user, @required this.ts, @required this.returnHome});
 
   @override
   _EditSessionState createState() => _EditSessionState();
@@ -80,20 +73,6 @@ class _EditSessionState extends State<EditSession>
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 Navigator.pop(context);
-                // Navigator.pushReplacement(context,
-                //     MaterialPageRoute(builder: (context) {
-                //   if (widget.returnHome) {
-                //     return Home2(
-                //       db: widget.db,
-                //       user: widget.user,
-                //     );
-                //   } else {
-                //     return EntriesPage(
-                //       db: widget.db,
-                //       user: widget.user,
-                //     );
-                //   }
-                // }));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -117,13 +96,11 @@ class _EditSessionState extends State<EditSession>
             controller: tabController,
             children: <Widget>[
               StandardSessionSettings(
-                db: widget.db,
                 user: widget.user,
                 ts: widget.ts,
                 isEdit: true,
               ),
               AdvancedSessionSettings(
-                db: widget.db,
                 user: widget.user,
                 ts: widget.ts,
                 isEdit: true,
@@ -136,20 +113,14 @@ class _EditSessionState extends State<EditSession>
                 FocusScope.of(context).requestFocus(new FocusNode());
                 widget.ts.userID = widget.user.id;
                 firestore.updateTrainingSession(widget.ts);
-                // await widget.db.updateJournalEntry(widget.ts);
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<TrainingSession> y = await widget.db.getJournal();
-                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   if (widget.returnHome) {
                     return Home2(
-                      db: widget.db,
                       user: widget.user,
                     );
                   } else {
                     return EntriesPage(
-                      db: widget.db,
                       user: widget.user,
                     );
                   }

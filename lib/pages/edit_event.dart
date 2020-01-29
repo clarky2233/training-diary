@@ -3,19 +3,13 @@ import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_date_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_time_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_title_card.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/event.dart';
-import 'package:training_journal/pages/home.dart';
-import 'package:training_journal/pages/home_2.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class EditEvent extends StatefulWidget {
-  final DBHelper db;
   final User user;
   final Event event;
-  const EditEvent(
-      {@required this.db, @required this.user, @required this.event});
+  const EditEvent({@required this.user, @required this.event});
 
   @override
   _EditEventState createState() => _EditEventState();
@@ -72,13 +66,6 @@ class _EditEventState extends State<EditEvent>
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 Navigator.pop(context);
-                // Navigator.pushReplacement(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => Home2(
-                //               db: widget.db,
-                //               user: widget.user,
-                //             )));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -111,13 +98,6 @@ class _EditEventState extends State<EditEvent>
                 widget.event.userID = widget.user.id;
                 firestore.updateEvent(widget.event);
                 Navigator.pop(context);
-                // Navigator.pushReplacement(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => Home2(
-                //               db: widget.db,
-                //               user: widget.user,
-                //             )));
               } else {
                 _neverSatisfied();
               }

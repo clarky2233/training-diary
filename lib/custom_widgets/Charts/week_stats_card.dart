@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Charts/bar_category_chart.dart';
-import 'package:training_journal/stats_manager.dart';
 import 'package:training_journal/user.dart';
 
 class WeekStatsCard extends StatefulWidget {
@@ -30,8 +29,49 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
 
   @override
   Widget build(BuildContext context) {
+    void _showBottomSheet() {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 60, 0, 30.0),
+                  child: Text(
+                    "Graph Analysis for ${widget.title}",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Average: ${firestore.barGraphStats(data)[0].toStringAsFixed(3)}",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Max: ${firestore.barGraphStats(data)[1].toStringAsFixed(3)}",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Min: ${firestore.barGraphStats(data)[2].toStringAsFixed(3)}",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            );
+          });
+    }
+
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        _showBottomSheet();
+      },
       child: Container(
         width: MediaQuery.of(context).size.width - 20, //380,
         height: MediaQuery.of(context).size.height - 200, //280,
@@ -65,7 +105,7 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
                       child: IconButton(
                         icon: Icon(Icons.expand_more),
                         onPressed: () {
-                          //_showBottomSheet();
+                          _showBottomSheet();
                         },
                       ),
                     ),

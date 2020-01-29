@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/Authentication/authenticate.dart';
 import 'package:training_journal/Services/auth.dart';
-import 'package:training_journal/pages/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:training_journal/user.dart';
 import 'package:training_journal/wrapper.dart';

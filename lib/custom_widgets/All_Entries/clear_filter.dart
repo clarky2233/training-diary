@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/pages/all_entries.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class ClearFilter extends StatefulWidget {
@@ -31,11 +30,9 @@ class _ClearFilterState extends State<ClearFilter> {
           ),
           onPressed: () async {
             if (widget.shouldClear) {
-              //List<TrainingSession> allEntries = await widget.db.getJournal();
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
                 return EntriesPage(
-                  db: widget.db,
                   user: widget.user,
                 );
               }));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:training_journal/custom_widgets/Charts/year_stats_card.dart';
-import 'package:training_journal/stats_manager.dart';
 import 'package:training_journal/user.dart';
 
 class ThisYearStats extends StatefulWidget {
@@ -18,13 +17,6 @@ class _ThisYearStatsState extends State<ThisYearStats> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // Padding(
-        //   padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
-        //   child: Text(
-        //     "This Year",
-        //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
           child: Container(

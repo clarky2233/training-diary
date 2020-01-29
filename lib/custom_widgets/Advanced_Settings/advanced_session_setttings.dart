@@ -8,9 +8,7 @@ import 'package:training_journal/custom_widgets/Advanced_Settings/sleep_rating_c
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
-
 class AdvancedSessionSettings extends StatefulWidget {
-
   final DBHelper db;
   final User user;
   final TrainingSession ts;
@@ -18,11 +16,12 @@ class AdvancedSessionSettings extends StatefulWidget {
   const AdvancedSessionSettings({this.db, this.user, this.ts, this.isEdit});
 
   @override
-  _AdvancedSessionSettingsState createState() => _AdvancedSessionSettingsState();
+  _AdvancedSessionSettingsState createState() =>
+      _AdvancedSessionSettingsState();
 }
 
-class _AdvancedSessionSettingsState extends State<AdvancedSessionSettings> with AutomaticKeepAliveClientMixin {
-
+class _AdvancedSessionSettingsState extends State<AdvancedSessionSettings>
+    with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 
   @override
@@ -38,12 +37,26 @@ class _AdvancedSessionSettingsState extends State<AdvancedSessionSettings> with 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              HeartRateCard(ts: widget.ts, isEdit: widget.isEdit,),
-              RPECard(ts: widget.ts, isEdit: widget.isEdit,),
-              SleepHoursCard(ts: widget.ts, isEdit: widget.isEdit,),
-              SleepRatingCard(ts: widget.ts, isEdit: widget.isEdit,),
-              HydrationCard(ts: widget.ts, isEdit: widget.isEdit,),
-              // MoodCard(ts: widget.ts, isEdit: false,),
+              HeartRateCard(
+                ts: widget.ts,
+                isEdit: widget.isEdit,
+              ),
+              RPECard(
+                ts: widget.ts,
+                isEdit: widget.isEdit,
+              ),
+              SleepHoursCard(
+                ts: widget.ts,
+                isEdit: widget.isEdit,
+              ),
+              SleepRatingCard(
+                ts: widget.ts,
+                isEdit: widget.isEdit,
+              ),
+              HydrationCard(
+                ts: widget.ts,
+                isEdit: widget.isEdit,
+              ),
             ],
           ),
         ),

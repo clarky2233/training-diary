@@ -4,9 +4,7 @@ import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/edit_event.dart';
-import 'package:training_journal/pages/home.dart';
 import 'package:training_journal/pages/home_2.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class UpcomingCard extends StatefulWidget {
@@ -32,7 +30,6 @@ class _UpcomingCardState extends State<UpcomingCard> {
     return Container(
       height: 300,
       width: MediaQuery.of(context).size.width - 20, //380,
-      //margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(15),
@@ -71,7 +68,6 @@ class _UpcomingCardState extends State<UpcomingCard> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditEvent(
-                                  db: widget.db,
                                   user: widget.user,
                                   event: widget.event,
                                 )));
@@ -139,7 +135,6 @@ class _UpcomingCardState extends State<UpcomingCard> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Home2(
-                              db: widget.db,
                               user: widget.user,
                             )));
               },
