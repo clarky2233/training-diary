@@ -511,6 +511,22 @@ class DatabaseService {
     result.add(user.toMap());
     return result;
   }
+
+  void uploadData(List<TrainingSession> journal,
+      List<TrainingSession> templates, List<Goal> goals, List<Event> events) {
+    for (TrainingSession session in journal) {
+      updateTrainingSession(session);
+    }
+    for (TrainingSession template in templates) {
+      updateTemplate(template);
+    }
+    for (Goal goal in goals) {
+      updateGoal(goal);
+    }
+    for (Event event in events) {
+      updateEvent(event);
+    }
+  }
 }
 
 class TSDataModel {

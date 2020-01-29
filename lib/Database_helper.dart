@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:training_journal/DBUpgrades.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/activities.dart';
@@ -11,6 +12,9 @@ import 'package:training_journal/user.dart';
 class DBHelper {
   Future<Database> database;
   final stableDatabaseVersion = 2;
+  User user;
+
+  DBHelper({this.user});
 
   List<DBUpgrade> upgrades = [
     DBUpgrade(version: 1, sqlUpgrades: [
@@ -80,7 +84,10 @@ class DBHelper {
   ];
 
   void setup() async {
-    database = createDatabase();
+    //database = createDatabase();
+    DatabaseService firestore = DatabaseService(uid: user.id);
+    firestore.uploadData(await getJournal(), await getTemplates(),
+        await getGoals(), await getEvents());
   }
 
   Future<Database> createDatabase() async {

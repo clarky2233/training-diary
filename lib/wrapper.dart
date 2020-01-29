@@ -13,17 +13,18 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
   DBHelper db;
-  DatabaseService firestore = DatabaseService();
+  DatabaseService firestore;
 
   void initState() {
     super.initState();
-    db = DBHelper();
-    db.setup();
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    firestore = DatabaseService(uid: user.id);
+    db = DBHelper(user: user);
+    db.setup();
 
     if (user == null) {
       return Authenticate();
