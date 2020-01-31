@@ -138,6 +138,8 @@ class DatabaseService {
   Stream<List<Event>> get events {
     return eventCollection
         .where("userID", isEqualTo: uid)
+        .where("date",
+            isGreaterThanOrEqualTo: DateTime.now().subtract(Duration(days: 1)))
         .orderBy("date", descending: true)
         .snapshots()
         .map(_eventListFromSnapshot);
