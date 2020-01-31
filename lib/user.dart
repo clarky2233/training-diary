@@ -1,8 +1,8 @@
 class User {
-  int id;
+  String id;
   String username;
   String name;
-  DateTime dob;
+  //DateTime dob;
   double weight;
   int height;
   int restingHeartRate;
@@ -11,7 +11,7 @@ class User {
     this.id,
     this.username,
     this.name,
-    this.dob,
+    //this.dob,
     this.weight,
     this.restingHeartRate,
     this.height,
@@ -22,7 +22,7 @@ class User {
       'id': id,
       'username': username,
       'name': name,
-      'dob': dob.toIso8601String(),
+      //'dob': dob.toIso8601String(),
       'weight': weight,
       'height': height,
       'restingHeartRate': restingHeartRate,
@@ -34,7 +34,7 @@ class User {
       id: map['id'],
       username: map['username'],
       name: map['name'],
-      dob: DateTime.parse(map['dob']),
+      //dob: DateTime.parse(map['dob']),
       weight: map['weight'],
       height: map['height'],
       restingHeartRate: map['restingHeartRate'],
@@ -60,7 +60,7 @@ class User {
   static bool isValid(User user) {
     if (user.name == null ||
         user.username == null ||
-        user.dob == null ||
+        //user.dob == null ||
         user.name == "" ||
         user.username == "" ||
         user.weight == -1234.0 ||
@@ -74,8 +74,8 @@ class User {
 }
 
 class Goal {
-  int id;
-  int userID;
+  String id;
+  String userID;
   String title;
   String text;
 

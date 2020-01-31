@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Charts/time_series_chart.dart';
-import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/user.dart';
 
 class YearStatsCard extends StatefulWidget {
-  final StatsManager sm;
+  final User user;
   final String title;
   final String dataColumn;
+  final bool thisYear;
   const YearStatsCard({
-    this.sm,
+    this.user,
     this.title,
     this.dataColumn,
+    this.thisYear,
   });
 
   @override
@@ -19,6 +22,12 @@ class YearStatsCard extends StatefulWidget {
 
 class _YearStatsCardState extends State<YearStatsCard> {
   List<TSDataModel> data;
+  DatabaseService firestore;
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     void _showBottomSheet() {
@@ -37,21 +46,21 @@ class _YearStatsCardState extends State<YearStatsCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Average: ${widget.sm.tsGraphStats(data)[0].toStringAsFixed(3)}",
+                    "Average: ${firestore.tsGraphStats(data)[0].toStringAsFixed(3)}",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Max: ${widget.sm.tsGraphStats(data)[1].toStringAsFixed(3)}",
+                    "Max: ${firestore.tsGraphStats(data)[1].toStringAsFixed(3)}",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Min: ${widget.sm.tsGraphStats(data)[2].toStringAsFixed(3)}",
+                    "Min: ${firestore.tsGraphStats(data)[2].toStringAsFixed(3)}",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -65,7 +74,7 @@ class _YearStatsCardState extends State<YearStatsCard> {
         _showBottomSheet();
       },
       child: Container(
-        width: MediaQuery.of(context).size.width - 20,
+        width: MediaQuery.of(context).size.width - 20, //380,
         height: MediaQuery.of(context).size.height - 200, //280,
         child: Card(
           shape: RoundedRectangleBorder(
@@ -104,9 +113,11 @@ class _YearStatsCardState extends State<YearStatsCard> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 8, 15, 8),
+                  padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder(
-                    future: widget.sm.getYearData('${widget.dataColumn}'),
+                    future: widget.thisYear
+                        ? firestore.getYearData('${widget.dataColumn}')
+                        : firestore.getLastYearData('${widget.dataColumn}'),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         data = snapshot.data;

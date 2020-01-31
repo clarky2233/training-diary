@@ -1,8 +1,8 @@
 import 'package:training_journal/activities.dart';
 
 class TrainingSession {
-  int id;
-  int userID;
+  String id;
+  String userID;
   // Standard Settings //
   String title;
   int duration; // this is in minutes
@@ -38,27 +38,27 @@ class TrainingSession {
   });
 
   Map<String, dynamic> toMap() {
-    String dateStr;
-    String activityStr;
-    if (date == null) {
-      dateStr = null;
-    } else {
-      dateStr = date.toIso8601String();
-    }
-    if (activity == null) {
-      activityStr = null;
-    } else {
-      activityStr = activity.name;
-    }
+    // String dateStr;
+    // String activityStr;
+    // if (date == null) {
+    //   dateStr = null;
+    // } else {
+    //   dateStr = date.toIso8601String();
+    // }
+    // if (activity == null) {
+    //   activityStr = null;
+    // } else {
+    //   activityStr = activity.name;
+    // }
 
     return {
       'id': id,
       'title': title,
       'userID': userID,
-      'date': dateStr,
+      'date': date,
       'duration': duration,
       'description': description,
-      'activity': activityStr,
+      'activity': activity,
       'difficulty': difficulty,
       'enjoymentRating': enjoymentRating,
       'heartRate': heartRate,

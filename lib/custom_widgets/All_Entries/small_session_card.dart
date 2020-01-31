@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/custom_widgets/Home_Page/more_info.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class SmallSessionCard extends StatefulWidget {
   final TrainingSession ts;
-  final DBHelper db;
   final User user;
-  const SmallSessionCard(
-      {@required this.ts, @required this.db, @required this.user});
+  const SmallSessionCard({@required this.ts, @required this.user});
 
   @override
   _SmallSessionCardState createState() => _SmallSessionCardState();
@@ -21,18 +18,16 @@ class _SmallSessionCardState extends State<SmallSessionCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => MoreInfo(
-                      db: widget.db,
                       user: widget.user,
                       ts: widget.ts,
                       returnHome: false,
                     )));
       },
       child: Container(
-          //height: 250,
           width: 180,
           margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
           child: Card(

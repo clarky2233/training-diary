@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class BarCategoryChart extends StatelessWidget {
@@ -15,7 +15,7 @@ class BarCategoryChart extends StatelessWidget {
           data: data,
           domainFn: (BarDataModel model, _) => model.xValue,
           measureFn: (BarDataModel model, _) => model.yValue,
-          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.blueAccent),
+          colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.redAccent),
           labelAccessorFn: (BarDataModel model, _) =>
               '${model.yValue.toStringAsFixed(1)}'),
     ];

@@ -3,7 +3,6 @@ import 'package:training_journal/activities.dart';
 import 'package:training_journal/training_session.dart';
 
 class ActivityCard extends StatefulWidget {
-
   final TrainingSession ts;
   final bool isEdit;
   const ActivityCard({this.ts, this.isEdit});
@@ -39,12 +38,13 @@ class _ActivityCardState extends State<ActivityCard> {
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
                 color: Colors.black,
-              ),              
+              ),
             ),
             Wrap(
               spacing: 15.0,
               runSpacing: 3.0,
-              children: List<Widget>.generate(Activities.activities.length, (index) {
+              children:
+                  List<Widget>.generate(Activities.activities.length, (index) {
                 return ChoiceChip(
                   label: Text(
                     Activities.activities[index].name,
@@ -52,9 +52,9 @@ class _ActivityCardState extends State<ActivityCard> {
                   labelStyle: TextStyle(
                     color: Colors.black,
                   ),
-                  avatar:Icon(Activities.activities[index].icon),
+                  avatar: Icon(Activities.activities[index].icon),
                   selected: value == index,
-                  selectedColor: Colors.pink[200],
+                  selectedColor: Colors.redAccent[100],
                   onSelected: (bool selected) {
                     setState(() {
                       if (selected) {
@@ -63,7 +63,6 @@ class _ActivityCardState extends State<ActivityCard> {
                           widget.ts.activity = Activities.activities[value];
                         }
                       }
-                      //value = selected ? index : null;
                     });
                   },
                 );

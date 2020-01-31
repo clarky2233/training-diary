@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:training_journal/DBUpgrades.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/activities.dart';
@@ -11,6 +15,10 @@ import 'package:training_journal/user.dart';
 class DBHelper {
   Future<Database> database;
   final stableDatabaseVersion = 2;
+  User user;
+  DatabaseService firestore;
+
+  DBHelper({this.user});
 
   List<DBUpgrade> upgrades = [
     DBUpgrade(version: 1, sqlUpgrades: [
@@ -80,13 +88,43 @@ class DBHelper {
   ];
 
   void setup() async {
+    firestore = DatabaseService(uid: user.id);
+    //copyDatabase();
     database = createDatabase();
+    List<TrainingSession> x = await getJournal(await database);
+    print(x.length);
+  }
+
+  void copyDatabase() async {
+    var databasesPath = await getDatabasesPath();
+    var path = join(databasesPath, "copy_journal_database.db");
+    var exists = await databaseExists(path);
+    if (!exists) {
+      // Should happen only the first time you launch your application
+      print("Creating new copy from asset");
+
+      // Make sure the parent directory exists
+      try {
+        await Directory(dirname(path)).create(recursive: true);
+      } catch (_) {}
+
+      // Copy from asset
+      ByteData data = await rootBundle.load(join("journal_database.db"));
+      List<int> bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+      // Write and flush the bytes written
+      await File(path).writeAsBytes(bytes, flush: true);
+    } else {
+      print("Opening existing database");
+    }
+    Database db = await openDatabase(path, readOnly: true);
   }
 
   Future<Database> createDatabase() async {
     Future<Database> database = openDatabase(
       join(await getDatabasesPath(), 'journal_database.db'),
-      onUpgrade: (db, oldVersion, newVersion) {
+      onUpgrade: (db, oldVersion, newVersion) async {
         for (DBUpgrade upgrade in upgrades) {
           for (String sql in upgrade.sqlUpgrades) {
             if (upgrade.version > oldVersion && upgrade.version <= newVersion) {
@@ -94,6 +132,8 @@ class DBHelper {
             }
           }
         }
+        List<TrainingSession> x = await getJournal(db);
+        print(x.length);
       },
       version: 2,
     );
@@ -124,8 +164,8 @@ class DBHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<TrainingSession>> getJournal() async {
-    final Database db = await database;
+  Future<List<TrainingSession>> getJournal(Database db) async {
+    //final Database db = await database;
     final List<Map<String, dynamic>> maps =
         await db.rawQuery('SELECT * FROM journal ORDER BY date DESC');
     return List.generate(maps.length, (i) {
@@ -278,7 +318,7 @@ class DBHelper {
       return User(
         id: maps[i]['id'],
         username: maps[i]['username'],
-        dob: DateTime.parse(maps[i]['dob']),
+        //dob: DateTime.parse(maps[i]['dob']),
         name: maps[i]['name'],
         weight: maps[i]['weight'],
         height: maps[i]['height'],

@@ -5,26 +5,25 @@ class TitleCard extends StatefulWidget {
   final TrainingSession ts;
   final bool isEdit;
   const TitleCard({this.ts, this.isEdit});
-  
+
   @override
   _TitleCardState createState() => _TitleCardState();
 }
 
 class _TitleCardState extends State<TitleCard> {
-
   String titleValue;
   String original;
 
   final TextEditingController textController = new TextEditingController();
 
-    @override
-    void initState() {
-      if (widget.isEdit) {
-        textController.text = widget.ts.title;
-        original = widget.ts.title;
-      }
-      super.initState();
+  @override
+  void initState() {
+    if (widget.isEdit) {
+      textController.text = widget.ts.title;
+      original = widget.ts.title;
     }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +40,11 @@ class _TitleCardState extends State<TitleCard> {
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
                 color: Colors.black,
-              ),              
+              ),
             ),
             TextField(
               maxLines: 1,
-              cursorColor: Colors.pink[400],
+              cursorColor: Colors.redAccent,
               controller: textController,
               onSubmitted: (text) {
                 setState(() {
@@ -62,13 +61,12 @@ class _TitleCardState extends State<TitleCard> {
                 fontSize: 22,
               ),
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pink[400]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pink[400]),
-                )
-              ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.redAccent),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.redAccent),
+                  )),
             ),
           ],
         ),

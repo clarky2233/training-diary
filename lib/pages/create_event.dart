@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_date_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_time_card.dart';
 import 'package:training_journal/custom_widgets/Create_Event/event_title_card.dart';
-import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/event.dart';
-import 'package:training_journal/pages/home.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class CreateEvent extends StatefulWidget {
-  final DBHelper db;
   final User user;
-  const CreateEvent({@required this.db, @required this.user});
+  const CreateEvent({@required this.user});
 
   @override
   _CreateEventState createState() => _CreateEventState();
@@ -20,8 +17,10 @@ class CreateEvent extends StatefulWidget {
 class _CreateEventState extends State<CreateEvent>
     with SingleTickerProviderStateMixin {
   Event event = Event();
+  DatabaseService firestore;
 
   void initState() {
+    firestore = DatabaseService(uid: widget.user.id);
     super.initState();
   }
 
@@ -50,21 +49,18 @@ class _CreateEventState extends State<CreateEvent>
           appBar: AppBar(
             title: Text('New Upcoming Event'),
             centerTitle: true,
-            backgroundColor: Colors.pink[500],
+            backgroundColor: Colors.redAccent,
             leading: FlatButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home(
-                              db: widget.db,
-                              user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
-                            )));
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => Home2(
+                //               db: widget.db,
+                //               user: widget.user,
+                //             )));
               },
               child: Icon(
                 Icons.arrow_back,
@@ -99,25 +95,21 @@ class _CreateEventState extends State<CreateEvent>
               if (isValid(event)) {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 event.userID = widget.user.id;
-                await widget.db.insertEvent(event);
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home(
-                              db: widget.db,
-                              user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
-                            )));
-                //print(await widget.db.getJournal());
+                firestore.updateEvent(event);
+                Navigator.pop(context);
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => Home2(
+                //               db: widget.db,
+                //               user: widget.user,
+                //             )));
               } else {
                 _neverSatisfied();
               }
             },
             child: Icon(Icons.done_outline),
-            backgroundColor: Colors.pink[600],
+            backgroundColor: Colors.redAccent,
           ),
         ),
       ),
@@ -142,7 +134,7 @@ class _CreateEventState extends State<CreateEvent>
             FlatButton(
               child: Text(
                 'Ok',
-                style: TextStyle(color: Colors.pink[800]),
+                style: TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

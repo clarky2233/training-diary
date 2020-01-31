@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Charts/grouped_bar_chart.dart';
-import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/user.dart';
 
 class SummaryStatsCard extends StatefulWidget {
-  final StatsManager sm;
+  final User user;
   final String title;
   const SummaryStatsCard({
-    this.sm,
+    this.user,
     this.title,
   });
 
@@ -16,6 +17,13 @@ class SummaryStatsCard extends StatefulWidget {
 }
 
 class _SummaryStatsCardState extends State<SummaryStatsCard> {
+  DatabaseService firestore;
+
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,8 +54,14 @@ class _SummaryStatsCardState extends State<SummaryStatsCard> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
                 child: FutureBuilder(
-                  future: widget.sm.getSummaryData(),
+                  future: firestore.getSummaryData(),
                   builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return SpinKitDualRing(
+                        color: Colors.blueAccent,
+                        size: 70,
+                      );
+                    }
                     if (snapshot.connectionState == ConnectionState.done) {
                       return GroupedBarChart(
                         data: snapshot.data,

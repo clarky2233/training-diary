@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "102228957365",
+    "firebase_url": "https://training-diary-7c93a.firebaseio.com",
+    "project_id": "training-diary-7c93a",
+    "storage_bucket": "training-diary-7c93a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102228957365:android:c8a2cfe1c8060fda7606fc",
+        "android_client_info": {
+          "package_name": "com.projects.training_journal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "102228957365-n54ev4agcqmgqoa9g60sc5f3ju3i0mrf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzvJQvktVV5iAAInKfg_zCTsOZzArG_5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "102228957365-n54ev4agcqmgqoa9g60sc5f3ju3i0mrf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

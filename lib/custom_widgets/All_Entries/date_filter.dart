@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:training_journal/Database_helper.dart';
 import 'package:training_journal/pages/all_entries.dart';
-import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
 class DateFilter extends StatefulWidget {
@@ -42,16 +40,11 @@ class _DateFilterState extends State<DateFilter> {
                   selectedMonth = date;
                 });
                 try {
-                  List<TrainingSession> filteredList =
-                      await widget.db.getFiltered(date);
-                  String str = DateFormat.yMMMM("en_US").format(date);
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
                     return EntriesPage(
-                      allEntries: filteredList,
-                      db: widget.db,
                       user: widget.user,
-                      currentFilter: str,
+                      currentFilter: date,
                     );
                   }));
                 } catch (e) {}

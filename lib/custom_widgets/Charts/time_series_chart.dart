@@ -1,6 +1,6 @@
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class TSChart extends StatelessWidget {
@@ -16,7 +16,7 @@ class TSChart extends StatelessWidget {
         data: data,
         domainFn: (TSDataModel model, _) => model.xValue,
         measureFn: (TSDataModel model, _) => model.yValue,
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.blueAccent),
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Colors.redAccent),
       )
     ];
     return Container(

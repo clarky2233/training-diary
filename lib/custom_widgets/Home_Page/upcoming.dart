@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:training_journal/Database_helper.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/event.dart';
 import 'package:training_journal/pages/edit_event.dart';
-import 'package:training_journal/pages/home.dart';
-import 'package:training_journal/training_session.dart';
+import 'package:training_journal/pages/home_2.dart';
 import 'package:training_journal/user.dart';
 
 class UpcomingCard extends StatefulWidget {
@@ -18,12 +18,18 @@ class UpcomingCard extends StatefulWidget {
 }
 
 class _UpcomingCardState extends State<UpcomingCard> {
+  DatabaseService firestore;
+
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 300,
       width: MediaQuery.of(context).size.width - 20, //380,
-      //margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(15),
@@ -58,11 +64,10 @@ class _UpcomingCardState extends State<UpcomingCard> {
                     color: Colors.black,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditEvent(
-                                  db: widget.db,
                                   user: widget.user,
                                   event: widget.event,
                                 )));
@@ -121,18 +126,16 @@ class _UpcomingCardState extends State<UpcomingCard> {
                 style: TextStyle(color: Colors.blue[800]),
               ),
               onPressed: () async {
-                await widget.db.deleteEvent(widget.event.id);
+                //await widget.db.deleteEvent(widget.event.id);
+                firestore.deleteEvent(widget.event.id);
                 Navigator.of(context).pop();
-                List<TrainingSession> x = await widget.db.lastTenSessions();
-                List<Event> upcoming = await widget.db.getEvents();
+                // List<TrainingSession> x = await widget.db.lastTenSessions();
+                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home(
-                              db: widget.db,
+                        builder: (context) => Home2(
                               user: widget.user,
-                              recentTen: x,
-                              upcoming: upcoming,
                             )));
               },
             ),

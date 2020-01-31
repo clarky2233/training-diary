@@ -29,7 +29,7 @@
 .pub-cache/
 .pub/
 /build/
-/journal_database.db
+journal_database.db
 
 # Web related
 lib/generated_plugin_registrant.dart

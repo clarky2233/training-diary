@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Charts/bar_category_chart.dart';
-import 'package:training_journal/stats_manager.dart';
+import 'package:training_journal/user.dart';
 
 class WeekStatsCard extends StatefulWidget {
-  final StatsManager sm;
+  final User user;
   final String title;
   final String dataColumn;
+  final bool thisWeek;
   const WeekStatsCard({
-    this.sm,
+    this.user,
     this.title,
     this.dataColumn,
+    this.thisWeek,
   });
 
   @override
@@ -19,7 +22,13 @@ class WeekStatsCard extends StatefulWidget {
 
 class _WeekStatsCardState extends State<WeekStatsCard> {
   List<BarDataModel> data;
-  Icon stat_icon = Icon(Icons.expand_more);
+  DatabaseService firestore;
+
+  void initState() {
+    super.initState();
+    firestore = DatabaseService(uid: widget.user.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     void _showBottomSheet() {
@@ -38,21 +47,21 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Average: ${widget.sm.barGraphStats(data)[0].toStringAsFixed(3)}",
+                    "Average: ${firestore.barGraphStats(data)[0].toStringAsFixed(3)}",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Max: ${widget.sm.barGraphStats(data)[1].toStringAsFixed(3)}",
+                    "Max: ${firestore.barGraphStats(data)[1].toStringAsFixed(3)}",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Min: ${widget.sm.barGraphStats(data)[2].toStringAsFixed(3)}",
+                    "Min: ${firestore.barGraphStats(data)[2].toStringAsFixed(3)}",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -96,7 +105,7 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: IconButton(
-                        icon: stat_icon,
+                        icon: Icon(Icons.expand_more),
                         onPressed: () {
                           _showBottomSheet();
                         },
@@ -107,7 +116,9 @@ class _WeekStatsCardState extends State<WeekStatsCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder(
-                    future: widget.sm.getWeekData('${widget.dataColumn}'),
+                    future: widget.thisWeek
+                        ? firestore.getWeekData('${widget.dataColumn}')
+                        : firestore.getLastWeekData('${widget.dataColumn}'),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         data = snapshot.data;

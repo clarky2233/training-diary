@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Event {
-  int id;
-  int userID;
+  String id;
+  String userID;
   String name;
   DateTime date;
   TimeOfDay startTime;
