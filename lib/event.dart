@@ -21,7 +21,7 @@ class Event {
       'userID': userID,
       'name': name,
       'date': date.toIso8601String(),
-      'startTime': startTime.toString().substring(10, 15),
+      'startTime': startTime.toString().substring(10, 14),
     };
   }
 
