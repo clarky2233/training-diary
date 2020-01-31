@@ -25,6 +25,7 @@ class _SignInState extends State<SignIn> {
     return loading
         ? Loading()
         : MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: WillPopScope(
               onWillPop: () {
                 return Future.value(false);

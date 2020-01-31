@@ -26,6 +26,7 @@ class _RegisterState extends State<Register> {
     return loading
         ? Loading()
         : MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: WillPopScope(
               onWillPop: () {
                 return Future.value(false);

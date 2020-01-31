@@ -75,6 +75,7 @@ class _MoreInfoState extends State<MoreInfo> {
     }
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: WillPopScope(
         onWillPop: () {
           return Future.value(false);
