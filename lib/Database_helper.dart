@@ -118,7 +118,7 @@ class DBHelper {
     } else {
       print("Opening existing database");
     }
-    Database db = await openDatabase(path, readOnly: true);
+    //Database db = await openDatabase(path, readOnly: true);
   }
 
   Future<Database> createDatabase() async {

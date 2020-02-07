@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:training_journal/custom_widgets/Charts/new_stats_card.dart';
 import 'package:training_journal/custom_widgets/Charts/week_stats_card.dart';
 import 'package:training_journal/user.dart';
 
