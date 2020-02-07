@@ -393,36 +393,35 @@ class DatabaseService {
   List<BarDataModel> weekBarData(
       List<TrainingSession> sessions, String dataColumn) {
     List<BarDataModel> data = List<BarDataModel>();
-    data.add(BarDataModel(yValue: 0.0, xValue: "Mon"));
-    data.add(BarDataModel(yValue: 0.0, xValue: "Tues"));
-    data.add(BarDataModel(yValue: 0.0, xValue: "Wed"));
-    data.add(BarDataModel(yValue: 0.0, xValue: "Thur"));
-    data.add(BarDataModel(yValue: 0.0, xValue: "Fri"));
-    data.add(BarDataModel(yValue: 0.0, xValue: "Sat"));
-    data.add(BarDataModel(yValue: 0.0, xValue: "Sun"));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Mon", total: 0.0, count: 0.0));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Tues", total: 0.0, count: 0.0));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Wed", total: 0.0, count: 0.0));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Thur", total: 0.0, count: 0.0));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Fri", total: 0.0, count: 0.0));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Sat", total: 0.0, count: 0.0));
+    data.add(BarDataModel(yValue: 0.0, xValue: "Sun", total: 0.0, count: 0.0));
     if (sessions == null || sessions.length == 0) {
       return data;
     }
     for (TrainingSession session in sessions) {
       Map x = session.toMap();
       for (BarDataModel day in data) {
-        int difficultyCount = 0;
-        int difficultyTotal = 0;
-        int enjoymentCount = 0;
-        int enjoymentTotal = 0;
+        // int difficultyCount = 0;
+        // int difficultyTotal = 0;
+        // int enjoymentCount = 0;
+        // int enjoymentTotal = 0;
         if (day.xValue == getDayOfWeek(x['date'].weekday) &&
             x['$dataColumn'] != null) {
           if (dataColumn == 'duration') {
             day.yValue += (x['$dataColumn'] / 60);
           } else if (dataColumn == 'difficulty') {
-            difficultyTotal += x['$dataColumn'];
-            difficultyCount++;
-            day.yValue =
-                difficultyTotal.toDouble() / difficultyCount.toDouble();
+            day.total += x['$dataColumn'];
+            day.count++;
+            day.yValue = day.total / day.count;
           } else if (dataColumn == 'enjoymentRating') {
-            enjoymentTotal += x['$dataColumn'];
-            enjoymentCount++;
-            day.yValue = enjoymentTotal.toDouble() / enjoymentCount.toDouble();
+            day.total += x['$dataColumn'];
+            day.count++;
+            day.yValue = day.total / day.count;
           } else if (dataColumn == 'hydration') {
             day.yValue += x['$dataColumn'].toDouble();
           } else {
@@ -610,8 +609,10 @@ class TSDataModel {
 class BarDataModel {
   final String xValue;
   double yValue;
+  double total;
+  double count;
 
-  BarDataModel({this.xValue, this.yValue});
+  BarDataModel({this.xValue, this.yValue, this.total, this.count});
 
   static BarDataModel fromMap(Map<String, dynamic> map, String dataColumn) {
     return BarDataModel(

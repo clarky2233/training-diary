@@ -49,7 +49,6 @@ class _StatsPageState extends State<StatsPage> {
             ),
             centerTitle: false,
             actions: <Widget>[
-              getDropDown(),
               IconButton(
                 icon: Icon(Icons.share),
                 color: Colors.white,
