@@ -256,12 +256,14 @@ class DatabaseService {
 
   Future<List<BarDataModel>> getWeekData(String dataColumn) async {
     try {
-      DateTime startOfWeek =
-          DateTime.now().subtract(Duration(days: DateTime.now().weekday));
+      DateTime startOfWeek = DateTime.now().subtract(Duration(
+          days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday,
+          hours: DateTime.now().hour,
+          minutes: DateTime.now().minute));
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
           .where("date", isGreaterThanOrEqualTo: startOfWeek)
-          .where("date", isLessThan: startOfWeek.add(Duration(days: 7)))
+          .where("date", isLessThan: startOfWeek.add(Duration(days: 8)))
           .orderBy("date", descending: true)
           .getDocuments()
           .then(_trainingSessionListFromSnapshot);
@@ -274,8 +276,10 @@ class DatabaseService {
 
   Future<List<BarDataModel>> getLastWeekData(String dataColumn) async {
     try {
-      DateTime startOfWeek =
-          DateTime.now().subtract(Duration(days: DateTime.now().weekday));
+      DateTime startOfWeek = DateTime.now().subtract(Duration(
+          days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday,
+          hours: DateTime.now().hour,
+          minutes: DateTime.now().minute));
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
           .where("date",
@@ -294,12 +298,15 @@ class DatabaseService {
   Future<List<List<BarDataModel>>> getSummaryData() async {
     try {
       List<List<BarDataModel>> data = List<List<BarDataModel>>();
-      DateTime startOfWeek =
-          DateTime.now().subtract(Duration(days: DateTime.now().weekday));
+      int dayz = DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday;
+      DateTime startOfWeek = DateTime.now().subtract(Duration(
+          days: dayz,
+          hours: DateTime.now().hour,
+          minutes: DateTime.now().minute));
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
           .where("date", isGreaterThanOrEqualTo: startOfWeek)
-          .where("date", isLessThan: startOfWeek.add(Duration(days: 7)))
+          .where("date", isLessThan: startOfWeek.add(Duration(days: 8)))
           .orderBy("date", descending: true)
           .getDocuments()
           .then(_trainingSessionListFromSnapshot);
@@ -313,8 +320,10 @@ class DatabaseService {
   }
 
   Future<List<TSDataModel>> getMonthData(String dataColumn) async {
-    DateTime startOfMonth =
-        DateTime.now().subtract(Duration(days: DateTime.now().day));
+    DateTime startOfMonth = DateTime.now().subtract(Duration(
+        days: DateTime.now().day == 1 ? 0 : DateTime.now().day,
+        hours: DateTime.now().hour,
+        minutes: DateTime.now().minute));
     try {
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
@@ -333,8 +342,10 @@ class DatabaseService {
   }
 
   Future<List<TSDataModel>> getLastMonthData(String dataColumn) async {
-    DateTime startOfMonth =
-        DateTime.now().subtract(Duration(days: DateTime.now().day));
+    DateTime startOfMonth = DateTime.now().subtract(Duration(
+        days: DateTime.now().day == 1 ? 0 : DateTime.now().day,
+        hours: DateTime.now().hour,
+        minutes: DateTime.now().minute));
     try {
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
