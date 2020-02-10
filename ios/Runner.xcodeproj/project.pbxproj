@@ -384,11 +384,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/TD.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-<<<<<<< HEAD
-				CURRENT_PROJECT_VERSION = 12;
-=======
-				CURRENT_PROJECT_VERSION = 13;
->>>>>>> firebase
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 8FR4MG27XA;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -402,11 +398,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-<<<<<<< HEAD
-				MARKETING_VERSION = 1.1.0;
-=======
-				MARKETING_VERSION = 2.0.0;
->>>>>>> firebase
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.projects.trainingdiary;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "Training Diary+ App Store Distribution";
@@ -534,11 +526,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/TD.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-<<<<<<< HEAD
-				CURRENT_PROJECT_VERSION = 12;
-=======
-				CURRENT_PROJECT_VERSION = 13;
->>>>>>> firebase
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 8FR4MG27XA;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -552,11 +540,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-<<<<<<< HEAD
-				MARKETING_VERSION = 1.1.0;
-=======
-				MARKETING_VERSION = 2.0.0;
->>>>>>> firebase
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.projects.trainingdiary;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "Training Diary+ App Store Distribution";
@@ -577,11 +561,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/TD.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-<<<<<<< HEAD
-				CURRENT_PROJECT_VERSION = 12;
-=======
-				CURRENT_PROJECT_VERSION = 13;
->>>>>>> firebase
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 8FR4MG27XA;
 				"DEVELOPMENT_TEAM[sdk=*]" = 8FR4MG27XA;
 				ENABLE_BITCODE = NO;
@@ -596,11 +576,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-<<<<<<< HEAD
-				MARKETING_VERSION = 1.1.0;
-=======
-				MARKETING_VERSION = 2.0.0;
->>>>>>> firebase
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.projects.trainingdiary;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "Training Diary+ App Store Distribution";
