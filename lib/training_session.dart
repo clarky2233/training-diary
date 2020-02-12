@@ -103,6 +103,7 @@ class TrainingSession {
 
   static bool isValid(TrainingSession ts) {
     if (ts.title == null ||
+        ts.date == null ||
         ts.duration == null ||
         ts.activity == null ||
         ts.difficulty == null ||
