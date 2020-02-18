@@ -257,7 +257,7 @@ class DatabaseService {
   Future<List<BarDataModel>> getWeekData(String dataColumn) async {
     try {
       DateTime startOfWeek = DateTime.now().subtract(Duration(
-          days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday,
+          days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday - 1,
           hours: DateTime.now().hour,
           minutes: DateTime.now().minute));
       List<TrainingSession> sessions = await journalCollection
@@ -277,7 +277,7 @@ class DatabaseService {
   Future<List<BarDataModel>> getLastWeekData(String dataColumn) async {
     try {
       DateTime startOfWeek = DateTime.now().subtract(Duration(
-          days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday,
+          days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday - 1,
           hours: DateTime.now().hour,
           minutes: DateTime.now().minute));
       List<TrainingSession> sessions = await journalCollection
@@ -298,7 +298,7 @@ class DatabaseService {
   Future<List<List<BarDataModel>>> getSummaryData() async {
     try {
       List<List<BarDataModel>> data = List<List<BarDataModel>>();
-      int dayz = DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday;
+      int dayz = DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday - 1;
       DateTime startOfWeek = DateTime.now().subtract(Duration(
           days: dayz,
           hours: DateTime.now().hour,
@@ -321,7 +321,7 @@ class DatabaseService {
 
   Future<List<TSDataModel>> getMonthData(String dataColumn) async {
     DateTime startOfMonth = DateTime.now().subtract(Duration(
-        days: DateTime.now().day == 1 ? 0 : DateTime.now().day,
+        days: DateTime.now().day == 1 ? 0 : DateTime.now().day - 1,
         hours: DateTime.now().hour,
         minutes: DateTime.now().minute));
     try {
@@ -343,7 +343,7 @@ class DatabaseService {
 
   Future<List<TSDataModel>> getLastMonthData(String dataColumn) async {
     DateTime startOfMonth = DateTime.now().subtract(Duration(
-        days: DateTime.now().day == 1 ? 0 : DateTime.now().day,
+        days: DateTime.now().day == 1 ? 0 : DateTime.now().day - 1,
         hours: DateTime.now().hour,
         minutes: DateTime.now().minute));
     try {
