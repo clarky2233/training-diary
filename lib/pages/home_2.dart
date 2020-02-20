@@ -14,17 +14,17 @@ import 'package:training_journal/pages/stats_page.dart';
 import 'package:training_journal/training_session.dart';
 import 'package:training_journal/user.dart';
 
-class Home2 extends StatefulWidget {
+class Home extends StatefulWidget {
   final User user;
-  const Home2({
+  const Home({
     @required this.user,
   });
 
   @override
-  _Home2State createState() => _Home2State();
+  _HomeState createState() => _HomeState();
 }
 
-class _Home2State extends State<Home2> {
+class _HomeState extends State<Home> {
   User userFS;
   User user;
   DatabaseService firestore;

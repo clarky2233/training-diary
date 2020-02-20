@@ -31,7 +31,7 @@ class _WrapperState extends State<Wrapper> {
       return FutureBuilder<User>(
           future: firestore.getUser(),
           builder: (context, snapshot) {
-            return Home2(
+            return Home(
               user: snapshot.data,
             );
           });

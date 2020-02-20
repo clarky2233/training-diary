@@ -97,7 +97,7 @@ class _StatsPageState extends State<StatsPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home2(
+                        builder: (context) => Home(
                               user: widget.user,
                             )));
               }

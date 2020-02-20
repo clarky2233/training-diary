@@ -160,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home2(
+                        builder: (context) => Home(
                               user: widget.user,
                             )));
               } else if (index == 0) {

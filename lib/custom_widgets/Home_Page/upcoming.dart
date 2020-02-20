@@ -134,7 +134,7 @@ class _UpcomingCardState extends State<UpcomingCard> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home2(
+                        builder: (context) => Home(
                               user: widget.user,
                             )));
               },

@@ -91,7 +91,7 @@ class _MoreInfoState extends State<MoreInfo> {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   if (widget.returnHome) {
-                    return Home2(
+                    return Home(
                       user: widget.user,
                     );
                   } else {
@@ -443,7 +443,7 @@ class _MoreInfoState extends State<MoreInfo> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Home2(
+                          builder: (context) => Home(
                                 user: widget.user,
                               )));
                 } else {

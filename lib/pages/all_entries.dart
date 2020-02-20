@@ -52,7 +52,7 @@ class _EntriesPageState extends State<EntriesPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Home2(
+                            builder: (context) => Home(
                                   user: widget.user,
                                 )));
                   },

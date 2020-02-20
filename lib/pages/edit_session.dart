@@ -116,7 +116,7 @@ class _EditSessionState extends State<EditSession>
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
                   if (widget.returnHome) {
-                    return Home2(
+                    return Home(
                       user: widget.user,
                     );
                   } else {

@@ -55,7 +55,7 @@ class _CreateSessionState extends State<CreateSession>
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home2(
+                        builder: (context) => Home(
                               user: widget.user,
                             )));
               },
@@ -115,7 +115,7 @@ class _CreateSessionState extends State<CreateSession>
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Home2(
+                        builder: (context) => Home(
                               user: widget.user,
                             )));
               } else {
