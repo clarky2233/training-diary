@@ -64,6 +64,7 @@ class _EntriesPageState extends State<EntriesPage> {
             ],
             backgroundColor: Colors.redAccent,
             elevation: 0,
+            centerTitle: false,
             title: Text(
               "My Diary",
               style: TextStyle(

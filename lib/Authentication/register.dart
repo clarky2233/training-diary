@@ -35,6 +35,7 @@ class _RegisterState extends State<Register> {
                 appBar: AppBar(
                   backgroundColor: Colors.redAccent,
                   elevation: 0,
+                  centerTitle: false,
                   title: Text(
                     "Register",
                     style: TextStyle(fontSize: 25),

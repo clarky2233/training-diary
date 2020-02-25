@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_fab_dialer/flutter_fab_dialer.dart';
 import 'package:provider/provider.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Home_Page/session_card.dart';
@@ -106,7 +105,7 @@ class _HomeState extends State<Home> {
                 ),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.endFloat,
-                floatingActionButton: FloatingActionButton(
+                floatingActionButton: FloatingActionButton.extended(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -115,7 +114,8 @@ class _HomeState extends State<Home> {
                                   user: user,
                                 )));
                   },
-                  child: Icon(Icons.add),
+                  label: Text("Training"),
+                  icon: Icon(Icons.add),
                   backgroundColor: Colors.redAccent,
                   elevation: 2,
                 ),
