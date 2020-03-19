@@ -260,7 +260,7 @@ class DatabaseService {
         days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday - 1,
         hours: DateTime.now().hour,
         minutes: DateTime.now().minute,
-        seconds: DateTime.now().second,
+        seconds: DateTime.now().second + 1,
       ));
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
@@ -282,7 +282,7 @@ class DatabaseService {
         days: DateTime.now().weekday == 1 ? 0 : DateTime.now().weekday - 1,
         hours: DateTime.now().hour,
         minutes: DateTime.now().minute,
-        seconds: DateTime.now().second,
+        seconds: DateTime.now().second + 1,
       ));
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
@@ -307,8 +307,9 @@ class DatabaseService {
         days: dayz,
         hours: DateTime.now().hour,
         minutes: DateTime.now().minute,
-        seconds: DateTime.now().second,
+        seconds: DateTime.now().second + 1,
       ));
+      print(startOfWeek);
       List<TrainingSession> sessions = await journalCollection
           .where("userID", isEqualTo: uid)
           .where("date", isGreaterThanOrEqualTo: startOfWeek)
@@ -330,7 +331,7 @@ class DatabaseService {
       days: DateTime.now().day == 1 ? 0 : DateTime.now().day - 1,
       hours: DateTime.now().hour,
       minutes: DateTime.now().minute,
-      seconds: DateTime.now().second,
+      seconds: DateTime.now().second + 1,
     ));
     try {
       List<TrainingSession> sessions = await journalCollection
@@ -354,7 +355,7 @@ class DatabaseService {
       days: DateTime.now().day == 1 ? 0 : DateTime.now().day - 1,
       hours: DateTime.now().hour,
       minutes: DateTime.now().minute,
-      seconds: DateTime.now().second,
+      seconds: DateTime.now().second + 1,
     ));
     try {
       List<TrainingSession> sessions = await journalCollection
