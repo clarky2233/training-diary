@@ -24,6 +24,9 @@ class DatabaseService {
   final CollectionReference templateCollection =
       Firestore.instance.collection('templates');
 
+  final CollectionReference ratingCollection =
+      Firestore.instance.collection('ratings');
+
   Future updateUserData(String name, String username, double weight, int height,
       int restingHeartRate) async {
     return await userDataCollection.document(uid).setData({
@@ -33,6 +36,10 @@ class DatabaseService {
       'height': height,
       'restingHeartRate': restingHeartRate,
     });
+  }
+
+  Future updateRating(double rating) async {
+    return await ratingCollection.document(uid).setData({'rating': rating});
   }
 
   Future updateEvent(Event event) async {

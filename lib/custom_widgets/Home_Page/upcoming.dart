@@ -126,11 +126,8 @@ class _UpcomingCardState extends State<UpcomingCard> {
                 style: TextStyle(color: Colors.blue[800]),
               ),
               onPressed: () async {
-                //await widget.db.deleteEvent(widget.event.id);
                 firestore.deleteEvent(widget.event.id);
                 Navigator.of(context).pop();
-                // List<TrainingSession> x = await widget.db.lastTenSessions();
-                // List<Event> upcoming = await widget.db.getEvents();
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

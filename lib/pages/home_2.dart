@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:training_journal/Services/firestore_database.dart';
 import 'package:training_journal/custom_widgets/Home_Page/session_card.dart';
 import 'package:training_journal/custom_widgets/Home_Page/summary_stats_card.dart';
@@ -31,6 +32,12 @@ class _HomeState extends State<Home> {
   String appBarText;
   bool showStats;
 
+  RateMyApp _rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 3,
+    minLaunches: 7,
+  );
+
   void initState() {
     appBarText = "Dashboard";
     showStats = true;
@@ -46,6 +53,38 @@ class _HomeState extends State<Home> {
 
     userFS = Provider.of<User>(context);
     firestore = DatabaseService(uid: userFS.id);
+
+    _rateMyApp.init().then((_) {
+      if (_rateMyApp.shouldOpenDialog) {
+        _rateMyApp.showStarRateDialog(context,
+            title: 'Rate this app!',
+            message: 'How are you enjoying Training Diary+',
+            actionsBuilder: (_, stars) {
+              return [
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () async {
+                    await _rateMyApp
+                        .callEvent(RateMyAppEventType.rateButtonPressed);
+                    await firestore.updateRating(stars);
+                    Navigator.pop<RateMyAppDialogButton>(
+                        context, RateMyAppDialogButton.rate);
+                  },
+                )
+              ];
+            },
+            ignoreIOS: true,
+            dialogStyle: DialogStyle(
+              titleAlign: TextAlign.center,
+              messageAlign: TextAlign.center,
+              messagePadding: EdgeInsets.only(bottom: 20),
+            ),
+            starRatingOptions: StarRatingOptions(),
+            onDismissed: () {
+              _rateMyApp.callEvent(RateMyAppEventType.laterButtonPressed);
+            });
+      }
+    });
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
